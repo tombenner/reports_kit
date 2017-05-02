@@ -1,0 +1,58 @@
+1. Add ReportsKit
+
+Gemfile
+
+source 'https://my-api-key@gems.reportskit.co' do
+  gem 'reportskit'
+end
+
+
+2. Configure Models
+
+Configure the filters and dimensions that can be used in your reports:
+
+app/models/task.rb
+
+class Task < ActiveRecord::Base
+  belongs_to :assignee
+  belongs_to :project
+
+  reportskit do
+    filter :assignee
+    filter :project
+    filter :completed_at
+    filter :is_completed, :boolean, conditions: -> { where.not(completed_at: nil) }
+
+    dimension :assignee
+    dimension :project
+    dimension :completed_at
+  end
+end
+
+
+3. Configure Reports
+
+config/reportskit/reports/completed_tasks.yml
+
+name: Completed tasks
+measures:
+- tasks
+dimensions:
+- completed_at
+display_format: area
+
+
+4. Add Report to a View
+
+app/views/reports/my_view.html.haml
+
+= render_report 'completed_tasks'
+
+
+5. Add Routes:
+
+config/routes.rb
+
+mount ReportsKit::Engine, at: '/reports'
+
+That's it! You can now visit the view in step 4. to see the report that you've configured.
