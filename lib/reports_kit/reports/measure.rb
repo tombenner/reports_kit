@@ -20,6 +20,10 @@ module ReportsKit
         :count
       end
 
+      def conditions
+        nil
+      end
+
       def base_relation
         model_class
       end

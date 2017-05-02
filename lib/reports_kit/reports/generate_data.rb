@@ -12,13 +12,16 @@ module ReportsKit
       def perform
         measure_hash = properties[:measure]
         dimension_hashes = properties[:dimensions]
+        raise ArgumentError.new('Blank dimensions') if dimension_hashes.blank?
+
+        dimension_hashes = dimension_hashes.values if dimension_hashes.is_a?(Hash) && dimension_hashes.key?('0')
 
         raise ArgumentError.new('The number of measures must be exactly one') if measure_hash.blank?
         raise ArgumentError.new('The number of dimensions must be 1-2') unless dimension_hashes.length.in?([1, 2])
 
         measure = Measure.new(measure_hash)
         dimension = Dimension.new(dimension_hashes[0], measure: measure)
-        second_dimension = Dimension.new(dimension_hashes[1]) if dimension_hashes[1]
+        second_dimension = Dimension.new(dimension_hashes[1], measure: measure) if dimension_hashes[1]
 
         if second_dimension
           data_for_two_dimensions(measure, dimension, second_dimension)
@@ -99,8 +102,8 @@ module ReportsKit
         relation = relation.joins(dimension.group_joins) if dimension.group_joins
         relation = relation.joins(nested_dimension.group_joins) if nested_dimension.group_joins
 
-        relation = call_dimension_conditions(dimension, relation)
-        relation = call_dimension_conditions(nested_dimension, relation)
+        # relation = call_dimension_conditions(dimension, relation)
+        # relation = call_dimension_conditions(nested_dimension, relation)
 
         if dimension.should_be_sorted_by_count?
           relation = relation.order('1 DESC')
@@ -147,6 +150,35 @@ module ReportsKit
         end
 
         chart_items = label_1s_label_2s_values_to_chart_items(label_1s_label_2s_values)
+        chart_items
+      end
+
+      def label_1s_label_2s_values_to_chart_items(label_1s_label_2s_values)
+        chart_items = []
+        label_1s_label_2s_values.map! do |label_1, label_2s_values|
+          [label_1, label_2s_values]
+        end
+        all_label1s = label_1s_label_2s_values.map(&:first)
+        label_2s_label_1s_values = {}
+        label_1s_label_2s_values.each do |label_1, label_2s_values|
+          label_2s_values.each do |label_2, value|
+            label_2s_label_1s_values[label_2] ||= {}
+            label_2s_label_1s_values[label_2][label_1] = value
+          end
+        end
+        label_2s_label_1s_values.each do |label_2, label_1s_values|
+          label_1s_values = Hash[label_1s_values]
+          values = all_label1s.map do |label_1|
+            {
+              x: label_1,
+              y: label_1s_values[label_1] || 0
+            }
+          end
+          chart_items << {
+            key: label_2,
+            values: values
+          }
+        end
         chart_items
       end
 
