@@ -51,6 +51,11 @@ module ReportsKit
         model_class.reflect_on_association(key)
       end
 
+      def instance_class
+        return reflection.class_name.constantize if reflection
+        nil
+      end
+
       def instance_class_for_column
         type = model_class.columns_hash[key.to_s].try(:type)
         return nil if type.blank?

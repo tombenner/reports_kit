@@ -9,7 +9,7 @@ module ReportsKit
 
       attr_accessor :properties, :measure, :configuration
 
-      delegate :configuration_strategy, to: :configuration
+      delegate :configuration_strategy, :instance_class, to: :configuration
 
       def initialize(properties, measure:)
         self.configuration = InferrableConfiguration.new(self, :filters)

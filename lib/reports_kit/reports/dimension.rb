@@ -6,7 +6,7 @@ module ReportsKit
       attr_accessor :properties, :measure, :configuration
 
       delegate :configured_by_association?, :configured_by_model?, :configured_by_time?,
-        :properties_from_model, :reflection,
+        :properties_from_model, :reflection, :instance_class,
         to: :configuration
 
       def initialize(properties, measure:)
@@ -25,11 +25,6 @@ module ReportsKit
 
       def key
         properties[:key]
-      end
-
-      def instance_class
-        return reflection.class_name.constantize if reflection
-        nil
       end
 
       def group_expression

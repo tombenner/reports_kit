@@ -22,8 +22,42 @@ ReportsKit.Report = (function(options) {
     self.spinner = self.el.find('.spinner-container');
     self.defaultProperties = self.el.data('properties');
     self.form = self.el.find('.reports_kit_report_form');
+
+    self.initializeElements();
     self.initializeEvents();
     self.render();
+  };
+
+  self.initializeElements = function() {
+    self.form.find('.select2').each(function(index, el) {
+      el = $(el);
+      path = el.data('path');
+      el.select2({
+        minimumResultsForSearch: 10,
+        ajax: {
+          url: path,
+          dataType: 'json',
+          delay: 250,
+          data: function(params) {
+            var data = {
+              q: params.term,
+              page: params.page
+            }
+            var staticParams = $('[data-role=static_params]').val()
+            if (staticParams) {
+              staticParams = JSON.parse(staticParams)
+              data = $.extend(data, staticParams)
+            }
+            return data;
+          },
+          processResults: function(data, params) {
+            params.page = params.page || 1;
+            return { results: data.data }
+          },
+          cache: true
+        }
+      });
+    });
   };
 
   self.initializeEvents = function() {
