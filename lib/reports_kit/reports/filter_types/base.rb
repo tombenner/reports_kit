@@ -2,24 +2,28 @@ module ReportsKit
   module Reports
     module FilterTypes
       class Base
-        attr_accessor :records, :properties
+        attr_accessor :properties
 
-        def initialize(records, properties)
-          self.records = records
+        def initialize(properties)
           self.properties = properties
         end
 
-        def apply_filter
-          self.records = records.joins(joins) if joins.present?
+        def apply_filter(records)
+          return records unless valid?
+          records = records.joins(joins) if joins.present?
           if value.blank? && !is_a?(FilterTypes::Boolean)
             return records
           end
-          apply_conditions
+          apply_conditions(records)
+        end
+
+        def default_criteria
+          self.class::DEFAULT_CRITERIA
         end
 
         private
 
-        def apply_conditions
+        def apply_conditions(records)
           raise NotImplementedError
         end
 

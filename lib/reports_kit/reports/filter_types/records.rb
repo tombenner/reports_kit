@@ -2,7 +2,9 @@ module ReportsKit
   module Reports
     module FilterTypes
       class Records < Base
-        def apply_conditions
+        DEFAULT_CRITERIA = {}
+
+        def apply_conditions(records)
           case criteria[:operator]
           when 'include'
             records.where(column => value)

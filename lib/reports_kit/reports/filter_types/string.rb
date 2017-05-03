@@ -2,7 +2,7 @@ module ReportsKit
   module Reports
     module FilterTypes
       class String < Base
-        def apply_conditions
+        def apply_conditions(records)
           case criteria[:operator]
           when 'equals'
             records.where("#{column} = ?", value)

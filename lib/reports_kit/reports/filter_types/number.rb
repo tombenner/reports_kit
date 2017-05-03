@@ -2,7 +2,7 @@ module ReportsKit
   module Reports
     module FilterTypes
       class Number < Base
-        def apply_conditions
+        def apply_conditions(records)
           case criteria[:operator]
           when '>'
             records.where("#{column} > #{value.to_i}")

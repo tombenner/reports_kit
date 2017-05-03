@@ -14,8 +14,12 @@ module ReportsKit
           { name: '6 months ago', string: '-6mo', value: 6.months },
           { name: '1 year ago', string: '-1y', value: 1.year }
         ]
+        DEFAULT_CRITERIA = {
+          operator: 'during',
+          value: '-6mo'
+        }
 
-        def apply_conditions
+        def apply_conditions(records)
           case criteria[:operator]
           when 'during'
             now = Time.now.utc

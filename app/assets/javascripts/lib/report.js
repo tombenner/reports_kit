@@ -61,7 +61,7 @@ ReportsKit.Report = (function(options) {
   };
 
   self.initializeEvents = function() {
-    self.form.find('input,select').on('change', function() {
+    self.form.find('select,:checkbox').on('change', function() {
       self.render();
     })
   };
@@ -80,15 +80,25 @@ ReportsKit.Report = (function(options) {
 
   self.properties = function() {
     var filterKeysValues = {};
+    var checkboxKeysEnableds = {};
     self.form.find('select').each(function(index, el) {
       var filter = $(el);
       var key = filter.attr('name');
       filterKeysValues[key] = filter.val();
     });
+    self.form.find(':checkbox').each(function(index, el) {
+      var filter = $(el);
+      var key = filter.attr('name');
+      checkboxKeysEnableds[key] = filter.prop('checked');
+    });
     self.defaultProperties.measure.filters = $.map(self.defaultProperties.measure.filters, function(filter) {
       var value = filterKeysValues[filter.key];
       if (value) {
         filter.criteria.value = value;
+      }
+      var enabled = checkboxKeysEnableds[filter.key];
+      if (enabled !== undefined) {
+        filter.criteria.operator = enabled ? 'true' : 'false';
       }
       return filter;
     });

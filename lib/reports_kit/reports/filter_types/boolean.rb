@@ -2,7 +2,11 @@ module ReportsKit
   module Reports
     module FilterTypes
       class Boolean < Base
-        def apply_conditions
+        DEFAULT_CRITERIA = {
+          operator: nil
+        }
+
+        def apply_conditions(records)
           case criteria[:operator]
           when 'true'
             records.where("(#{column}) = true")
@@ -15,6 +19,10 @@ module ReportsKit
 
         def valid?
           criteria[:operator].present?
+        end
+
+        def column
+          properties[:conditions] || properties[:key]
         end
       end
     end

@@ -44,6 +44,12 @@ module ReportsKit
         end
         relation
       end
+
+      def properties_with_filters
+        all_properties = properties
+        all_properties[:filters] = filters.map(&:properties)
+        all_properties
+      end
     end
   end
 end
