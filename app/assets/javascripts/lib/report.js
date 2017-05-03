@@ -15,16 +15,22 @@ ReportsKit.Report = (function(options) {
 
     self.svg = $('<svg />').appendTo(self.el);
     if (self.should_redraw) {
-      // This isn't sufficient, as the old chart is still bound to the <svg> and will show up if you resize the window
-      // d3.select(@svg[0]).selectAll('*').remove()
       self.svg.replaceWith('<svg />');
       self.svg = self.el.find('svg');
     }
     // TODO: Spinner el
     self.spinner = self.el.find('.spinner-container');
-    self.properties = self.el.data('properties');
+    self.defaultProperties = self.el.data('properties');
+    self.form = self.el.find('.reports_kit_report_form');
+    self.initializeEvents();
     self.render();
-  }
+  };
+
+  self.initializeEvents = function() {
+    self.form.find('input,select').on('change', function() {
+      self.render();
+    })
+  };
 
   self.xTickFormat = function(value) {
     if (self.isInt(value)) {
@@ -32,18 +38,35 @@ ReportsKit.Report = (function(options) {
     } else {
       return value;
     }
-  }
+  };
 
   self.isInt = function(value) {
     return value === parseInt(value, 10);
-  }
+  };
+
+  self.properties = function() {
+    var filterKeysValues = {};
+    self.form.find('select').each(function(index, el) {
+      var filter = $(el);
+      var key = filter.attr('name');
+      filterKeysValues[key] = filter.val();
+    });
+    self.defaultProperties.measure.filters = $.map(self.defaultProperties.measure.filters, function(filter) {
+      var value = filterKeysValues[filter.key];
+      if (value) {
+        filter.criteria.value = value;
+      }
+      return filter;
+    });
+    return self.defaultProperties;
+  };
 
   self.render = function() {
     self.svg.fadeTo(1000, 0.3);
     self.spinner.fadeIn(1000);
     self.spinner.removeClass('hidden');
     let path = self.el.data('path') + 'reports_kit/reports?'
-    path += $.param({ 'properties': self.properties });
+    path += $.param({ 'properties': self.properties() });
     return d3.json(path, (error, response) => {
       self.spinner.addClass('hidden');
       self.svg.stop().fadeTo(500, 1);
@@ -144,7 +167,7 @@ ReportsKit.Report = (function(options) {
         return chart;
       });
     });
-  }
+  };
 
   self.initialize(options);
 

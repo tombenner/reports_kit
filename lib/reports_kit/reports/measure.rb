@@ -1,11 +1,16 @@
 module ReportsKit
   module Reports
     class Measure
-      attr_accessor :properties
+      attr_accessor :properties, :filters
 
       def initialize(properties)
         properties = { key: properties } if properties.is_a?(String)
+        properties = properties.deep_symbolize_keys
+        filter_hashes = properties.delete(:filters) || []
+        filter_hashes = filter_hashes.values if filter_hashes.is_a?(Hash) && filter_hashes.key?(:'0')
+
         self.properties = properties
+        self.filters = filter_hashes.map { |filter_hash| Filter.new(filter_hash, measure: self) }
       end
 
       def key
@@ -33,7 +38,11 @@ module ReportsKit
       end
 
       def filtered_relation
-        base_relation
+        relation = base_relation
+        filters.each do |filter|
+          relation = filter.apply(relation)
+        end
+        relation
       end
     end
   end
