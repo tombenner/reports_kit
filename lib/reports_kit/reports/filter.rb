@@ -2,15 +2,18 @@ module ReportsKit
   module Reports
     class Filter
       CONFIGURATION_STRATEGIES_FILTER_TYPE_CLASSES = {
-        association: FilterTypes::Records,
+        association: FilterTypes::Records
+      }
+      COLUMN_TYPES_FILTER_TYPE_CLASSES = {
         boolean: FilterTypes::Boolean,
-        model: nil,
-        time: FilterTypes::Datetime,
+        datetime: FilterTypes::Datetime
       }
 
       attr_accessor :properties, :measure, :configuration
 
-      delegate :configuration_strategy, :instance_class, :properties_from_model, to: :configuration
+      delegate :configured_by_association?, :configured_by_column?, :configured_by_model?, :configured_by_time?,
+        :configuration_strategy, :instance_class, :properties_from_model, :column_type,
+        to: :configuration
 
       def initialize(properties, measure:)
         self.configuration = InferrableConfiguration.new(self, :filters)
@@ -32,9 +35,12 @@ module ReportsKit
       end
 
       def type_klass
-        CONFIGURATION_STRATEGIES_FILTER_TYPE_CLASSES[configuration_strategy] ||
-          filter_type_class_from_model ||
-          raise(ArgumentError.new("No configuration found for filter with key: '#{key}'"))
+        type_klass_for_configuration_strategy = CONFIGURATION_STRATEGIES_FILTER_TYPE_CLASSES[configuration_strategy]
+        return type_klass_for_configuration_strategy if type_klass_for_configuration_strategy
+        type_klass_for_column_type = COLUMN_TYPES_FILTER_TYPE_CLASSES[column_type]
+        return type_klass_for_column_type if type_klass_for_column_type
+        return filter_type_class_from_model if configured_by_model?
+        raise ArgumentError.new("No configuration found for filter with key: '#{key}'")
       end
 
       def filter_type

@@ -93,7 +93,7 @@ ReportsKit.Report = (function(options) {
     });
     self.defaultProperties.measure.filters = $.map(self.defaultProperties.measure.filters, function(filter) {
       var value = filterKeysValues[filter.key];
-      if (value) {
+      if (value !== undefined) {
         filter.criteria.value = value;
       }
       var enabled = checkboxKeysEnableds[filter.key];

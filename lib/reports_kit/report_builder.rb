@@ -11,6 +11,7 @@ module ReportsKit
     def check_box(filter_key)
       filter_key = filter_key.to_s
       filter = filters.find { |filter| filter.key == filter_key }
+      raise "Invalid filter key: '#{filter_key}'" unless filter
       checked = filter.properties[:criteria][:operator] == 'true'# if filter
       check_box_tag(filter_key, '1', checked, class: 'form-control input-sm')
     end

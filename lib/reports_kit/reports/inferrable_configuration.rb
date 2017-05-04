@@ -1,9 +1,10 @@
 module ReportsKit
   module Reports
     class InferrableConfiguration
-      COLUMN_TYPES_CLASSES = {
-        datetime: Time
-      }
+      SUPPORTED_COLUMN_TYPES = [
+        :boolean,
+        :datetime
+      ]
 
       attr_accessor :inferrable, :inferrable_type
 
@@ -19,10 +20,10 @@ module ReportsKit
           :model
         elsif reflection
           :association
-        elsif instance_class_for_column == Time
-          :time
+        elsif column_type
+          :column
         else
-          raise ArgumentError.new("No configuration found for #{inferrable_type} with key: '#{key}'")
+          raise ArgumentError.new("No configuration found on the #{model_class} model for #{inferrable_type.to_s.singularize} with key: '#{key}'")
         end
       end
 
@@ -30,12 +31,16 @@ module ReportsKit
         configuration_strategy == :association
       end
 
+      def configured_by_column?
+        configuration_strategy == :column
+      end
+
       def configured_by_model?
         configuration_strategy == :model
       end
 
       def configured_by_time?
-        configuration_strategy == :time
+        column_type == :datetime
       end
 
       def properties_from_model
@@ -56,12 +61,9 @@ module ReportsKit
         nil
       end
 
-      def instance_class_for_column
-        type = model_class.columns_hash[key.to_s].try(:type)
-        return nil if type.blank?
-        klass = COLUMN_TYPES_CLASSES[type]
-        return nil if klass.blank?
-        klass
+      def column_type
+        column_type = model_class.columns_hash[key.to_s].try(:type)
+        return column_type if SUPPORTED_COLUMN_TYPES.include?(column_type)
       end
 
       def model_configuration

@@ -5,7 +5,7 @@ module ReportsKit
 
       attr_accessor :properties, :measure, :configuration
 
-      delegate :configured_by_association?, :configured_by_model?, :configured_by_time?,
+      delegate :configured_by_association?, :configured_by_column?, :configured_by_model?, :configured_by_time?,
         :properties_from_model, :reflection, :instance_class,
         to: :configuration
 
@@ -32,7 +32,7 @@ module ReportsKit
           properties[:group]
         elsif configured_by_association?
           reflection.foreign_key
-        elsif configured_by_time?
+        elsif configured_by_column? && configured_by_time?
           "date_trunc('week', #{key}::timestamp)"
         else
           raise ArgumentError.new('Invalid group_expression')
