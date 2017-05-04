@@ -2,6 +2,10 @@ module ReportsKit
   module Reports
     module FilterTypes
       class String < Base
+        DEFAULT_CRITERIA = {
+          operator: 'contains'
+        }
+
         def apply_conditions(records)
           case criteria[:operator]
           when 'equals'
@@ -21,7 +25,7 @@ module ReportsKit
           when 'does_not_end_with'
             records.where("#{column} NOT LIKE ?", "%#{value}")
           else
-            raise 'Unsupported'
+            raise "Unsupported operator: '#{criteria[:operator]}'"
           end
         end
 

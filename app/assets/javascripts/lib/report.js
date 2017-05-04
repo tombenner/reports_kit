@@ -61,8 +61,12 @@ ReportsKit.Report = (function(options) {
   };
 
   self.initializeEvents = function() {
-    self.form.find('select,:checkbox').on('change', function() {
+    self.form.find('select,input').on('change', function() {
       self.render();
+    })
+    self.form.on('submit', function() {
+      self.render();
+      return false;
     })
   };
 
@@ -81,7 +85,7 @@ ReportsKit.Report = (function(options) {
   self.properties = function() {
     var filterKeysValues = {};
     var checkboxKeysEnableds = {};
-    self.form.find('select').each(function(index, el) {
+    self.form.find('select,:text').each(function(index, el) {
       var filter = $(el);
       var key = filter.attr('name');
       filterKeysValues[key] = filter.val();

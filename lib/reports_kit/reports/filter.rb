@@ -6,7 +6,8 @@ module ReportsKit
       }
       COLUMN_TYPES_FILTER_TYPE_CLASSES = {
         boolean: FilterTypes::Boolean,
-        datetime: FilterTypes::Datetime
+        datetime: FilterTypes::Datetime,
+        string: FilterTypes::String
       }
 
       attr_accessor :properties, :measure, :configuration

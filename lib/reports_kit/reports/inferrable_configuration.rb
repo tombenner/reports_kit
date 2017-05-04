@@ -3,7 +3,8 @@ module ReportsKit
     class InferrableConfiguration
       SUPPORTED_COLUMN_TYPES = [
         :boolean,
-        :datetime
+        :datetime,
+        :string
       ]
 
       attr_accessor :inferrable, :inferrable_type
