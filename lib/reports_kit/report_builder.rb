@@ -14,18 +14,16 @@ module ReportsKit
       check_box_tag(filter_key, '1', checked, class: 'form-control input-sm')
     end
 
+    def date_range(filter_key, placeholder: nil)
+      filter = filter_for_filter_key(filter_key)
+      text_field_tag(filter_key, filter.properties[:criteria][:value], class: 'form-control input-sm date_range_picker', placeholder: placeholder)
+    end
+
     def multi_autocomplete(filter_key, placeholder: nil)
       filter = filter_for_filter_key(filter_key)
       selected = filter.properties[:criteria][:value] if filter && filter.properties[:criteria]
       # TODO: Don't hardcode path
       select_tag(filter_key, nil, class: 'form-control input-sm select2', multiple: 'multiple', data: { placeholder: placeholder, path: "/reports_kit/resources/measures/#{measure.key}/filters/#{filter_key}/autocomplete" })
-    end
-
-    def relative_date(filter_key)
-      filter = filter_for_filter_key(filter_key)
-      options = Reports::FilterTypes::Datetime::RELATIVE_DATE_OPTIONS.map { |option| [option[:name], option[:string]] }
-      selected = filter.properties[:criteria][:value] if filter
-      select_tag(filter_key, options_for_select(options, selected), class: 'form-control input-sm')
     end
 
     def string_filter(filter_key, placeholder: nil)

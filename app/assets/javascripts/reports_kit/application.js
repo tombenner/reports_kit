@@ -10,4 +10,5 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require_tree ./lib
+//= require ./vendor/moment
+//= require_tree .

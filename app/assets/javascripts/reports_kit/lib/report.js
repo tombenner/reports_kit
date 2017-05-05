@@ -29,6 +29,23 @@ ReportsKit.Report = (function(options) {
   };
 
   self.initializeElements = function() {
+    self.form.find('.date_range_picker').daterangepicker({
+      locale: {
+        format: 'MMM D, YYYY'
+      },
+      startDate: moment().subtract(3, 'months'),
+      endDate: moment(),
+      ranges: {
+        'Today': [moment(), moment()],
+        'Last 7 Days': [moment().subtract(7, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(30, 'days'), moment()],
+        'Last 2 Months': [moment().subtract(2, 'months'), moment()],
+        'Last 3 Months': [moment().subtract(3, 'months'), moment()],
+        'Last 4 Months': [moment().subtract(4, 'months'), moment()],
+        'Last 6 Months': [moment().subtract(6, 'months'), moment()],
+        'Last 12 Months': [moment().subtract(12, 'months'), moment()]
+      }
+    });
     self.form.find('.select2').each(function(index, el) {
       el = $(el);
       path = el.data('path');
