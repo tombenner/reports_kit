@@ -22,7 +22,7 @@ module ReportsKit
         end
 
         def column
-          properties[:conditions] || properties[:key]
+          settings[:conditions] || properties[:key]
         end
       end
     end

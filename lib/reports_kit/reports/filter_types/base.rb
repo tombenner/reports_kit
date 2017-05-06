@@ -2,9 +2,10 @@ module ReportsKit
   module Reports
     module FilterTypes
       class Base
-        attr_accessor :properties
+        attr_accessor :settings, :properties
 
-        def initialize(properties)
+        def initialize(settings, properties)
+          self.settings = settings || {}
           self.properties = properties
         end
 
@@ -36,11 +37,11 @@ module ReportsKit
         end
 
         def joins
-          properties[:joins]
+          settings[:joins]
         end
 
         def column
-          properties[:column] || properties[:key]
+          settings[:column] || properties[:key]
         end
       end
     end

@@ -17,7 +17,7 @@ module ReportsKit
       end
 
       def configuration_strategy
-        if properties_from_model
+        if settings_from_model.present?
           :model
         elsif reflection
           :association
@@ -44,13 +44,13 @@ module ReportsKit
         column_type == :datetime
       end
 
-      def properties_from_model
-        return if model_configuration.blank?
-        return if model_configuration.public_send(inferrable_type).blank?
+      def settings_from_model
+        return {} if model_configuration.blank?
+        return {} if model_configuration.public_send(inferrable_type).blank?
         config_hash = model_configuration.public_send(inferrable_type).find do |config_hash|
           config_hash[:key] == key
         end
-        config_hash
+        config_hash || {}
       end
 
       def reflection
@@ -72,7 +72,7 @@ module ReportsKit
         if configured_by_association?
           return { column: reflection.foreign_key } if reflection.macro == :belongs_to
         end
-        nil
+        {}
       end
 
       def column_type

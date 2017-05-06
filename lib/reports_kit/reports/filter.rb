@@ -13,7 +13,7 @@ module ReportsKit
       attr_accessor :properties, :measure, :configuration
 
       delegate :configured_by_association?, :configured_by_column?, :configured_by_model?, :configured_by_time?,
-        :configuration_strategy, :instance_class, :properties_from_model, :column_type, :column,
+        :settings_from_model, :configuration_strategy, :instance_class, :column_type, :column,
         to: :configuration
 
       def initialize(properties, measure:)
@@ -23,7 +23,6 @@ module ReportsKit
         properties = { key: properties } if properties.is_a?(String)
         self.properties = properties.deep_symbolize_keys
         self.properties[:criteria] = filter_type.default_criteria unless self.properties[:criteria]
-        self.properties = properties_from_model.merge(self.properties) if properties_from_model
         self.properties = self.properties
       end
 
@@ -33,6 +32,20 @@ module ReportsKit
 
       def label
         key.titleize
+      end
+
+      def settings
+        inferred_settings.merge(settings_from_model)
+      end
+
+      def inferred_settings
+        configuration.inferred_settings.merge(inferred_filter_settings)
+      end
+
+      def inferred_filter_settings
+        {
+          column: column
+        }
       end
 
       def type_klass
@@ -45,22 +58,16 @@ module ReportsKit
       end
 
       def filter_type
-        type_klass.new(inferred_properties.merge(properties))
+        type_klass.new(settings, properties)
       end
 
       def filter_type_class_from_model
-        return unless properties_from_model
-        type_key = properties_from_model[:type_key]
+        return unless settings
+        type_key = settings[:type_key]
         raise ArgumentError.new("No type specified for filter with key: '#{key}'") unless type_key
         type_class = CONFIGURATION_STRATEGIES_FILTER_TYPE_CLASSES[type_key]
         raise ArgumentError.new("Invalid type specified for filter with key: '#{key}'") unless type_class
         type_class
-      end
-
-      def inferred_properties
-        {
-          column: column
-        }
       end
 
       def apply(relation)
