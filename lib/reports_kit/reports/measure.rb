@@ -1,9 +1,9 @@
 module ReportsKit
   module Reports
     class Measure
-      attr_accessor :properties, :filters
+      attr_accessor :properties, :filters, :context_record
 
-      def initialize(properties)
+      def initialize(properties, context_record: nil)
         properties = { key: properties } if properties.is_a?(String)
         properties = properties.deep_symbolize_keys
         filter_hashes = properties.delete(:filters) || []
@@ -11,6 +11,7 @@ module ReportsKit
 
         self.properties = properties
         self.filters = filter_hashes.map { |filter_hash| Filter.new(filter_hash, measure: self) }
+        self.context_record = context_record
       end
 
       def key
@@ -30,6 +31,7 @@ module ReportsKit
       end
 
       def base_relation
+        return context_record.public_send(key) if context_record
         model_class
       end
 

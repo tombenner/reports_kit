@@ -2,7 +2,6 @@ module ReportsKit
   module Reports
     module FilterTypes
       class Datetime < Base
-        FIRST_DAY_OF_WEEK = :sunday
         DEFAULT_CRITERIA = {
           operator: 'between'
         }

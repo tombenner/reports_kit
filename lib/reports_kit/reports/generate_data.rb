@@ -3,10 +3,11 @@ module ReportsKit
     class GenerateData
       ROUND_PRECISION = 3
 
-      attr_accessor :properties
+      attr_accessor :properties, :context_record
 
-      def initialize(properties)
+      def initialize(properties, context_record: nil)
         self.properties = properties
+        self.context_record = context_record
       end
 
       def perform
@@ -19,7 +20,7 @@ module ReportsKit
         raise ArgumentError.new('The number of measures must be exactly one') if measure_hash.blank?
         raise ArgumentError.new('The number of dimensions must be 1-2') unless dimension_hashes.length.in?([1, 2])
 
-        measure = Measure.new(measure_hash)
+        measure = Measure.new(measure_hash, context_record: context_record)
         dimension = Dimension.new(dimension_hashes[0], measure: measure)
         second_dimension = Dimension.new(dimension_hashes[1], measure: measure) if dimension_hashes[1]
 
@@ -207,7 +208,7 @@ module ReportsKit
         first_key = dimension_keys_values.first.first
         return dimension_keys_values unless first_key.is_a?(Time)
 
-        beginning_of_current_week = Time.now.utc.beginning_of_week(Rpt.config.first_day_of_week)
+        beginning_of_current_week = Time.now.utc.beginning_of_week(ReportsKit.configuration.first_day_of_week)
         last_key = dimension_keys_values.to_a.last.first
         last_key = [beginning_of_current_week, last_key].compact.max
 

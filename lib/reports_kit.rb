@@ -4,4 +4,12 @@ Dir.glob("#{directory}/reports_kit/reports/filter_types/*.rb") { |file| require 
 Dir.glob("#{directory}/reports_kit/reports/*.rb") { |file| require file }
 
 module ReportsKit
+  def self.configure
+    yield(configuration)
+  end
+
+  def self.configuration
+    @configuration ||= Configuration.new
+  end
 end
+
