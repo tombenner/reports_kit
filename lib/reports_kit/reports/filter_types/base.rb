@@ -40,7 +40,7 @@ module ReportsKit
         end
 
         def column
-          properties[:key]
+          properties[:column] || properties[:key]
         end
       end
     end

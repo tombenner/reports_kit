@@ -54,11 +54,24 @@ module ReportsKit
       end
 
       def reflection
-        model_class.reflect_on_association(key)
+        model_class.reflect_on_association(key.to_sym)
       end
 
       def instance_class
         return reflection.class_name.constantize if reflection
+        nil
+      end
+
+      def column
+        return unless inferred_settings
+        inferred_settings[:column]
+      end
+
+      def inferred_settings
+        return { column: key } if configured_by_column?
+        if configured_by_association?
+          return { column: reflection.foreign_key } if reflection.macro == :belongs_to
+        end
         nil
       end
 

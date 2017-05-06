@@ -13,7 +13,7 @@ module ReportsKit
       attr_accessor :properties, :measure, :configuration
 
       delegate :configured_by_association?, :configured_by_column?, :configured_by_model?, :configured_by_time?,
-        :configuration_strategy, :instance_class, :properties_from_model, :column_type,
+        :configuration_strategy, :instance_class, :properties_from_model, :column_type, :column,
         to: :configuration
 
       def initialize(properties, measure:)
@@ -45,7 +45,7 @@ module ReportsKit
       end
 
       def filter_type
-        type_klass.new(properties)
+        type_klass.new(inferred_properties.merge(properties))
       end
 
       def filter_type_class_from_model
@@ -55,6 +55,12 @@ module ReportsKit
         type_class = CONFIGURATION_STRATEGIES_FILTER_TYPE_CLASSES[type_key]
         raise ArgumentError.new("Invalid type specified for filter with key: '#{key}'") unless type_class
         type_class
+      end
+
+      def inferred_properties
+        {
+          column: column
+        }
       end
 
       def apply(relation)
