@@ -8,7 +8,7 @@ describe ReportsKit::Reports::GenerateData do
   let(:chart_data) { subject[:chart_data] }
   let(:chart_values) { chart_data.map { |series| series[:values] } }
 
-  context 'with a timestamp dimension' do
+  context 'with a datetime dimension' do
     let(:properties) do
       {
         measure: 'issues',
@@ -31,7 +31,7 @@ describe ReportsKit::Reports::GenerateData do
       ]])
     end
 
-    context 'with a timestamp filter' do
+    context 'with a datetime filter' do
       let(:properties) do
         {
           measure: {
@@ -168,7 +168,7 @@ describe ReportsKit::Reports::GenerateData do
     end
   end
 
-  context 'with timestamp and association dimensions' do
+  context 'with datetime and association dimensions' do
     let(:properties) do
       {
         measure: 'issues',

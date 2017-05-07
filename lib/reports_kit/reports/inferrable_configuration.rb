@@ -68,9 +68,9 @@ module ReportsKit
       end
 
       def inferred_settings
-        return { column: key } if configured_by_column?
+        return { column: "#{model_class.table_name}.#{key}" } if configured_by_column?
         if configured_by_association?
-          return { column: reflection.foreign_key } if reflection.macro == :belongs_to
+          return { column: "#{model_class.table_name}.#{reflection.foreign_key}" } if reflection.macro == :belongs_to
           return inferred_settings_from_has_many if inferred_settings_from_has_many
         end
         {}
