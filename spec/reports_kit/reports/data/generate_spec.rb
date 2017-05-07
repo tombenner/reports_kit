@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ReportsKit::Reports::GenerateData do
+describe ReportsKit::Reports::Data::Generate do
   subject { described_class.new(properties, context_record: context_record).perform }
 
   let(:repo) { create(:repo) }
