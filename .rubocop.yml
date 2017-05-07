@@ -1,0 +1,83 @@
+# inherits from https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+
+AllCops:
+  Exclude:
+    - spec/support/schema.rb
+    - bin/**/*
+    - tmp/**/*
+    - vendor/**/*
+    - .bundle/**/*
+  Rails:
+    Enabled: true
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+
+Documentation:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: true
+  Max: 40
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+Metrics/CyclomaticComplexity:
+  Enabled: true
+  Max: 12
+Metrics/LineLength:
+  Enabled: true
+  Max: 140
+Metrics/PerceivedComplexity:
+  Enabled: true
+  Max: 12
+Metrics/ClassLength:
+  Enabled: true
+  CountComments: false
+  Max: 200
+Metrics/ModuleLength:
+  CountComments: false
+  Max: 200
+  Enabled: true
+Metrics/MethodLength:
+  StyleGuide: https://github.com/bbatsov/ruby-style-guide#short-methods
+  Enabled: true
+  CountComments: false
+  Max: 50
+Metrics/ParameterLists:
+  StyleGuide: https://github.com/bbatsov/ruby-style-guide#too-many-params
+  Enabled: true
+  Max: 5
+  CountKeywordArgs: true
+
+Lint/AssignmentInCondition:
+  StyleGuide: https://github.com/bbatsov/ruby-style-guide#safe-assignment-in-condition
+  Enabled: true
+  AllowSafeAssignment: true
+Lint/UnusedBlockArgument:
+  Enabled: false
+
+Style/AccessorMethodName:
+  Enabled: true
+Style/AlignHash:
+  EnforcedColonStyle: key
+  EnforcedHashRocketStyle: key
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+Style/Alias:
+  StyleGuide: https://github.com/bbatsov/ruby-style-guide#alias-method
+  EnforcedStyle: prefer_alias_method
+Style/BracesAroundHashParameters:
+  Exclude:
+    - spec/**/*
+Style/CaseIndentation:
+  EnforcedStyle: case
+  SupportedStyles:
+    - case
+    - end
+  IndentOneStep: false
+Style/RaiseArgs:
+  Enabled: false
+Style/SignalException:
+  Enabled: false
+Style/SpecialGlobalVars:
+  Enabled: false

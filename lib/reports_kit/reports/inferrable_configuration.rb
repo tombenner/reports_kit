@@ -24,7 +24,8 @@ module ReportsKit
         elsif column_type
           :column
         else
-          raise ArgumentError.new("No configuration found on the #{model_class} model for #{inferrable_type.to_s.singularize} with key: '#{key}'")
+          inferrable_type_string = inferrable_type.to_s.singularize
+          raise ArgumentError.new("No configuration found on the #{model_class} model for #{inferrable_type_string} with key: '#{key}'")
         end
       end
 
@@ -47,8 +48,8 @@ module ReportsKit
       def settings_from_model
         return {} if model_configuration.blank?
         return {} if model_configuration.public_send(inferrable_type).blank?
-        config_hash = model_configuration.public_send(inferrable_type).find do |config_hash|
-          config_hash[:key] == key
+        config_hash = model_configuration.public_send(inferrable_type).find do |hash|
+          hash[:key] == key
         end
         config_hash || {}
       end

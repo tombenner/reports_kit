@@ -12,9 +12,7 @@ module ReportsKit
         def apply_filter(records)
           return records unless valid?
           records = records.joins(joins) if joins.present?
-          if value.blank? && !is_a?(FilterTypes::Boolean)
-            return records
-          end
+          return records if value.blank? && !is_a?(FilterTypes::Boolean)
           apply_conditions(records)
         end
 
@@ -24,7 +22,7 @@ module ReportsKit
 
         private
 
-        def apply_conditions(records)
+        def apply_conditions(_records)
           raise NotImplementedError
         end
 

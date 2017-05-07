@@ -103,9 +103,6 @@ module ReportsKit
         relation = relation.joins(dimension.group_joins) if dimension.group_joins
         relation = relation.joins(nested_dimension.group_joins) if nested_dimension.group_joins
 
-        # relation = call_dimension_conditions(dimension, relation)
-        # relation = call_dimension_conditions(nested_dimension, relation)
-
         if dimension.should_be_sorted_by_count?
           relation = relation.order('1 DESC')
         else
@@ -120,6 +117,20 @@ module ReportsKit
         nested_dimension_ids = key_pairs.map(&:last)
         nested_dimension_ids_dimension_instances = dimension_to_dimension_ids_dimension_instances(nested_dimension, nested_dimension_ids)
 
+        key_1s_key_2s_values = dimensions_keys_values_to_key_1s_key_2s_values(dimension, dimension_keys_values)
+        label_1s_label_2s_values = key_1s_key_2s_values_to_label_1s_label_2s_values(
+          key_1s_key_2s_values,
+          dimension,
+          nested_dimension,
+          dimension_ids_dimension_instances,
+          nested_dimension_ids_dimension_instances
+        )
+
+        chart_items = label_1s_label_2s_values_to_chart_items(label_1s_label_2s_values)
+        chart_items
+      end
+
+      def dimensions_keys_values_to_key_1s_key_2s_values(dimension, dimension_keys_values)
         key_1s_key_2s_values = {}
         dimension_keys_values.each do |(key_1, key_2), value|
           next if value.zero? || key_1.blank? || key_2.blank?
@@ -133,7 +144,10 @@ module ReportsKit
             key_2s_values.values.sum
           end.reverse
         end
+        key_1s_key_2s_values
+      end
 
+      def key_1s_key_2s_values_to_label_1s_label_2s_values(key_1s_key_2s_values, dimension, nested_dimension, dimension_ids_dimension_instances, nested_dimension_ids_dimension_instances)
         label_1s_label_2s_values = {}
         key_1s_key_2s_values.each do |key_1, key_2s_values|
           key_2s_values.each do |key_2, value|
@@ -149,9 +163,7 @@ module ReportsKit
         else
           label_1s_label_2s_values = label_1s_label_2s_values.to_a.last(limit)
         end
-
-        chart_items = label_1s_label_2s_values_to_chart_items(label_1s_label_2s_values)
-        chart_items
+        label_1s_label_2s_values
       end
 
       def label_1s_label_2s_values_to_chart_items(label_1s_label_2s_values)
@@ -185,7 +197,10 @@ module ReportsKit
 
       def dimension_to_dimension_ids_dimension_instances(dimension, dimension_ids)
         return nil unless dimension.instance_class
-        dimension_ids_dimension_instances = dimension.instance_class.where(id: dimension_ids).map { |dimension_instance| [dimension_instance.id, dimension_instance] }
+        dimension_instances = dimension.instance_class.where(id: dimension_ids)
+        dimension_ids_dimension_instances = dimension_instances.map do |dimension_instance|
+          [dimension_instance.id, dimension_instance]
+        end
         Hash[dimension_ids_dimension_instances]
       end
 
@@ -212,7 +227,6 @@ module ReportsKit
         last_key = dimension_keys_values.to_a.last.first
         last_key = [beginning_of_current_week, last_key].compact.max
 
-        keys = dimension_keys_values.keys
         time = first_key
         full_dimension_instances_values = []
         if use_first_value_key

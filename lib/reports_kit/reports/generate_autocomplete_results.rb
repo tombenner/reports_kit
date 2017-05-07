@@ -21,15 +21,15 @@ module ReportsKit
         results
       end
 
-    private
+      private
 
-    def filter_results(results)
-      query = params[:q].try(:downcase)
-      if query.present?
-        results = results.to_a.select { |r| r[:text].downcase.include?(query) }
+      def filter_results(results)
+        query = params[:q].try(:downcase)
+        if query.present?
+          results = results.to_a.select { |r| r[:text].downcase.include?(query) }
+        end
+        results
       end
-      results
-    end
     end
   end
 end

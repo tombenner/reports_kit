@@ -17,9 +17,8 @@ module ReportsKit
         properties = { key: properties } if properties.is_a?(String)
         properties = properties.deep_symbolize_keys
         self.properties = properties
-        if settings && !settings.key?(:group)
-          raise ArgumentError.new("Dimension settings for dimension '#{key}' of #{model_class} must include :group")
-        end
+        missing_group_setting = settings && !settings.key?(:group)
+        raise ArgumentError.new("Dimension settings for dimension '#{key}' of #{model_class} must include :group") if missing_group_setting
       end
 
       def key

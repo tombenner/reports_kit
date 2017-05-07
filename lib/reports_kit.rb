@@ -14,4 +14,3 @@ module ReportsKit
     @configuration ||= Configuration.new
   end
 end
-

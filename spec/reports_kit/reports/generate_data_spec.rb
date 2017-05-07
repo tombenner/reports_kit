@@ -1,10 +1,11 @@
 require 'spec_helper'
 
 describe ReportsKit::Reports::GenerateData do
-  subject { described_class.new(properties).perform }
+  subject { described_class.new(properties, context_record: context_record).perform }
 
   let(:repo) { create(:repo) }
   let(:repo2) { create(:repo) }
+  let(:context_record) { nil }
   let(:chart_data) { subject[:chart_data] }
   let(:chart_values) { chart_data.map { |series| series[:values] } }
 
@@ -27,7 +28,7 @@ describe ReportsKit::Reports::GenerateData do
       expect(chart_values).to eq([[
         { x: week_offset_timestamp(2), y: 2 },
         { x: week_offset_timestamp(1), y: 0 },
-        { x: week_offset_timestamp(0), y: 1 },
+        { x: week_offset_timestamp(0), y: 1 }
       ]])
     end
 
@@ -78,6 +79,16 @@ describe ReportsKit::Reports::GenerateData do
         { x: repo.full_name, y: 2 },
         { x: repo2.full_name, y: 1 }
       ]])
+    end
+
+    context 'with a context_record' do
+      let(:context_record) { repo }
+
+      it 'returns the chart_values' do
+        expect(chart_values).to eq([[
+          { x: repo.full_name, y: 2 }
+        ]])
+      end
     end
 
     context 'with a belongs_to association filter' do
