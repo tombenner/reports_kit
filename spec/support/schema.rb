@@ -28,4 +28,11 @@ ActiveRecord::Schema.define do
     t.string   :full_name
     t.timestamps
   end
+
+  create_table :tags, force: :cascade do |t|
+    t.integer  :repo_id
+    t.integer  :issue_id
+    t.string   :name
+    t.timestamps
+  end
 end

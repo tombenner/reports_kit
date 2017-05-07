@@ -71,8 +71,25 @@ module ReportsKit
         return { column: key } if configured_by_column?
         if configured_by_association?
           return { column: reflection.foreign_key } if reflection.macro == :belongs_to
+          return inferred_settings_from_has_many if inferred_settings_from_has_many
         end
         {}
+      end
+
+      def inferred_settings_from_has_many
+        return unless reflection.macro == :has_many
+        through_reflection = reflection.through_reflection
+        if through_reflection
+          {
+            joins: through_reflection.name,
+            column: "#{through_reflection.table_name}.#{reflection.source_reflection.foreign_key}"
+          }
+        else
+          {
+            joins: reflection.name,
+            column: "#{reflection.klass.table_name}.#{reflection.klass.primary_key}"
+          }
+        end
       end
 
       def column_type

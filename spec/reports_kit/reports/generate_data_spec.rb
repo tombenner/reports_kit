@@ -105,6 +105,67 @@ describe ReportsKit::Reports::GenerateData do
         ]])
       end
     end
+
+    context 'with a has_many association filter' do
+      let(:properties) do
+        {
+          measure: {
+            key: 'issues',
+            filters: [
+              {
+                key: 'tags',
+                criteria: {
+                  operator: 'include',
+                  value: [tag.id]
+                }
+              }
+            ]
+          },
+          dimensions: %w(repo)
+        }
+      end
+      let(:tag) { create(:tag) }
+      before(:each) do
+        issues[0].tags << tag
+      end
+
+      it 'returns the chart_values' do
+        chart_values
+        expect(chart_values).to eq([[
+          { x: repo.full_name, y: 1 }
+        ]])
+      end
+    end
+
+    context 'with a has_many :through association filter' do
+      let(:properties) do
+        {
+          measure: {
+            key: 'issues',
+            filters: [
+              {
+                key: 'labels',
+                criteria: {
+                  operator: 'include',
+                  value: [label.id]
+                }
+              }
+            ]
+          },
+          dimensions: %w(repo)
+        }
+      end
+      let(:label) { create(:label) }
+      before(:each) do
+        issues[0].labels << label
+      end
+
+      it 'returns the chart_values' do
+        expect(chart_values).to eq([[
+          { x: repo.full_name, y: 1 }
+        ]])
+      end
+    end
   end
 
   context 'with timestamp and association dimensions' do

@@ -44,9 +44,9 @@ module ReportsKit
         if configured_by_model?
           settings_from_model[:group]
         elsif configured_by_association?
-          reflection.foreign_key
+          "#{model_class.table_name}.#{reflection.foreign_key}"
         elsif configured_by_column? && configured_by_time?
-          "date_trunc('week', #{key}::timestamp)"
+          "date_trunc('week', #{model_class.table_name}.#{key}::timestamp)"
         else
           raise ArgumentError.new('Invalid group_expression')
         end
