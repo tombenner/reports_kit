@@ -25,6 +25,10 @@ module ReportsKit
         properties[:key]
       end
 
+      def label
+        key.titleize
+      end
+
       def settings
         inferred_settings.merge(settings_from_model)
       end
