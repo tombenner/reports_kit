@@ -2,12 +2,12 @@ module ReportsKit
   module Reports
     module Data
       class TwoDimensions
-        attr_accessor :dimension, :second_dimension, :dimension_keys_values
+        attr_accessor :measure, :dimension, :second_dimension
 
-        def initialize(dimension, second_dimension, dimension_keys_values)
+        def initialize(measure, dimension, second_dimension)
+          self.measure = measure
           self.dimension = dimension
           self.second_dimension = second_dimension
-          self.dimension_keys_values = dimension_keys_values
         end
 
         def perform
@@ -21,6 +21,29 @@ module ReportsKit
 
         private
 
+        def dimension_keys_values
+          @dimension_keys_values ||= begin
+            relation = measure.filtered_relation
+            relation = measure.conditions.call(relation) if measure.conditions
+            relation = relation.group(dimension.group_expression, second_dimension.group_expression)
+
+            relation = relation.joins(dimension.joins) if dimension.joins
+            relation = relation.joins(second_dimension.joins) if second_dimension.joins
+
+            if dimension.should_be_sorted_by_count?
+              relation = relation.order('1 DESC')
+            else
+              relation = relation.order('2')
+            end
+            dimension_keys_values = relation.count
+
+            if dimension.should_be_sorted_by_count?
+              dimension_keys_values = sort_dimension_keys_values_by_count(dimension_keys_values)
+            end
+            Hash[dimension_keys_values]
+          end
+        end
+
         def primary_keys_secondary_keys_values
           primary_keys_secondary_keys_values = {}
           dimension_keys_values.each do |(primary_key, secondary_key), value|
@@ -28,6 +51,17 @@ module ReportsKit
             primary_keys_secondary_keys_values[primary_key][secondary_key] = value
           end
           primary_keys_secondary_keys_values
+        end
+
+        def sort_dimension_keys_values_by_count(dimension_keys_values)
+          primary_keys_counts = Hash.new(0)
+          dimension_keys_values.each do |(primary_key, secondary_key), count|
+            primary_keys_counts[primary_key] += count
+          end
+          primary_keys_counts = primary_keys_counts.to_a
+          sorted_primary_keys = primary_keys_counts.sort_by { |primary_key, count| count }.reverse.map(&:first)
+          dimension_keys_values = dimension_keys_values.sort_by { |(primary_key, secondary_key), count| sorted_primary_keys.index(primary_key) }
+          Hash[dimension_keys_values]
         end
 
         def dimension_ids
@@ -59,7 +93,11 @@ module ReportsKit
         end
 
         def primary_keys
-          Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:first).uniq)
+          keys = Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:first).uniq)
+          if dimension.should_be_sorted_by_count?
+            keys = keys.first(dimension.dimension_instances_limit)
+          end
+          keys
         end
 
         def secondary_keys

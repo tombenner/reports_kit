@@ -1,7 +1,7 @@
 module ReportsKit
   module Reports
     class Dimension
-      DEFAULT_DIMENSION_INSTANCES_LIMIT = 50
+      DEFAULT_DIMENSION_INSTANCES_LIMIT = 30
 
       attr_accessor :properties, :measure, :configuration
 
@@ -51,8 +51,8 @@ module ReportsKit
         end
       end
 
-      def group_joins
-        nil
+      def joins
+        settings_from_model[:joins] if configured_by_model?
       end
 
       def dimension_instances_limit

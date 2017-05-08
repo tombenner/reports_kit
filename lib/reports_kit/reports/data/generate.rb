@@ -26,10 +26,11 @@ module ReportsKit
           second_dimension = Dimension.new(dimension_hashes[1], measure: measure) if dimension_hashes[1]
 
           if second_dimension
-            data = data_for_two_dimensions(measure, dimension, second_dimension)
+            data = Data::TwoDimensions.new(measure, dimension, second_dimension).perform
           else
-            data = data_for_one_dimension(measure, dimension)
+            data = Data::OneDimension.new(measure, dimension).perform
           end
+          data = data.merge(type: type)
 
           ChartOptions.new(data).perform
         end
@@ -38,47 +39,6 @@ module ReportsKit
 
         def type
           properties[:type] || 'bar'
-        end
-
-        def data_for_one_dimension(measure, dimension)
-          relation = measure.filtered_relation
-          relation = relation.group(dimension.group_expression)
-          relation = relation.joins(dimension.group_joins) if dimension.group_joins
-          relation = relation.limit(dimension.dimension_instances_limit)
-          if dimension.should_be_sorted_by_count?
-            relation = relation.order('1 DESC')
-          else
-            relation = relation.order('2')
-          end
-          dimension_keys_values = relation.distinct.public_send(*measure.aggregate_function)
-          dimension_keys_values = Utils.populate_sparse_values(dimension_keys_values)
-          dimension_keys_values.delete(nil)
-          dimension_keys_values.delete('')
-          Data::OneDimension.new(measure, dimension, dimension_keys_values).perform.merge(type: type)
-        end
-
-        def data_for_two_dimensions(measure, dimension, second_dimension)
-          relation = measure.filtered_relation
-          relation = measure.conditions.call(relation) if measure.conditions
-          relation = relation.group(dimension.group_expression, second_dimension.group_expression)
-
-          relation = relation.joins(dimension.group_joins) if dimension.group_joins
-          relation = relation.joins(second_dimension.group_joins) if second_dimension.group_joins
-
-          if dimension.should_be_sorted_by_count?
-            relation = relation.order('1 DESC')
-          else
-            relation = relation.order('2')
-          end
-          dimension_keys_values = relation.count
-          limit = dimension.dimension_instances_limit
-          if dimension.should_be_sorted_by_count?
-            dimension_keys_values = dimension_keys_values.to_a.first(limit)
-          else
-            dimension_keys_values = dimension_keys_values.to_a.last(limit)
-          end
-          dimension_keys_values = Hash[dimension_keys_values]
-          Data::TwoDimensions.new(dimension, second_dimension, dimension_keys_values).perform.merge(type: type)
         end
       end
     end

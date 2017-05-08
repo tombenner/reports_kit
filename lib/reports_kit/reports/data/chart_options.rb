@@ -32,7 +32,9 @@ module ReportsKit
               stacked: true,
               gridLines: {
                 display: false
-              }
+              },
+              barPercentage: 0.9,
+              categoryPercentage: 0.9
             }],
             yAxes: [{
               stacked: true

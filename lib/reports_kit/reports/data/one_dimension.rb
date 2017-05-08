@@ -2,12 +2,11 @@ module ReportsKit
   module Reports
     module Data
       class OneDimension
-        attr_accessor :measure, :dimension, :dimension_keys_values
+        attr_accessor :measure, :dimension
 
-        def initialize(measure, dimension, dimension_keys_values)
+        def initialize(measure, dimension)
           self.measure = measure
           self.dimension = dimension
-          self.dimension_keys_values = dimension_keys_values
         end
 
         def perform
@@ -20,6 +19,25 @@ module ReportsKit
         end
 
         private
+
+        def dimension_keys_values
+          @dimension_keys_values ||= begin
+            relation = measure.filtered_relation
+            relation = relation.group(dimension.group_expression)
+            relation = relation.joins(dimension.joins) if dimension.joins
+            relation = relation.limit(dimension.dimension_instances_limit)
+            if dimension.should_be_sorted_by_count?
+              relation = relation.order('1 DESC')
+            else
+              relation = relation.order('2')
+            end
+            dimension_keys_values = relation.distinct.public_send(*measure.aggregate_function)
+            dimension_keys_values = Utils.populate_sparse_values(dimension_keys_values)
+            dimension_keys_values.delete(nil)
+            dimension_keys_values.delete('')
+            dimension_keys_values
+          end
+        end
 
         def datasets
           [
