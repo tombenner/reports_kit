@@ -15,6 +15,7 @@ describe ReportsKit::Reports::Data::Generate do
   end
 
   let(:chart_type) { subject[:type] }
+  let(:chart_options) { subject[:chart_data][:options] }
 
   context 'with a datetime dimension' do
     let(:properties) do
@@ -49,6 +50,27 @@ describe ReportsKit::Reports::Data::Generate do
           }
         ]
       })
+    end
+
+    it 'returns the default options' do
+      expect(chart_options).to eq(ReportsKit::Reports::Data::ChartOptions::DEFAULT_OPTIONS)
+    end
+
+    context 'with chart options' do
+      let(:custom_options) { { foo: 'bar' } }
+      let(:properties) do
+        {
+          measure: 'issues',
+          dimensions: %w(opened_at),
+          chart: {
+            options: custom_options
+          }
+        }
+      end
+
+      it 'merges the options' do
+        expect(chart_options).to eq(ReportsKit::Reports::Data::ChartOptions::DEFAULT_OPTIONS.deep_merge(custom_options))
+      end
     end
 
     context 'with a datetime filter' do

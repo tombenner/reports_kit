@@ -2,8 +2,6 @@ module ReportsKit
   module Reports
     module Data
       class ChartOptions
-        attr_accessor :data
-
         DEFAULT_COLORS = %w(
           #1f77b4
           #aec7e8
@@ -51,8 +49,11 @@ module ReportsKit
           }
         }
 
-        def initialize(data)
+        attr_accessor :data, :options
+
+        def initialize(data, options)
           self.data = data
+          self.options = options
         end
 
         def perform
@@ -71,7 +72,9 @@ module ReportsKit
         end
 
         def add_options
-          self.data[:chart_data][:options] = DEFAULT_OPTIONS
+          chart_options = DEFAULT_OPTIONS
+          chart_options = chart_options.deep_merge(options[:options]) if options.try(:[], :options)
+          self.data[:chart_data][:options] = chart_options
         end
       end
     end

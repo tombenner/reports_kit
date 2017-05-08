@@ -32,7 +32,7 @@ module ReportsKit
           end
           data = data.merge(type: type)
 
-          ChartOptions.new(data).perform
+          ChartOptions.new(data, properties[:chart]).perform
         end
 
         private
