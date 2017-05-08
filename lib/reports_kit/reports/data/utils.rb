@@ -2,6 +2,10 @@ module ReportsKit
   module Reports
     module Data
       class Utils
+        def self.format_time(time)
+          time.strftime('%b %-d, \'%y')
+        end
+
         def self.populate_sparse_values(dimension_keys_values, use_first_value_key: false)
           return dimension_keys_values if dimension_keys_values.blank?
           first_key = dimension_keys_values.first.first
@@ -27,6 +31,25 @@ module ReportsKit
           Hash[full_dimension_instances_values]
         end
 
+        def self.populate_sparse_keys(keys)
+          return keys if keys.blank?
+          first_key = keys.first
+          return keys unless first_key.is_a?(Time)
+          keys = keys.sort
+          beginning_of_current_week = Time.now.utc.beginning_of_week(ReportsKit.configuration.first_day_of_week)
+          last_key = keys.last
+          last_key = [beginning_of_current_week, last_key].compact.max
+
+          time = first_key
+          populated_keys = []
+          loop do
+            populated_keys << time
+            break if time >= last_key
+            time += 1.week
+          end
+          populated_keys
+        end
+
         def self.dimension_to_dimension_ids_dimension_instances(dimension, dimension_ids)
           return nil unless dimension.instance_class
           dimension_instances = dimension.instance_class.where(id: dimension_ids)
@@ -36,17 +59,17 @@ module ReportsKit
           Hash[dimension_ids_dimension_instances]
         end
 
-        def self.dimension_key_to_label(dimension_instance, ids_dimension_instances, dimension)
+        def self.dimension_key_to_label(dimension_instance, ids_dimension_instances)
           case dimension_instance
           when Time
-            dimension_instance.to_time.to_i * 1000
+            Utils.format_time(dimension_instance)
           when Fixnum
-            raise "instance_class maybe not set for Dimension##{dimension.dimension_key}" unless ids_dimension_instances
+            raise ArgumentError.new("ids_dimension_instances must be present for Dimension with identifier: #{dimension_instance}") unless ids_dimension_instances
             instance = ids_dimension_instances[dimension_instance.to_i]
-            raise "instance_class not set for Dimension##{dimension.dimension_key}" unless instance
+            raise ArgumentError.new("instance could not be found for Dimension with identifier: #{dimension_instance}") unless instance
             instance.to_s
           else
-            dimension_instance.to_s
+            dimension_instance.to_s.gsub(/\.0$/, '')
           end
         end
       end

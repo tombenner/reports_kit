@@ -6,8 +6,15 @@ describe ReportsKit::Reports::Data::Generate do
   let(:repo) { create(:repo) }
   let(:repo2) { create(:repo) }
   let(:context_record) { nil }
-  let(:chart_data) { subject[:chart_data] }
-  let(:chart_values) { chart_data.map { |series| series[:values] } }
+  let(:chart_data) do
+    chart_data = subject[:chart_data].except(:options)
+    chart_data[:datasets] = chart_data[:datasets].map do |dataset|
+      dataset.except(:backgroundColor)
+    end
+    chart_data
+  end
+
+  let(:chart_type) { subject[:type] }
 
   context 'with a datetime dimension' do
     let(:properties) do
@@ -24,12 +31,24 @@ describe ReportsKit::Reports::Data::Generate do
       ]
     end
 
-    it 'returns the chart_values' do
-      expect(chart_values).to eq([[
-        { x: week_offset_timestamp(2), y: 2 },
-        { x: week_offset_timestamp(1), y: 0 },
-        { x: week_offset_timestamp(0), y: 1 }
-      ]])
+    it 'returns the type' do
+      expect(chart_type).to eq('bar')
+    end
+
+    it 'returns the data' do
+      expect(chart_data).to eq({
+        labels: [
+          format_time(2),
+          format_time(1),
+          format_time(0)
+        ],
+        datasets: [
+          {
+            label: 'Issues',
+            data: [2, 0, 1]
+          }
+        ]
+      })
     end
 
     context 'with a datetime filter' do
@@ -51,10 +70,16 @@ describe ReportsKit::Reports::Data::Generate do
         }
       end
 
-      it 'returns the chart_values' do
-        expect(chart_values).to eq([[
-          { x: week_offset_timestamp(0), y: 1 }
-        ]])
+      it 'returns the chart_data' do
+        expect(chart_data).to eq({
+          labels: [format_time(0)],
+          datasets: [
+            {
+              label: "Issues",
+              data: [1.0]
+            }
+          ]
+        })
       end
     end
   end
@@ -74,20 +99,21 @@ describe ReportsKit::Reports::Data::Generate do
       ]
     end
 
-    it 'returns the chart_values' do
-      expect(chart_values).to eq([[
-        { x: repo.full_name, y: 2 },
-        { x: repo2.full_name, y: 1 }
-      ]])
+    it 'returns the chart_data' do
+      expect(chart_data).to eq({
+        labels: [repo.to_s, repo2.to_s],
+        datasets: [{ label: 'Issues', data: [2, 1] }]
+      })
     end
 
     context 'with a context_record' do
       let(:context_record) { repo }
 
-      it 'returns the chart_values' do
-        expect(chart_values).to eq([[
-          { x: repo.full_name, y: 2 }
-        ]])
+      it 'returns the chart_data' do
+        expect(chart_data).to eq({
+          labels: [repo.to_s],
+          datasets: [{ label: "Issues", data: [2.0] }]
+        })
       end
     end
 
@@ -110,10 +136,11 @@ describe ReportsKit::Reports::Data::Generate do
         }
       end
 
-      it 'returns the chart_values' do
-        expect(chart_values).to eq([[
-          { x: repo.full_name, y: 2 }
-        ]])
+      it 'returns the chart_data' do
+        expect(chart_data).to eq({
+          labels: [repo.to_s],
+          datasets: [{ label: "Issues", data: [2.0] }]
+        })
       end
     end
 
@@ -140,11 +167,12 @@ describe ReportsKit::Reports::Data::Generate do
         issues[0].tags << tag
       end
 
-      it 'returns the chart_values' do
-        chart_values
-        expect(chart_values).to eq([[
-          { x: repo.full_name, y: 1 }
-        ]])
+      it 'returns the chart_data' do
+        chart_data
+        expect(chart_data).to eq({
+          labels: [repo.to_s],
+          datasets: [{ label: "Issues", data: [1.0] }]
+        })
       end
     end
 
@@ -171,10 +199,11 @@ describe ReportsKit::Reports::Data::Generate do
         issues[0].labels << label
       end
 
-      it 'returns the chart_values' do
-        expect(chart_values).to eq([[
-          { x: repo.full_name, y: 1 }
-        ]])
+      it 'returns the chart_data' do
+        expect(chart_data).to eq({
+          labels: [repo.to_s],
+          datasets: [{ label: "Issues", data: [1.0] }]
+        })
       end
     end
   end
@@ -189,16 +218,25 @@ describe ReportsKit::Reports::Data::Generate do
     let!(:issues) do
       [
         create(:issue, repo: repo, opened_at: now),
-        create(:issue, repo: repo, opened_at: now - 1.week),
+        create(:issue, repo: repo, opened_at: now - 2.weeks),
         create(:issue, repo: repo2, opened_at: now)
       ]
     end
 
     it 'returns the chart_data' do
-      expect(chart_data).to eq([
-        { key: repo.full_name, values: [{ x: week_offset_timestamp(1), y: 1.0 }, { x: week_offset_timestamp(0), y: 1.0 }] },
-        { key: repo2.full_name, values: [{ x: week_offset_timestamp(1), y: 0 }, { x: week_offset_timestamp(0), y: 1.0 }] }
-      ])
+      expect(chart_data).to eq({
+        labels: [format_time(2), format_time(1), format_time(0)],
+        datasets: [
+          {
+            label: repo.to_s,
+            data: [1, 0, 1]
+          },
+          {
+            label: repo2.to_s,
+            data: [0, 0, 1]
+          }
+        ]
+      })
     end
   end
 end

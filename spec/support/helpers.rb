@@ -7,7 +7,7 @@ module Helpers
     time.strftime('%b %-d, %Y')
   end
 
-  def week_offset_timestamp(week_offset)
-    (now - week_offset.weeks).beginning_of_week.to_i * 1000
+  def format_time(week_offset)
+    ReportsKit::Reports::Data::Utils.format_time((now - week_offset.weeks).beginning_of_week)
   end
 end

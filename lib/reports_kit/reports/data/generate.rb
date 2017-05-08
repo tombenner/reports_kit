@@ -26,53 +26,25 @@ module ReportsKit
           second_dimension = Dimension.new(dimension_hashes[1], measure: measure) if dimension_hashes[1]
 
           if second_dimension
-            data_for_two_dimensions(measure, dimension, second_dimension)
+            data = data_for_two_dimensions(measure, dimension, second_dimension)
           else
-            data_for_one_dimension(measure, dimension)
+            data = data_for_one_dimension(measure, dimension)
           end
+
+          ChartOptions.new(data).perform
         end
 
         private
 
-        def display_format
-          properties[:display_format] || 'bar'
+        def type
+          properties[:type] || 'bar'
         end
 
         def data_for_one_dimension(measure, dimension)
-          labels_values = dimension_and_measure_to_labels_values(dimension, measure)
-          values = labels_values.map do |label, value|
-            {
-              x: label,
-              y: value
-            }
-          end
-          chart_hash = {
-            key: measure.label,
-            values: values
-          }
-
-          {
-            x_label: properties[:x_label],
-            y_label: properties[:y_label],
-            display_format: display_format,
-            chart_data: [chart_hash]
-          }
-        end
-
-        def data_for_two_dimensions(measure, dimension, second_dimension)
-          chart_data = dimensions_and_measure_to_chart_data(measure, dimension, second_dimension)
-          {
-            x_label: properties[:x_label],
-            y_label: properties[:y_label],
-            display_format: display_format,
-            chart_data: chart_data
-          }
-        end
-
-        def dimension_and_measure_to_labels_values(dimension, measure)
           relation = measure.filtered_relation
           relation = relation.group(dimension.group_expression)
           relation = relation.joins(dimension.group_joins) if dimension.group_joins
+          relation = relation.limit(dimension.dimension_instances_limit)
           if dimension.should_be_sorted_by_count?
             relation = relation.order('1 DESC')
           else
@@ -82,10 +54,10 @@ module ReportsKit
           dimension_keys_values = Utils.populate_sparse_values(dimension_keys_values)
           dimension_keys_values.delete(nil)
           dimension_keys_values.delete('')
-          Data::OneDimension.new(dimension, dimension_keys_values).perform
+          Data::OneDimension.new(measure, dimension, dimension_keys_values).perform.merge(type: type)
         end
 
-        def dimensions_and_measure_to_chart_data(measure, dimension, second_dimension)
+        def data_for_two_dimensions(measure, dimension, second_dimension)
           relation = measure.filtered_relation
           relation = measure.conditions.call(relation) if measure.conditions
           relation = relation.group(dimension.group_expression, second_dimension.group_expression)
@@ -99,7 +71,14 @@ module ReportsKit
             relation = relation.order('2')
           end
           dimension_keys_values = relation.count
-          Data::TwoDimensions.new(dimension, second_dimension, dimension_keys_values).perform
+          limit = dimension.dimension_instances_limit
+          if dimension.should_be_sorted_by_count?
+            dimension_keys_values = dimension_keys_values.to_a.first(limit)
+          else
+            dimension_keys_values = dimension_keys_values.to_a.last(limit)
+          end
+          dimension_keys_values = Hash[dimension_keys_values]
+          Data::TwoDimensions.new(dimension, second_dimension, dimension_keys_values).perform.merge(type: type)
         end
       end
     end

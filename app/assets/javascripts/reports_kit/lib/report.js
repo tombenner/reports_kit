@@ -74,18 +74,6 @@ ReportsKit.Report = (function(options) {
     })
   };
 
-  self.xTickFormat = function(value) {
-    if (self.isInt(value)) {
-      return d3.time.format('%b %e, \'%y')(new Date(value));
-    } else {
-      return value;
-    }
-  };
-
-  self.isInt = function(value) {
-    return value === parseInt(value, 10);
-  };
-
   self.properties = function() {
     var filterKeysValues = {};
     var checkboxKeysEnableds = {};
