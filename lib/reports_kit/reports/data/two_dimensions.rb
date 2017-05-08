@@ -45,12 +45,14 @@ module ReportsKit
         end
 
         def primary_keys_secondary_keys_values
-          primary_keys_secondary_keys_values = {}
-          dimension_keys_values.each do |(primary_key, secondary_key), value|
-            primary_keys_secondary_keys_values[primary_key] ||= {}
-            primary_keys_secondary_keys_values[primary_key][secondary_key] = value
+          @primary_keys_secondary_keys_values ||= begin
+            primary_keys_secondary_keys_values = {}
+            dimension_keys_values.each do |(primary_key, secondary_key), value|
+              primary_keys_secondary_keys_values[primary_key] ||= {}
+              primary_keys_secondary_keys_values[primary_key][secondary_key] = value
+            end
+            primary_keys_secondary_keys_values
           end
-          primary_keys_secondary_keys_values
         end
 
         def sort_dimension_keys_values_by_count(dimension_keys_values)
@@ -93,15 +95,19 @@ module ReportsKit
         end
 
         def primary_keys
-          keys = Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:first).uniq)
-          if dimension.should_be_sorted_by_count?
-            keys = keys.first(dimension.dimension_instances_limit)
+          @primary_keys ||= begin
+            keys = Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:first).uniq)
+            if dimension.should_be_sorted_by_count?
+              keys = keys.first(dimension.dimension_instances_limit)
+            end
+            keys
           end
-          keys
         end
 
         def secondary_keys
-          Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:last).uniq)
+          @secondary_keys ||= begin
+            Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:last).uniq)
+          end
         end
 
         def labels

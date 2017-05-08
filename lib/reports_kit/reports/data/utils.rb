@@ -52,7 +52,7 @@ module ReportsKit
 
         def self.dimension_to_dimension_ids_dimension_instances(dimension, dimension_ids)
           return nil unless dimension.instance_class
-          dimension_instances = dimension.instance_class.where(id: dimension_ids)
+          dimension_instances = dimension.instance_class.where(id: dimension_ids.uniq)
           dimension_ids_dimension_instances = dimension_instances.map do |dimension_instance|
             [dimension_instance.id, dimension_instance]
           end
