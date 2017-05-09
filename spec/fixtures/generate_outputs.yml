@@ -1,0 +1,202 @@
+---
+- :chart_data:
+    :labels: []
+    :datasets:
+    - :label: Issues
+      :data: []
+      :backgroundColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :stacked: true
+          :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Repo
+        :yAxes:
+        - :stacked: true
+          :scaleLabel:
+            :display: true
+            :labelString: Issues
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels: []
+    :datasets:
+    - :label: Issues
+      :data: []
+      :backgroundColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :stacked: true
+          :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Repo
+        :yAxes:
+        - :stacked: true
+          :scaleLabel:
+            :display: true
+            :labelString: Issues
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+      :foo: bar
+  :type: bar
+- :chart_data:
+    :labels: []
+    :datasets:
+    - :label: Issues
+      :data: []
+      :backgroundColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :stacked: true
+          :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Repo
+        :yAxes:
+        - :stacked: true
+          :scaleLabel:
+            :display: true
+            :labelString: Issues
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels: []
+    :datasets:
+    - :label: Issues
+      :data: []
+      :backgroundColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :stacked: true
+          :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Repo
+        :yAxes:
+        - :stacked: true
+          :scaleLabel:
+            :display: true
+            :labelString: Issues
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels: []
+    :datasets:
+    - :label: Issues
+      :data: []
+      :backgroundColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :stacked: true
+          :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Opened At
+        :yAxes:
+        - :stacked: true
+          :scaleLabel:
+            :display: true
+            :labelString: Issues
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels: []
+    :datasets: []
+    :options:
+      :scales:
+        :xAxes:
+        - :stacked: true
+          :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Opened At
+        :yAxes:
+        - :stacked: true
+          :scaleLabel:
+            :display: true
+            :labelString: Issues
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels: []
+    :datasets:
+    - :label: Issues
+      :data: []
+      :backgroundColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :stacked: true
+          :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Repo
+        :yAxes:
+        - :stacked: true
+          :scaleLabel:
+            :display: true
+            :labelString: Issues
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar

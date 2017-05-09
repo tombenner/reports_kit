@@ -1,0 +1,35 @@
+- measure: issues
+  dimensions:
+  - repo
+- measure: issues
+  dimensions:
+  - repo
+  chart:
+    options:
+      foo: bar
+- measure: issues
+  dimensions:
+  - repo
+  chart:
+    foo: bar
+- measure:
+    key: issues
+  dimensions:
+  - key: repo
+- measure:
+    key: issues
+  dimensions:
+  - key: opened_at
+- measure:
+    key: issues
+  dimensions:
+  - key: opened_at
+  - key: repo
+- measure:
+    key: issues
+    filters:
+    - key: locked
+    - key: title
+    - key: opened_at
+  dimensions:
+  - key: repo

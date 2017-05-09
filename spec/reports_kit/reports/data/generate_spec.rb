@@ -52,27 +52,6 @@ describe ReportsKit::Reports::Data::Generate do
       })
     end
 
-    it 'returns the default options' do
-      expect(chart_options).to eq(ReportsKit::Reports::Data::ChartOptions::DEFAULT_OPTIONS)
-    end
-
-    context 'with chart options' do
-      let(:custom_options) { { foo: 'bar' } }
-      let(:properties) do
-        {
-          measure: 'issues',
-          dimensions: %w(opened_at),
-          chart: {
-            options: custom_options
-          }
-        }
-      end
-
-      it 'merges the options' do
-        expect(chart_options).to eq(ReportsKit::Reports::Data::ChartOptions::DEFAULT_OPTIONS.deep_merge(custom_options))
-      end
-    end
-
     context 'with a datetime filter' do
       let(:properties) do
         {
@@ -259,6 +238,38 @@ describe ReportsKit::Reports::Data::Generate do
           }
         ]
       })
+    end
+  end
+
+  # These examples allow for quick comparisons of many types of inputs and outputs.
+  # When making functional modifications, run these to see whether the modifications impact the output in any cases.
+  # If the output effects are desired, comment out the `skip` to write them to the outputs YAML file, then verify that the output
+  # modifications are desired, then commit the result and uncomment the `skip`.
+  describe 'chart options' do
+    FIXTURES_DIRECTORY = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'fixtures'))
+
+    let(:inputs) { YAML.load_file("#{FIXTURES_DIRECTORY}/generate_inputs.yml") }
+    let(:outputs_path) { "#{FIXTURES_DIRECTORY}/generate_outputs.yml" }
+    let(:outputs) { YAML.load_file(outputs_path) }
+
+    context 'input examples' do
+      YAML.load_file("#{FIXTURES_DIRECTORY}/generate_inputs.yml").each.with_index do |inputs, index|
+        it 'returns the expected output' do
+          expect(described_class.new(inputs).perform).to eq(outputs[index])
+        end
+      end
+    end
+
+    context 'writing the outputs' do
+      # For documentation about this `skip`, see the comment at the top of this `describe` block.
+      skip
+
+      it 'writes the outputs' do
+        outputs = inputs.map do |example|
+          described_class.new(example).perform
+        end
+        File.write(outputs_path, outputs.to_yaml)
+      end
     end
   end
 end
