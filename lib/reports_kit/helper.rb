@@ -1,6 +1,7 @@
 module ReportsKit
   module Helper
     def render_report(properties, &block)
+      raise ArgumentError.new('`properties` must be a Hash or String') if properties.blank?
       if properties.is_a?(String)
         path = Rails.root.join('config', 'reports_kit', 'reports', "#{properties}.yml")
         properties = YAML.load_file(path)
