@@ -2,7 +2,9 @@ module ReportsKit
   module Reports
     module FilterTypes
       class Records < Base
-        DEFAULT_CRITERIA = {}
+        DEFAULT_CRITERIA = {
+          operator: 'include'
+        }
 
         def apply_conditions(records)
           case criteria[:operator]
