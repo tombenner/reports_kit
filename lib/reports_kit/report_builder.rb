@@ -9,13 +9,13 @@ module ReportsKit
     end
 
     def check_box(filter_key)
-      filter = filter_for_filter_key(filter_key)
+      filter = validate_filter!(filter_key)
       checked = filter.properties[:criteria][:operator] == 'true'
       check_box_tag(filter_key, '1', checked, class: 'form-control input-sm')
     end
 
     def date_range(filter_key, placeholder: nil)
-      filter = filter_for_filter_key(filter_key)
+      filter = validate_filter!(filter_key)
       text_field_tag(
         filter_key,
         filter.properties[:criteria][:value],
@@ -25,6 +25,7 @@ module ReportsKit
     end
 
     def multi_autocomplete(filter_key, placeholder: nil)
+      validate_filter!(filter_key)
       select_tag(
         filter_key,
         nil,
@@ -39,7 +40,7 @@ module ReportsKit
     end
 
     def string_filter(filter_key, placeholder: nil)
-      filter = filter_for_filter_key(filter_key)
+      filter = validate_filter!(filter_key)
       text_field_tag(
         filter_key,
         filter.properties[:criteria][:value],
@@ -50,7 +51,7 @@ module ReportsKit
 
     private
 
-    def filter_for_filter_key(filter_key)
+    def validate_filter!(filter_key)
       filter_key = filter_key.to_s
       filter = filters.find { |f| f.key == filter_key }
       raise ArgumentError.new("A filter with key '#{filter_key}' is not configured in this report") unless filter
