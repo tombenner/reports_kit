@@ -83,10 +83,14 @@ module ReportsKit
         end
 
         def datasets
-          secondary_keys.map do |secondary_key|
+          secondary_keys_values = secondary_keys.map do |secondary_key|
             values = primary_keys.map do |primary_key|
               primary_keys_secondary_keys_values[primary_key].try(:[], secondary_key) || 0
             end
+            [secondary_key, values]
+          end
+          secondary_keys_values = secondary_keys_values.sort_by { |_, values| values.sum }.reverse
+          secondary_keys_values.map do |secondary_key, values|
             {
               label: Utils.dimension_key_to_label(secondary_key, second_dimension_ids_dimension_instances),
               data: values
