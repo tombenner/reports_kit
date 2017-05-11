@@ -15,6 +15,7 @@ module ReportsKit
 
         raise ArgumentError.new('Blank properties') if properties.blank?
         properties = { key: properties } if properties.is_a?(String)
+        raise ArgumentError.new("Measure properties must be a String or Hash, not a #{properties.class.name}: #{properties.inspect}") unless properties.is_a?(Hash)
         properties = properties.deep_symbolize_keys
         self.properties = properties
         missing_group_setting = settings && !settings.key?(:group)

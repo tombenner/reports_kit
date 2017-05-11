@@ -5,6 +5,7 @@ module ReportsKit
 
       def initialize(properties, context_record: nil)
         properties = { key: properties } if properties.is_a?(String)
+        raise ArgumentError.new("Measure properties must be a String or Hash, not a #{properties.class.name}: #{properties.inspect}") unless properties.is_a?(Hash)
         properties = properties.deep_symbolize_keys
         filter_hashes = properties.delete(:filters) || []
         filter_hashes = filter_hashes.values if filter_hashes.is_a?(Hash) && filter_hashes.key?(:'0')
