@@ -45,12 +45,14 @@ module ReportsKit
           }
         }.freeze
 
-        attr_accessor :data, :options, :chart_options, :inferred_options
+        attr_accessor :data, :options, :chart_options, :inferred_options, :dataset_options, :type
 
         def initialize(data, options:, inferred_options: {})
           self.data = data
           self.options = options.try(:except, :options) || {}
           self.chart_options = options.try(:[], :options) || {}
+          self.dataset_options = options.try(:[], :datasets)
+          self.type = options.try(:[], :type) || 'bar'
 
           self.options = inferred_options.deep_merge(self.options) if inferred_options.present?
         end
@@ -58,6 +60,8 @@ module ReportsKit
         def perform
           set_colors
           set_chart_options
+          set_dataset_options
+          set_type
           data
         end
 
@@ -102,6 +106,18 @@ module ReportsKit
           merged_options = default_options
           merged_options = merged_options.deep_merge(chart_options) if chart_options
           self.data[:chart_data][:options] = merged_options
+        end
+
+        def set_dataset_options
+          return if self.data[:chart_data][:datasets].blank? || dataset_options.blank?
+          self.data[:chart_data][:datasets] = self.data[:chart_data][:datasets].map do |dataset|
+            dataset.merge(dataset_options)
+          end
+        end
+
+        def set_type
+          return if type.blank?
+          self.data[:type] = type
         end
       end
     end

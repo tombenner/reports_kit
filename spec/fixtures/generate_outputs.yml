@@ -8,8 +8,7 @@
     :options:
       :scales:
         :xAxes:
-        - :stacked: true
-          :gridLines:
+        - :gridLines:
             :display: false
           :barPercentage: 0.9
           :categoryPercentage: 0.9
@@ -17,8 +16,7 @@
             :display: true
             :labelString: Repo
         :yAxes:
-        - :stacked: true
-          :scaleLabel:
+        - :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:
@@ -37,8 +35,7 @@
     :options:
       :scales:
         :xAxes:
-        - :stacked: true
-          :gridLines:
+        - :gridLines:
             :display: false
           :barPercentage: 0.9
           :categoryPercentage: 0.9
@@ -46,8 +43,7 @@
             :display: true
             :labelString: Repo
         :yAxes:
-        - :stacked: true
-          :scaleLabel:
+        - :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:
@@ -67,8 +63,7 @@
     :options:
       :scales:
         :xAxes:
-        - :stacked: true
-          :gridLines:
+        - :gridLines:
             :display: false
           :barPercentage: 0.9
           :categoryPercentage: 0.9
@@ -76,8 +71,7 @@
             :display: true
             :labelString: Repo
         :yAxes:
-        - :stacked: true
-          :scaleLabel:
+        - :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:
@@ -96,8 +90,7 @@
     :options:
       :scales:
         :xAxes:
-        - :stacked: true
-          :gridLines:
+        - :gridLines:
             :display: false
           :barPercentage: 0.9
           :categoryPercentage: 0.9
@@ -105,8 +98,7 @@
             :display: true
             :labelString: Repo
         :yAxes:
-        - :stacked: true
-          :scaleLabel:
+        - :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:
@@ -125,8 +117,7 @@
     :options:
       :scales:
         :xAxes:
-        - :stacked: true
-          :gridLines:
+        - :gridLines:
             :display: false
           :barPercentage: 0.9
           :categoryPercentage: 0.9
@@ -134,8 +125,7 @@
             :display: true
             :labelString: Opened At
         :yAxes:
-        - :stacked: true
-          :scaleLabel:
+        - :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:
@@ -151,8 +141,7 @@
     :options:
       :scales:
         :xAxes:
-        - :stacked: true
-          :gridLines:
+        - :gridLines:
             :display: false
           :barPercentage: 0.9
           :categoryPercentage: 0.9
@@ -160,8 +149,7 @@
             :display: true
             :labelString: Opened At
         :yAxes:
-        - :stacked: true
-          :scaleLabel:
+        - :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:
@@ -180,8 +168,7 @@
     :options:
       :scales:
         :xAxes:
-        - :stacked: true
-          :gridLines:
+        - :gridLines:
             :display: false
           :barPercentage: 0.9
           :categoryPercentage: 0.9
@@ -189,8 +176,7 @@
             :display: true
             :labelString: Repo
         :yAxes:
-        - :stacked: true
-          :scaleLabel:
+        - :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:

@@ -17,7 +17,6 @@ module ReportsKit
           else
             data = Data::OneDimension.new(measure, dimension).perform
           end
-          data = data.merge(type: type)
 
           ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
         end
@@ -59,10 +58,6 @@ module ReportsKit
             x_axis_label: dimension.label,
             y_axis_label: measure.label
           }
-        end
-
-        def type
-          properties[:type] || 'bar'
         end
       end
     end
