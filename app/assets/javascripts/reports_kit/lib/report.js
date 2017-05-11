@@ -87,7 +87,8 @@ ReportsKit.Report = (function(options) {
       var key = filter.attr('name');
       checkboxKeysEnableds[key] = filter.prop('checked');
     });
-    self.defaultProperties.measure.filters = $.map(self.defaultProperties.measure.filters, function(filter) {
+    var properties = $.extend({}, self.defaultProperties);
+    properties.measure.filters = $.map(properties.measure.filters, function(filter) {
       var value = filterKeysValues[filter.key];
       if (value !== undefined) {
         filter.criteria.value = value;
@@ -98,7 +99,7 @@ ReportsKit.Report = (function(options) {
       }
       return filter;
     });
-    return self.defaultProperties;
+    return properties;
   };
 
   self.render = function() {

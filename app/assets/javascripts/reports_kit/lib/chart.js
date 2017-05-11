@@ -10,8 +10,8 @@ ReportsKit.Chart = (function(options) {
   };
 
   self.render = function() {
-    let path = self.el.data('path') + 'reports_kit/reports?'
-    path += $.param({ 'properties': self.report.properties() });
+    var path = self.el.data('path') + 'reports_kit/reports';
+    path += '?properties=' + JSON.stringify(self.report.properties());
     $.getJSON(path, function(response) {
       var data = response.data;
       var chart_data = data.chart_data
