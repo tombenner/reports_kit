@@ -27,15 +27,11 @@ module ReportsKit
         DEFAULT_OPTIONS = {
           scales: {
             xAxes: [{
-              stacked: true,
               gridLines: {
                 display: false
               },
               barPercentage: 0.9,
               categoryPercentage: 0.9
-            }],
-            yAxes: [{
-              stacked: true
             }]
           },
           legend: {
