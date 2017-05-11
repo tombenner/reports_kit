@@ -14,12 +14,13 @@ ReportsKit.Chart = (function(options) {
     path += '?properties=' + JSON.stringify(self.report.properties());
     $.getJSON(path, function(response) {
       var data = response.data;
-      var chart_data = data.chart_data
+      var chart_data = data.chart_data;
+      var options = chart_data.options;
 
       var args = {
         type: data.type,
         data: chart_data,
-        options: chart_data.options
+        options: options
       };
 
       if (self.chart) {
