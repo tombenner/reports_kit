@@ -243,7 +243,7 @@ describe ReportsKit::Reports::Data::Generate do
 
   # These examples allow for quick comparisons of many types of inputs and outputs.
   # When making functional modifications, run these to see whether the modifications impact the output in any cases.
-  # If the output effects are desired, comment out the `skip` to write them to the outputs YAML file, then verify that the output
+  # If the output effects are desired, run `REWRITE_RESULTS=1 rspec` to write them to the outputs YAML file, then verify that the output
   # modifications are desired, then commit the result and uncomment the `skip`.
   describe 'chart options' do
     FIXTURES_DIRECTORY = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'fixtures'))
@@ -262,7 +262,7 @@ describe ReportsKit::Reports::Data::Generate do
 
     context 'writing the outputs' do
       # For documentation about this `skip`, see the comment at the top of this `describe` block.
-      skip
+      skip unless ENV['REWRITE_RESULTS'] == '1'
 
       it 'writes the outputs' do
         outputs = inputs.map do |example|
