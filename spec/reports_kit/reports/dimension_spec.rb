@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ReportsKit::Reports::Dimension do
   subject { described_class.new(properties, measure: measure) }
-  let(:measure) { ReportsKit::Reports::Measure.new('issues') }
+  let(:measure) { ReportsKit::Reports::Measure.new('issue') }
 
   context 'with a datetime dimension' do
     let(:properties) { 'opened_at' }

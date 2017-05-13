@@ -20,7 +20,7 @@ module ReportsKit
       end
 
       def label
-        key.titleize
+        key.pluralize.titleize
       end
 
       def aggregate_function
@@ -32,12 +32,12 @@ module ReportsKit
       end
 
       def base_relation
-        return context_record.public_send(key) if context_record
+        return context_record.public_send(key.pluralize) if context_record
         model_class
       end
 
       def model_class
-        key.singularize.camelize.constantize
+        key.camelize.constantize
       end
 
       def filtered_relation

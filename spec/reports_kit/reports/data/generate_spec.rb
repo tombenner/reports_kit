@@ -20,7 +20,7 @@ describe ReportsKit::Reports::Data::Generate do
   context 'with a datetime dimension' do
     let(:properties) do
       {
-        measure: 'issues',
+        measure: 'issue',
         dimensions: %w(opened_at)
       }
     end
@@ -56,7 +56,7 @@ describe ReportsKit::Reports::Data::Generate do
       let(:properties) do
         {
           measure: {
-            key: 'issues',
+            key: 'issue',
             filters: [
               {
                 key: 'opened_at',
@@ -88,7 +88,7 @@ describe ReportsKit::Reports::Data::Generate do
   context 'with an association dimension' do
     let(:properties) do
       {
-        measure: 'issues',
+        measure: 'issue',
         dimensions: %w(repo)
       }
     end
@@ -122,7 +122,7 @@ describe ReportsKit::Reports::Data::Generate do
       let(:properties) do
         {
           measure: {
-            key: 'issues',
+            key: 'issue',
             filters: [
               {
                 key: 'repo',
@@ -149,7 +149,7 @@ describe ReportsKit::Reports::Data::Generate do
       let(:properties) do
         {
           measure: {
-            key: 'issues',
+            key: 'issue',
             filters: [
               {
                 key: 'tags',
@@ -181,7 +181,7 @@ describe ReportsKit::Reports::Data::Generate do
       let(:properties) do
         {
           measure: {
-            key: 'issues',
+            key: 'issue',
             filters: [
               {
                 key: 'labels',
@@ -212,7 +212,7 @@ describe ReportsKit::Reports::Data::Generate do
   context 'with datetime and association dimensions' do
     let(:properties) do
       {
-        measure: 'issues',
+        measure: 'issue',
         dimensions: %w(opened_at repo)
       }
     end

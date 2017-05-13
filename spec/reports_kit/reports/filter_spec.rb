@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ReportsKit::Reports::Filter do
   subject { described_class.new(properties, measure: measure) }
-  let(:measure) { ReportsKit::Reports::Measure.new('issues') }
+  let(:measure) { ReportsKit::Reports::Measure.new('issue') }
 
   context 'with a datetime filter' do
     let(:properties) { 'opened_at' }
