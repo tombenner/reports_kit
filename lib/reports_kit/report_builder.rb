@@ -24,8 +24,12 @@ module ReportsKit
       )
     end
 
-    def multi_autocomplete(filter_key, placeholder: nil)
+    def multi_autocomplete(filter_key, placeholder: nil, scope: nil)
       validate_filter!(filter_key)
+      reports_kit_path = Rails.application.routes.url_helpers.reports_kit_path
+      path = "#{reports_kit_path}reports_kit/resources/measures/#{measure.key}/filters/#{filter_key}/autocomplete"
+      params = {}
+      params[:scope] = scope if scope.present?
       select_tag(
         filter_key,
         nil,
@@ -33,8 +37,8 @@ module ReportsKit
         multiple: 'multiple',
         data: {
           placeholder: placeholder,
-          # TODO: Don't hardcode path
-          path: "/reports_kit/resources/measures/#{measure.key}/filters/#{filter_key}/autocomplete"
+          path: path,
+          params: params
         }
       )
     end

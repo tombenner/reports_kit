@@ -35,7 +35,8 @@ ReportsKit.Report = (function(options) {
     });
     self.form.find('.select2').each(function(index, el) {
       el = $(el);
-      path = el.data('path');
+      var path = el.data('path');
+      var elParams = el.data('params');
       el.select2({
         minimumResultsForSearch: 10,
         ajax: {
@@ -46,11 +47,12 @@ ReportsKit.Report = (function(options) {
             var data = {
               q: params.term,
               page: params.page
-            }
-            var staticParams = $('[data-role=static_params]').val()
+            };
+            data = $.extend(data, elParams);
+            var staticParams = $('[data-role=static_params]').val();
             if (staticParams) {
-              staticParams = JSON.parse(staticParams)
-              data = $.extend(data, staticParams)
+              staticParams = JSON.parse(staticParams);
+              data = $.extend(data, staticParams);
             }
             return data;
           },
