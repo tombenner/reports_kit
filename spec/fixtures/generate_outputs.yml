@@ -16,7 +16,9 @@
             :display: true
             :labelString: Repo
         :yAxes:
-        - :scaleLabel:
+        - :ticks:
+            :beginAtZero: true
+          :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:
@@ -43,7 +45,9 @@
             :display: true
             :labelString: Repo
         :yAxes:
-        - :scaleLabel:
+        - :ticks:
+            :beginAtZero: true
+          :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:
@@ -71,7 +75,9 @@
             :display: true
             :labelString: Repo
         :yAxes:
-        - :scaleLabel:
+        - :ticks:
+            :beginAtZero: true
+          :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:
@@ -98,7 +104,9 @@
             :display: true
             :labelString: Repo
         :yAxes:
-        - :scaleLabel:
+        - :ticks:
+            :beginAtZero: true
+          :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:
@@ -125,7 +133,9 @@
             :display: true
             :labelString: Opened At
         :yAxes:
-        - :scaleLabel:
+        - :ticks:
+            :beginAtZero: true
+          :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:
@@ -149,7 +159,9 @@
             :display: true
             :labelString: Opened At
         :yAxes:
-        - :scaleLabel:
+        - :ticks:
+            :beginAtZero: true
+          :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:
@@ -176,7 +188,9 @@
             :display: true
             :labelString: Repo
         :yAxes:
-        - :scaleLabel:
+        - :ticks:
+            :beginAtZero: true
+          :scaleLabel:
             :display: true
             :labelString: Issues
       :legend:

@@ -32,6 +32,11 @@ module ReportsKit
               },
               barPercentage: 0.9,
               categoryPercentage: 0.9
+            }],
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
             }]
           },
           legend: {
