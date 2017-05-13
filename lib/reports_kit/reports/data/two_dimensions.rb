@@ -110,7 +110,8 @@ module ReportsKit
 
         def secondary_keys
           @secondary_keys ||= begin
-            Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:last).uniq)
+            limit = second_dimension.dimension_instances_limit
+            Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:last).uniq).first(limit)
           end
         end
 
