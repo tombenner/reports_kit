@@ -14,43 +14,39 @@ module ReportsKit
       check_box_tag(filter_key, '1', checked, class: 'form-control input-sm')
     end
 
-    def date_range(filter_key, placeholder: nil)
+    def date_range(filter_key, options={})
       filter = validate_filter!(filter_key)
-      text_field_tag(
-        filter_key,
-        filter.properties[:criteria][:value],
-        class: 'form-control input-sm date_range_picker',
-        placeholder: placeholder
-      )
+      defaults = { class: 'form-control input-sm date_range_picker' }
+      options = defaults.deep_merge(options)
+      text_field_tag(filter_key, filter.properties[:criteria][:value], options)
     end
 
-    def multi_autocomplete(filter_key, placeholder: nil, scope: nil)
+    def multi_autocomplete(filter_key, options={})
       validate_filter!(filter_key)
       reports_kit_path = Rails.application.routes.url_helpers.reports_kit_path
       path = "#{reports_kit_path}reports_kit/resources/measures/#{measure.key}/filters/#{filter_key}/autocomplete"
+      scope = options.delete(:scope)
       params = {}
       params[:scope] = scope if scope.present?
-      select_tag(
-        filter_key,
-        nil,
+
+      defaults = {
         class: 'form-control input-sm select2',
         multiple: 'multiple',
         data: {
-          placeholder: placeholder,
+          placeholder: options[:placeholder],
           path: path,
           params: params
         }
-      )
+      }
+      options = defaults.deep_merge(options)
+      select_tag(filter_key, nil, options)
     end
 
-    def string_filter(filter_key, placeholder: nil)
+    def string_filter(filter_key, options={})
       filter = validate_filter!(filter_key)
-      text_field_tag(
-        filter_key,
-        filter.properties[:criteria][:value],
-        class: 'form-control input-sm',
-        placeholder: placeholder
-      )
+      defaults = { class: 'form-control input-sm' }
+      options = defaults.deep_merge(options)
+      text_field_tag(filter_key, filter.properties[:criteria][:value], options)
     end
 
     private
