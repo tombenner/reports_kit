@@ -14,6 +14,7 @@ module ReportsKit
         measure = Measure.new(measure_key, context_record: context_record)
         filter = Filter.new(filter_key, measure: measure)
         model = filter.instance_class
+        raise ArgumentError.new("Could not find a model for filter_key: '#{filter_key}'") unless model
         results = model.limit(100)
         results = results.map { |result| { id: result.id, text: result.to_s } }
         results = results.sort_by { |result| result[:text].downcase }
