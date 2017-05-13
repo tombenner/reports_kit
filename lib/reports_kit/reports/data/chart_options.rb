@@ -74,7 +74,9 @@ module ReportsKit
 
         def set_colors
           self.data[:chart_data][:datasets] = data[:chart_data][:datasets].map.with_index do |dataset, index|
-            dataset[:backgroundColor] = DEFAULT_COLORS[index % DEFAULT_COLORS.length]
+            color = DEFAULT_COLORS[index % DEFAULT_COLORS.length]
+            dataset[:backgroundColor] = color
+            dataset[:borderColor] = color
             dataset
           end
         end

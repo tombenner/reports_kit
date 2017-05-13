@@ -9,7 +9,7 @@ describe ReportsKit::Reports::Data::Generate do
   let(:chart_data) do
     chart_data = subject[:chart_data].except(:options)
     chart_data[:datasets] = chart_data[:datasets].map do |dataset|
-      dataset.except(:backgroundColor)
+      dataset.except(:backgroundColor, :borderColor)
     end
     chart_data
   end

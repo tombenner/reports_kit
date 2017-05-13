@@ -5,6 +5,7 @@
     - :label: Issues
       :data: []
       :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
     :options:
       :scales:
         :xAxes:
@@ -34,6 +35,7 @@
     - :label: Issues
       :data: []
       :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
     :options:
       :scales:
         :xAxes:
@@ -64,6 +66,7 @@
     - :label: Issues
       :data: []
       :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
     :options:
       :scales:
         :xAxes:
@@ -93,6 +96,7 @@
     - :label: Issues
       :data: []
       :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
     :options:
       :scales:
         :xAxes:
@@ -122,6 +126,7 @@
     - :label: Issues
       :data: []
       :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
     :options:
       :scales:
         :xAxes:
@@ -177,6 +182,7 @@
     - :label: Issues
       :data: []
       :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
     :options:
       :scales:
         :xAxes:
