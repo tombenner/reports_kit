@@ -38,6 +38,7 @@ ReportsKit.Report = (function(options) {
       var path = el.data('path');
       var elParams = el.data('params');
       el.select2({
+        theme: 'bootstrap',
         minimumResultsForSearch: 10,
         ajax: {
           url: path,
