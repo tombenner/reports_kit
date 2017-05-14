@@ -2,7 +2,10 @@ module ReportsKit
   module Reports
     class Filter
       CONFIGURATION_STRATEGIES_FILTER_TYPE_CLASSES = {
-        association: FilterTypes::Records
+        association: FilterTypes::Records,
+        boolean: FilterTypes::Boolean,
+        datetime: FilterTypes::Datetime,
+        string: FilterTypes::String
       }
       COLUMN_TYPES_FILTER_TYPE_CLASSES = {
         boolean: FilterTypes::Boolean,
