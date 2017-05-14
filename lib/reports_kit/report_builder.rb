@@ -8,10 +8,10 @@ module ReportsKit
       self.properties = normalize_properties(properties)
     end
 
-    def check_box(filter_key)
+    def check_box(filter_key, options={})
       filter = validate_filter!(filter_key)
       checked = filter.properties[:criteria][:operator] == 'true'
-      check_box_tag(filter_key, '1', checked, class: 'form-control input-sm')
+      check_box_tag(filter_key, '1', checked, options)
     end
 
     def date_range(filter_key, options={})
