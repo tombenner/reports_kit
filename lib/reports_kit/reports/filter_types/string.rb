@@ -11,19 +11,19 @@ module ReportsKit
           when 'equals'
             records.where("#{column} = ?", value)
           when 'contains'
-            records.where("#{column} LIKE ?", "%#{value}%")
+            records.where("#{column} ILIKE ?", "%#{value}%")
           when 'starts_with'
-            records.where("#{column} LIKE ?", "#{value}%")
+            records.where("#{column} ILIKE ?", "#{value}%")
           when 'ends_with'
-            records.where("#{column} LIKE ?", "%#{value}")
+            records.where("#{column} ILIKE ?", "%#{value}")
           when 'does_not_equal'
             records.where("#{column} != ?", value)
           when 'does_not_contain'
-            records.where("#{column} NOT LIKE ?", "%#{value}%")
+            records.where("#{column} NOT ILIKE ?", "%#{value}%")
           when 'does_not_start_with'
-            records.where("#{column} NOT LIKE ?", "#{value}%")
+            records.where("#{column} NOT ILIKE ?", "#{value}%")
           when 'does_not_end_with'
-            records.where("#{column} NOT LIKE ?", "%#{value}")
+            records.where("#{column} NOT ILIKE ?", "%#{value}")
           else
             raise "Unsupported operator: '#{criteria[:operator]}'"
           end
