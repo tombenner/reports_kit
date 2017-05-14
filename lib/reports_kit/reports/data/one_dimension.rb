@@ -55,7 +55,7 @@ module ReportsKit
         def labels
           keys = dimension_keys_values.keys
           keys.map do |key|
-            Utils.dimension_key_to_label(key, dimension_ids_dimension_instances)
+            Utils.dimension_key_to_label(key, dimension, dimension_ids_dimension_instances)
           end
         end
 

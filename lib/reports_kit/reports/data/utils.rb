@@ -59,7 +59,8 @@ module ReportsKit
           Hash[dimension_ids_dimension_instances]
         end
 
-        def self.dimension_key_to_label(dimension_instance, ids_dimension_instances)
+        def self.dimension_key_to_label(dimension_instance, dimension, ids_dimension_instances)
+          return dimension_instance.to_s if dimension.configured_by_column? && dimension.column_type == :integer
           case dimension_instance
           when Time
             Utils.format_time(dimension_instance)

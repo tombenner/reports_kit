@@ -6,7 +6,7 @@ module ReportsKit
       attr_accessor :properties, :measure, :configuration
 
       delegate :configured_by_association?, :configured_by_column?, :configured_by_model?, :configured_by_time?,
-        :settings_from_model, :reflection, :instance_class, :model_class,
+        :settings_from_model, :reflection, :instance_class, :model_class, :column_type,
         to: :configuration
 
       def initialize(properties, measure:)

@@ -4,6 +4,7 @@ module ReportsKit
       SUPPORTED_COLUMN_TYPES = [
         :boolean,
         :datetime,
+        :integer,
         :string
       ]
 
