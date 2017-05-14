@@ -88,9 +88,7 @@ ReportsKit.Report = (function(options) {
     self.form.find(':checkbox').each(function(index, el) {
       var filter = $(el);
       var key = filter.attr('name');
-      if (filter.prop('checked')) {
-        checkboxKeysEnableds[key] = filter.prop('checked');
-      }
+      checkboxKeysEnableds[key] = filter.prop('checked');
     });
     var properties = $.extend({}, self.defaultProperties);
     properties.measure.filters = $.map(properties.measure.filters, function(filter) {
@@ -99,10 +97,12 @@ ReportsKit.Report = (function(options) {
         filter.criteria.value = value;
       }
       var enabled = checkboxKeysEnableds[filter.key];
-      if (enabled) {
-        filter.criteria.operator = 'true';
-      } else {
-        filter.criteria = {};
+      if (enabled !== undefined) {
+        if (enabled) {
+          filter.criteria.operator = 'true';
+        } else {
+          filter.criteria = {};
+        }
       }
       return filter;
     });
