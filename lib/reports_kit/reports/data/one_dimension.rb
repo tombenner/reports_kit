@@ -25,7 +25,7 @@ module ReportsKit
             relation = measure.filtered_relation
             relation = relation.group(dimension.group_expression)
             relation = relation.joins(dimension.joins) if dimension.joins
-            relation = relation.limit(dimension.dimension_instances_limit)
+            relation = relation.limit(dimension.dimension_instances_limit) if dimension.dimension_instances_limit
             if dimension.should_be_sorted_by_count?
               relation = relation.order('1 DESC')
             else

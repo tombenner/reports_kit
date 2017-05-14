@@ -63,7 +63,11 @@ module ReportsKit
       end
 
       def dimension_instances_limit
-        properties[:limit] || DEFAULT_DIMENSION_INSTANCES_LIMIT
+        if configured_by_time?
+          properties[:limit]
+        else
+          properties[:limit] || DEFAULT_DIMENSION_INSTANCES_LIMIT
+        end
       end
 
       def should_be_sorted_by_count?

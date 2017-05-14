@@ -102,7 +102,8 @@ module ReportsKit
           @primary_keys ||= begin
             keys = Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:first).uniq)
             if dimension.should_be_sorted_by_count?
-              keys = keys.first(dimension.dimension_instances_limit)
+              limit = dimension.dimension_instances_limit
+              keys = keys.first(limit) if limit
             end
             keys
           end
@@ -110,8 +111,10 @@ module ReportsKit
 
         def secondary_keys
           @secondary_keys ||= begin
+            keys = Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:last).uniq)
             limit = second_dimension.dimension_instances_limit
-            Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:last).uniq).first(limit)
+            keys = keys.first(limit) if limit
+            keys
           end
         end
 
