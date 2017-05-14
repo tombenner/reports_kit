@@ -70,7 +70,7 @@ module ReportsKit
         type_key = settings[:type_key]
         raise ArgumentError.new("No type specified for filter with key: '#{key}'") unless type_key
         type_class = CONFIGURATION_STRATEGIES_FILTER_TYPE_CLASSES[type_key]
-        raise ArgumentError.new("Invalid type specified for filter with key: '#{key}'") unless type_class
+        raise ArgumentError.new("Invalid type ('#{type_key}') specified for filter with key: '#{key}'") unless type_class
         type_class
       end
 
