@@ -43,7 +43,7 @@ module ReportsKit
         @scope ||= begin
           scope = params[:scope]
           return unless scope.present?
-          return unless model.reports_kit_configuration && model.reports_kit_configuration.autocomplete_scopes.present?
+          return unless model.try(:reports_kit_configuration) && model.reports_kit_configuration.autocomplete_scopes.present?
           unless model.reports_kit_configuration.autocomplete_scopes.include?(scope)
             raise ArgumentError.new("Unallowed scope '#{scope}' for model #{model.name}")
           end
