@@ -8,9 +8,9 @@ module ReportsKit
 
         def apply_conditions(records)
           case criteria[:operator]
-          when 'true'
+          when true, 'true'
             records.where("(#{column}) = true")
-          when 'false'
+          when false, 'false'
             records.where("(#{column}) != true")
           else
             raise "Unsupported: #{criteria[:operator]}"
