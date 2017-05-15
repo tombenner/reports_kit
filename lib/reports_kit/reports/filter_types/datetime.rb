@@ -14,7 +14,7 @@ module ReportsKit
             end_at = Date.parse(end_string)
             records.where("#{column} IS NOT NULL").where("#{column} BETWEEN ? AND ?", start_at, end_at)
           else
-            raise "Unsupported operator: '#{criteria[:operator]}'"
+            raise ArgumentError.new("Unsupported operator: '#{criteria[:operator]}'")
           end
         end
 

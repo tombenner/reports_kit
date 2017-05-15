@@ -13,7 +13,7 @@ module ReportsKit
           when false, 'false'
             records.where("(#{column}) != true")
           else
-            raise "Unsupported: #{criteria[:operator]}"
+            raise ArgumentError.new("Unsupported operator: '#{criteria[:operator]}'")
           end
         end
 

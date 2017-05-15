@@ -13,7 +13,7 @@ module ReportsKit
           when 'does_not_include'
             records.where.not(column => value)
           else
-            raise 'Unsupported'
+            raise ArgumentError.new("Unsupported operator: '#{criteria[:operator]}'")
           end
         end
 

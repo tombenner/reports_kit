@@ -15,7 +15,7 @@ module ReportsKit
           when '='
             records.where("#{column} = #{value.to_i}")
           else
-            raise 'Unsupported'
+            raise ArgumentError.new("Unsupported operator: '#{criteria[:operator]}'")
           end
         end
 

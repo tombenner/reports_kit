@@ -25,7 +25,7 @@ module ReportsKit
           when 'does_not_end_with'
             records.where("#{column} NOT ILIKE ?", "%#{value}")
           else
-            raise "Unsupported operator: '#{criteria[:operator]}'"
+            raise ArgumentError.new("Unsupported operator: '#{criteria[:operator]}'")
           end
         end
 
