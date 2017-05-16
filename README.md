@@ -2,6 +2,19 @@ ReportsKit
 =====
 Beautiful, interactive charts for Ruby on Rails
 
+Table of Contents
+-----------------
+
+* [Overview](#overview)
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Your First Chart](#your-first-chart)
+  * [Measures](#measures)
+  * [Dimensions](#dimensions)
+  * [Filters](#filters)
+  * [Display Options](#display-options)
+* [License](#license)
+
 Overview
 --------
 ReportsKit lets you easily create beautiful charts with customizable, interactive filters.
