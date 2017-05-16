@@ -10,6 +10,8 @@ For interactive examples, see [reportskit.co](https://www.reportskit.co).
 
 [<img src="docs/images/flights_with_filters.png?raw=true" width="500" />](docs/images/flights_with_filters.png?raw=true)
 
+ReportsKit integrates with ActiveRecord, abstracting away complex aggregation logic to make it easy to create powerful charts and filters.
+
 Installation
 ------------
 
@@ -42,16 +44,12 @@ Usage
 
 In any view, render a chart that shows the number of records of a model (e.g. `user`) created over time:
 
+`app/views/users/index.html.haml`
 ```haml
-# app/views/users/index.html.haml
 = render_report measure: 'user', dimensions: ['created_at']
 ```
 
-Any model and datetime column can be used:
-
-```haml
-= render_report measure: 'blog_post', dimensions: ['published_at']
-```
+[<img src="docs/images/users_by_created_at.png?raw=true" width="500" />](docs/images/users_by_created_at.png?raw=true)
 
 You can also configure your charts using YAML and then pass the filename to `render_report`:
 
@@ -62,6 +60,7 @@ dimensions:
 - created_at
 ```
 
+`app/views/users/index.html.haml`
 ```haml
 = render_report 'my_users'
 ```
@@ -367,6 +366,88 @@ dimensions:
   = f.string_filter :carrier_name, placeholder: 'Carrier name (e.g. Airlines)...', style: 'width: 175px;'
 ```
 [<img src="docs/images/flights_with_string_filter.png?raw=true" width="500" />](docs/images/flights_with_string_filter.png?raw=true)
+
+### Display Options
+
+#### Overview
+
+Charts are rendered using [Chart.js](http://www.chartjs.org/). You can configure your ReportsKit chart using any [Chart.js options](http://www.chartjs.org/docs/).
+
+##### `type`
+
+You can use any `type` value supported by Chart.js, including `bar`, `line`, `horizontalBar`, `radar`, and more.
+
+Here's an example of a horizontal bar chart:
+
+```yaml
+measure: flight
+dimensions:
+- carrier
+chart:
+  type: horizontalBar
+  options:
+    scales:
+      xAxes:
+      - scaleLabel:
+          display: true
+          labelString: Flights
+      yAxes:
+      - scaleLabel:
+          display: true
+          labelString: Carrier
+```
+[<img src="docs/images/horizontal_bar.png?raw=true" width="500" />](docs/images/horizontal_bar.png?raw=true)
+
+##### `options`
+
+You can use any `options` that are supported by Chart.js.
+
+Here's an example of a chart with Chart.js options:
+
+```yaml
+measure: flight
+dimensions:
+- origin_market
+- carrier
+chart:
+  type: horizontalBar
+  options:
+    scales:
+      xAxes:
+      - stacked: true
+        scaleLabel:
+          display: true
+          labelString: Flights
+      yAxes:
+      - stacked: true
+        scaleLabel:
+          display: true
+          labelString: Market
+```
+[<img src="docs/images/chart_options.png?raw=true" width="500" />](docs/images/chart_options.png?raw=true)
+
+##### `datasets`
+
+You can use any `datasets` options that are supported by Chart.js.
+
+Here's an example of a chart with `datasets` options:
+
+```yaml
+measure: flight
+dimensions:
+- flight_at
+- key: carrier
+  limit: 3
+chart:
+  type: line
+  datasets:
+    fill: false
+    borderDash:
+      - 5
+      - 5
+```
+[<img src="docs/images/dashed_line.png?raw=true" width="500" />](docs/images/dashed_line.png?raw=true)
+
 
 License
 -------
