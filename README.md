@@ -366,7 +366,7 @@ dimensions:
 
 #### Form Controls
 
-Most charting libraries don't provide interactive form controls, but ReportsKit does. It makes it easy to add form controls to allow users to modify charts.
+Most charting libraries don't provide interactive form controls, but ReportsKit does. It makes it easy to add form controls to allow end users to modify charts.
 
 ##### Check Box
 
