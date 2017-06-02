@@ -64,7 +64,9 @@ Usage
 -----
 ### Your First Chart
 
-In any view, render a chart that shows the number of records of a model (e.g. `user`) created over time:
+After installation, you can create your first chart with a single line!
+
+In any view, create a chart that shows the number of records of a model (e.g. `user`) created over time:
 
 `app/views/users/index.html.haml`
 ```haml
@@ -73,7 +75,9 @@ In any view, render a chart that shows the number of records of a model (e.g. `u
 
 [<img src="docs/images/users_by_created_at.png?raw=true" width="500" />](docs/images/users_by_created_at.png?raw=true)
 
-You can also configure your charts using YAML and then pass the filename to `render_report`:
+In the above chart, `measure: 'user'` tells ReportsKit to count the number of `User` records, and `dimensions: ['created_at']` tells it to group by the week of the `created_at` column. Since `created_at` is a `datetime` column, ReportsKit knows that it should sort the results chronologically.
+
+Instead of passing a hash to `render_report`, you can alternatively configure your charts using YAML and then pass the filename to `render_report`:
 
 `config/reports_kit/reports/my_users.yml`
 ```yaml
@@ -87,9 +91,11 @@ dimensions:
 = render_report 'my_users'
 ```
 
+The YAML approach is more maintainable and readable, so we'll use it for examples in the rest of the documentation.
+
 ### Measures
 
-The measure is what is being counted (or aggregated). You can use any model for the measure.
+The measure is what is being counted (or aggregated in another way). You can use any model as the measure.
 
 For example, say we have a `Flight` model with a `flight_at` datetime column. We can chart the number of flights over time:
 
@@ -106,7 +112,15 @@ dimensions:
 
 The dimension is what the measure is being grouped by. You can use datetime columns, integer columns, string columns, associations, or even define custom dimensions.
 
-For example, the chart below groups by a `carrier` association on `Flight`
+For example, say you have a `Flight` model with a `belongs_to :carrier` association:
+
+```ruby
+class Flight < ActiveRecord::Base
+  belongs_to :carrier
+end
+```
+
+You can then use `dimensions: ['carrier']` to count the number of Flights per Carrier:
 
 ```yaml
 measure: flight
@@ -125,7 +139,7 @@ dimensions:
 ```
 [<img src="docs/images/flights_by_carrier_and_flight_at.png?raw=true" width="500" />](docs/images/flights_by_carrier_and_flight_at.png?raw=true)
 
-Dimensions can be configured using a string:
+Dimensions can be configured using a string (`carrier`):
 
 ```yaml
 measure: flight
@@ -170,7 +184,7 @@ dimensions:
 ```
 [<img src="docs/images/flights_by_delay.png?raw=true" width="500" />](docs/images/flights_by_delay.png?raw=true)
 
-##### Custom
+##### Custom Dimensions
 
 You can define custom dimensions in your model. For example, if `Flight` has a column named `delay` (in minutes), we can define a `hours_delayed` dimension:
 
@@ -201,13 +215,13 @@ The dimension's identifier. You can use association names (e.g. `author`), colum
 
 ##### `limit` *Integer*
 
-The maximum number of dimension instances to include.
+The maximum number of dimension instances to include. For example, if you set `limit: 5` and have one dimension, then the x-axis will only show 5 items.
 
 ### Filters
 
 #### Overview
 
-A filter is like a `where`: it filters the results to only include results that match a condition. You can use datetime columns, integer columns, string columns, associations, or even define custom filters.
+A filter is like a SQL `WHERE`: it filters the results to only include results that match a condition. You can use datetime columns, integer columns, string columns, associations, or even define custom filters.
 
 For example, if the `Flight` model has a `delay` column that's an integer, the chart below will show only flights that have a delay of greater than 15 minutes:
 
@@ -239,7 +253,7 @@ dimensions:
 - carrier
 ```
 
-In `app/views/my_view.html.haml`:
+In `app/views/my_view.html.haml`, you can use ReportsKit's form helpers to create the controls:
 ```haml
 = render_report 'filters' do |f|
   .pull-right
@@ -266,7 +280,6 @@ measure:
   - key: is_on_time
     criteria:
       operator: true
-      value: 15
 dimensions:
 - carrier
 ```
@@ -353,7 +366,11 @@ dimensions:
 
 #### Form Controls
 
+Most charting libraries don't provide interactive form controls, but ReportsKit does. It makes it easy to add form controls to allow users to modify charts.
+
 ##### Check Box
+
+Check boxes can be used with filters that have a `boolean` type.
 
 ```yaml
 measure:
@@ -374,6 +391,8 @@ dimensions:
 [<img src="docs/images/flights_with_check_box.png?raw=true" width="500" />](docs/images/flights_with_check_box.png?raw=true)
 
 ##### Date Range
+
+Date ranges can be used with filters that have a `datetime` type.
 
 ```yaml
 measure:
