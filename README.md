@@ -233,7 +233,7 @@ dimensions:
 
 In `app/views/my_view.html.haml`:
 ```haml
-= render_report 'filters' do
+= render_report 'filters' do |f|
   .pull-right
     = f.date_range :flight_at
   = f.multi_autocomplete :carrier, scope: 'top', placeholder: 'Carrier...'
@@ -357,7 +357,7 @@ dimensions:
 - carrier
 ```
 ```haml
-= render_report 'filter_check_box' do
+= render_report 'filter_check_box' do |f|
   .checkbox
     = label_tag :is_on_time do
       = f.check_box :is_on_time
@@ -377,7 +377,7 @@ dimensions:
 - carrier
 ```
 ```haml
-= render_report 'filter_date_range' do
+= render_report 'filter_date_range' do |f|
   = f.date_range :flight_at
 ```
 [<img src="docs/images/flights_with_date_range.png?raw=true" width="500" />](docs/images/flights_with_date_range.png?raw=true)
@@ -394,7 +394,7 @@ dimensions:
 - carrier
 ```
 ```haml
-= render_report 'filter_multi_autocomplete' do
+= render_report 'filter_multi_autocomplete' do |f|
   = f.multi_autocomplete :carrier, scope: 'top', placeholder: 'Carrier...'
 ```
 [<img src="docs/images/flights_with_multi_autocomplete.png?raw=true" width="500" />](docs/images/flights_with_multi_autocomplete.png?raw=true)
@@ -411,7 +411,7 @@ dimensions:
 - carrier
 ```
 ```haml
-= render_report 'filter_string' do
+= render_report 'filter_string' do |f|
   = f.string_filter :carrier_name, placeholder: 'Carrier name (e.g. Airlines)...', style: 'width: 175px;'
 ```
 [<img src="docs/images/flights_with_string_filter.png?raw=true" width="500" />](docs/images/flights_with_string_filter.png?raw=true)
