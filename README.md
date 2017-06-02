@@ -249,6 +249,8 @@ In `app/views/my_view.html.haml`:
 
 ##### Boolean
 
+Boolean filters can be used on any `boolean` columns, or you can define your own boolean filter (see [Custom Filters](#custom-filters)).
+
 ```yaml
 measure:
   key: flight
@@ -263,6 +265,8 @@ dimensions:
 [<img src="docs/images/flights_with_configured_boolean.png?raw=true" width="500" />](docs/images/flights_with_configured_boolean.png?raw=true)
 
 ##### Datetime
+
+Datetime filters can be used on any `datetime` or `timestamp` columns, or you can define your own datetime filter (see [Custom Filters](#custom-filters)).
 
 ```yaml
 measure:
@@ -279,6 +283,8 @@ dimensions:
 
 ##### Number
 
+Number filters can be used on any `integer`, `float`, or `decimal` columns, or you can define your own number filter (see [Custom Filters](#custom-filters)).
+
 ```yaml
 measure:
   key: flight
@@ -293,6 +299,8 @@ dimensions:
 [<img src="docs/images/flights_with_configured_number.png?raw=true" width="500" />](docs/images/flights_with_configured_number.png?raw=true)
 
 ##### String
+
+String filters can be used on any `string` or `text` columns, or you can define your own number filter (see [Custom Filters](#custom-filters)).
 
 ```yaml
 measure:
