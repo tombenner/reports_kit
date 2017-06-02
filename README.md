@@ -22,9 +22,17 @@ ReportsKit lets you easily create beautiful charts with customizable, interactiv
 
 For interactive examples, see [reportskit.co](https://www.reportskit.co).
 
-[<img src="docs/images/flights_with_filters.png?raw=true" width="500" />](docs/images/flights_with_filters.png?raw=true)
+[<img src="docs/images/demo.gif?raw=true" width="500" />](docs/images/demo.gif?raw=true)
 
-ReportsKit integrates with ActiveRecord, abstracting away complex aggregation logic to make it easy to create powerful charts and filters.
+ReportsKit integrates with ActiveRecord, abstracting away complex query logic to make it easy to create powerful, interactive charts and filters.
+
+[<img src="docs/images/demo_area.png?raw=true" width="200" />](docs/images/demo_area.png?raw=true)
+[<img src="docs/images/demo_dashed_line.png?raw=true" width="200" />](docs/images/demo_dashed_line.png?raw=true)
+[<img src="docs/images/demo_horizontal_stacked.png?raw=true" width="200" />](docs/images/demo_horizontal_stacked.png?raw=true)
+[<img src="docs/images/demo_legend.png?raw=true" width="200" />](docs/images/demo_legend.png?raw=true)
+[<img src="docs/images/demo_multiautocomplete.png?raw=true" width="200" />](docs/images/demo_multiautocomplete.png?raw=true)
+[<img src="docs/images/demo_radar.png?raw=true" width="100" />](docs/images/demo_radar.png?raw=true)
+
 
 Installation
 ------------
