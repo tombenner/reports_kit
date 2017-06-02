@@ -315,6 +315,33 @@ dimensions:
 ```
 [<img src="docs/images/flights_with_configured_string.png?raw=true" width="500" />](docs/images/flights_with_configured_string.png?raw=true)
 
+##### Customer Filters
+
+You can define custom filters in your model. For example, if `Flight` has a column named `delay` (an integer with a unit of minutes), then we can define a `was_delayed` dimension:
+
+```ruby
+class Flight < ApplicationRecord
+  include ReportsKit::Model
+
+  reports_kit do
+    filter :was_delayed, :boolean, conditions: 'delay IS NOT NULL AND delay > 15'
+  end
+end
+```
+
+We can then use the `was_delayed` filter:
+
+```yaml
+measure:
+  key: flight
+  filters:
+  - key: was_delayed
+    criteria:
+      operator: true
+dimensions:
+- carrier
+```
+[<img src="docs/images/flights_by_hours_delayed.png?raw=true" width="500" />](docs/images/flights_by_hours_delayed.png?raw=true)
 
 #### Form Controls
 
