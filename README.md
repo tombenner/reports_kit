@@ -13,6 +13,7 @@ Table of Contents
   * [Dimensions](#dimensions)
   * [Filters](#filters)
   * [Display Options](#display-options)
+  * [More Examples](#more-examples)
 * [License](#license)
 
 Overview
@@ -461,6 +462,9 @@ chart:
 ```
 [<img src="docs/images/dashed_line.png?raw=true" width="500" />](docs/images/dashed_line.png?raw=true)
 
+### More Examples
+
+For more examples, see [reportskit.co](https://www.reportskit.co).
 
 License
 -------
