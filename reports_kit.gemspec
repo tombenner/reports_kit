@@ -12,8 +12,8 @@ Gem::Specification.new do |s|
   s.version       = ReportsKit::VERSION
   s.license       = 'MIT'
 
-  s.add_dependency 'rails'
-  s.add_dependency 'pg'
+  s.add_dependency 'rails', '>= 3'
+  s.add_dependency 'pg', '>= 0.15'
 
   s.add_development_dependency 'rspec', '~> 3'
   s.add_development_dependency 'database_cleaner', '~> 1'
