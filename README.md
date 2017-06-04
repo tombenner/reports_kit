@@ -2,7 +2,11 @@ ReportsKit
 =====
 ReportsKit lets you easily create beautiful charts with customizable, interactive filters.
 
+Add powerful reporting to your Rails app in minutes, not months!
+
 For interactive examples, see [reportskit.co](https://www.reportskit.co/).
+
+---
 
 [<img src="docs/images/demo.gif?raw=true" width="500" />](docs/images/demo.gif?raw=true)
 [<img src="docs/images/demo_area.png?raw=true" width="500" />](docs/images/demo_area.png?raw=true)
@@ -11,6 +15,8 @@ For interactive examples, see [reportskit.co](https://www.reportskit.co/).
 [<img src="docs/images/demo_legend.png?raw=true" width="500" />](docs/images/demo_legend.png?raw=true)
 [<img src="docs/images/demo_multiautocomplete.png?raw=true" width="500" />](docs/images/demo_multiautocomplete.png?raw=true)
 [<img src="docs/images/demo_radar.png?raw=true" width="250" />](docs/images/demo_radar.png?raw=true)
+
+---
 
 1. **Quick setup** - Install ReportsKit and create your first chart in less than one minute using just ~5 lines of code.
 1. **Simple chart configuration** - Create charts using your existing Rails models. ReportsKit examines the column types and associations to understand how to render the chart.
