@@ -9,11 +9,17 @@ For interactive examples, see [reportskit.co](https://www.reportskit.co/).
 ---
 
 [<img src="docs/images/demo.gif?raw=true" width="500" />](docs/images/demo.gif?raw=true)
+
 [<img src="docs/images/demo_area.png?raw=true" width="500" />](docs/images/demo_area.png?raw=true)
+
 [<img src="docs/images/demo_dashed_line.png?raw=true" width="500" />](docs/images/demo_dashed_line.png?raw=true)
+
 [<img src="docs/images/demo_horizontal_stacked.png?raw=true" width="500" />](docs/images/demo_horizontal_stacked.png?raw=true)
+
 [<img src="docs/images/demo_legend.png?raw=true" width="500" />](docs/images/demo_legend.png?raw=true)
+
 [<img src="docs/images/demo_multiautocomplete.png?raw=true" width="500" />](docs/images/demo_multiautocomplete.png?raw=true)
+
 [<img src="docs/images/demo_radar.png?raw=true" width="250" />](docs/images/demo_radar.png?raw=true)
 
 ---
