@@ -1,38 +1,28 @@
 ReportsKit
 =====
-Beautiful, interactive charts for Ruby on Rails
-
-Table of Contents
------------------
-
-* [Overview](#overview)
-* [Installation](#installation)
-* [Usage](#usage)
-  * [Your First Chart](#your-first-chart)
-  * [Measures](#measures)
-  * [Dimensions](#dimensions)
-  * [Filters](#filters)
-  * [Display Options](#display-options)
-  * [More Examples](#more-examples)
-* [License](#license)
-
-Overview
---------
 ReportsKit lets you easily create beautiful charts with customizable, interactive filters.
 
-For interactive examples, see [reportskit.co](https://www.reportskit.co).
+For interactive examples, see [reportskit.co](https://www.reportskit.co/).
 
 [<img src="docs/images/demo.gif?raw=true" width="500" />](docs/images/demo.gif?raw=true)
+[<img src="docs/images/demo_area.png?raw=true" width="500" />](docs/images/demo_area.png?raw=true)
+[<img src="docs/images/demo_dashed_line.png?raw=true" width="500" />](docs/images/demo_dashed_line.png?raw=true)
+[<img src="docs/images/demo_horizontal_stacked.png?raw=true" width="500" />](docs/images/demo_horizontal_stacked.png?raw=true)
+[<img src="docs/images/demo_legend.png?raw=true" width="500" />](docs/images/demo_legend.png?raw=true)
+[<img src="docs/images/demo_multiautocomplete.png?raw=true" width="500" />](docs/images/demo_multiautocomplete.png?raw=true)
+[<img src="docs/images/demo_radar.png?raw=true" width="250" />](docs/images/demo_radar.png?raw=true)
 
-ReportsKit integrates with ActiveRecord, abstracting away complex query logic to make it easy to create powerful, interactive charts and filters.
+1. **Quick setup** - Install ReportsKit and create your first chart in less than one minute using just ~5 lines of code.
+1. **Simple chart configuration** - Create charts using your existing Rails models. ReportsKit examines the column types and associations to understand how to render the chart.
+1. **Powerful results** - To see what ReportsKit can create with minimal code, see [reportskit.co](https://www.reportskit.co/).
 
-[<img src="docs/images/demo_area.png?raw=true" width="200" />](docs/images/demo_area.png?raw=true)
-[<img src="docs/images/demo_dashed_line.png?raw=true" width="200" />](docs/images/demo_dashed_line.png?raw=true)
-[<img src="docs/images/demo_horizontal_stacked.png?raw=true" width="200" />](docs/images/demo_horizontal_stacked.png?raw=true)
-[<img src="docs/images/demo_legend.png?raw=true" width="200" />](docs/images/demo_legend.png?raw=true)
-[<img src="docs/images/demo_multiautocomplete.png?raw=true" width="200" />](docs/images/demo_multiautocomplete.png?raw=true)
-[<img src="docs/images/demo_radar.png?raw=true" width="100" />](docs/images/demo_radar.png?raw=true)
+Resources
+---------
 
+* [Installation](#installation)
+* [Quick Start](#quick-start)
+* [Examples](https://www.reportskit.co/)
+* [Documentation](documentation)
 
 Installation
 ------------
@@ -60,9 +50,8 @@ Rails.application.routes.draw do
 end
 ```
 
-Usage
------
-### Your First Chart
+Quick Start
+-----------
 
 After installation, you can create your first chart with a single line!
 
@@ -73,9 +62,9 @@ In any view, create a chart that shows the number of records of a model (e.g. `u
 = render_report measure: 'user', dimensions: ['created_at']
 ```
 
-[<img src="docs/images/users_by_created_at.png?raw=true" width="500" />](docs/images/users_by_created_at.png?raw=true)
+You're done! `render_report` will render the following chart:
 
-In the above chart, `measure: 'user'` tells ReportsKit to count the number of `User` records, and `dimensions: ['created_at']` tells it to group by the week of the `created_at` column. Since `created_at` is a `datetime` column, ReportsKit knows that it should sort the results chronologically.
+[<img src="docs/images/users_by_created_at.png?raw=true" width="500" />](docs/images/users_by_created_at.png?raw=true)
 
 Instead of passing a hash to `render_report`, you can alternatively configure your charts using YAML and then pass the filename to `render_report`:
 
@@ -91,442 +80,30 @@ dimensions:
 = render_report 'my_users'
 ```
 
-The YAML approach is more maintainable and readable, so we'll use it for examples in the rest of the documentation.
+The YAML approach is more maintainable and readable, so we'll use it in the rest of the documentation.
 
-### Measures
+### Form Controls
 
-The measure is what is being counted (or aggregated in another way). You can use any model as the measure.
+You can add a date range form control to the above chart with a single line, using one of ReportsKit's form helpers:
 
-For example, say we have a `Flight` model with a `flight_at` datetime column. We can chart the number of flights over time:
-
-```yaml
-measure: flight
-dimensions:
-- flight_at
-```
-[<img src="docs/images/flights_by_flight_at.png?raw=true" width="500" />](docs/images/flights_by_flight_at.png?raw=true)
-
-### Dimensions
-
-#### Overview
-
-The dimension is what the measure is being grouped by. You can use datetime columns, integer columns, string columns, associations, or even define custom dimensions.
-
-For example, say you have a `Flight` model with a `belongs_to :carrier` association:
-
-```ruby
-class Flight < ActiveRecord::Base
-  belongs_to :carrier
-end
-```
-
-You can then use `dimensions: ['carrier']` to count the number of Flights per Carrier:
-
-```yaml
-measure: flight
-dimensions:
-- carrier
-```
-[<img src="docs/images/flights_by_carrier.png?raw=true" width="500" />](docs/images/flights_by_carrier.png?raw=true)
-
-You can also use two dimensions:
-
-```yaml
-measure: flight
-dimensions:
-- carrier
-- flight_at
-```
-[<img src="docs/images/flights_by_carrier_and_flight_at.png?raw=true" width="500" />](docs/images/flights_by_carrier_and_flight_at.png?raw=true)
-
-Dimensions can be configured using a string (`carrier`):
-
-```yaml
-measure: flight
-dimensions:
-- carrier
-```
-
-Or, if you need to use options, you can configure them using a hash:
-
-```yaml
-measure: flight
-dimensions:
-- key: carrier
-  limit: 5
-```
-#### Types
-
-##### Association
-
-```yaml
-measure: flight
-dimensions:
-- carrier
-```
-[<img src="docs/images/flights_by_carrier.png?raw=true" width="500" />](docs/images/flights_by_carrier.png?raw=true)
-
-##### Datetime Column
-
-```yaml
-measure: flight
-dimensions:
-- flight_at
-```
-[<img src="docs/images/flights_by_flight_at.png?raw=true" width="500" />](docs/images/flights_by_flight_at.png?raw=true)
-
-##### Integer Column
-
-```yaml
-measure: flight
-dimensions:
-- delay
-```
-[<img src="docs/images/flights_by_delay.png?raw=true" width="500" />](docs/images/flights_by_delay.png?raw=true)
-
-##### Custom Dimensions
-
-You can define custom dimensions in your model. For example, if `Flight` has a column named `delay` (in minutes), we can define a `hours_delayed` dimension:
-
-```ruby
-class Flight < ApplicationRecord
-  include ReportsKit::Model
-
-  reports_kit do
-    dimension :hours_delayed, group: 'GREATEST(ROUND(flights.delay::float/60), 0)'
-  end
-end
-```
-
-We can then use the `hours_delayed` dimension:
-
-```yaml
-measure: flight
-dimensions:
-- hours_delayed
-```
-[<img src="docs/images/flights_by_hours_delayed.png?raw=true" width="500" />](docs/images/flights_by_hours_delayed.png?raw=true)
-
-#### Options
-
-##### `key` *String*
-
-The dimension's identifier. You can use association names (e.g. `author`), column names (e.g. `created_at`), or the keys of custom dimensions (e.g. `my_dimension`).
-
-##### `limit` *Integer*
-
-The maximum number of dimension instances to include. For example, if you set `limit: 5` and have one dimension, then the x-axis will only show 5 items.
-
-### Filters
-
-#### Overview
-
-A filter is like a SQL `WHERE`: it filters the results to only include results that match a condition. You can use datetime columns, integer columns, string columns, associations, or even define custom filters.
-
-For example, if the `Flight` model has a `delay` column that's an integer, the chart below will show only flights that have a delay of greater than 15 minutes:
-
-```yaml
-measure:
-  key: flight
-  filters:
-  - key: delay
-    criteria:
-      operator: '>'
-      value: 15
-dimensions:
-- carrier
-```
-[<img src="docs/images/flights_with_configured_number.png?raw=true" width="500" />](docs/images/flights_with_configured_number.png?raw=true)
-
-You can also create form controls that the user can use to filter the chart:
-
-```yaml
-measure:
-  key: flight
-  filters:
-  - carrier
-  - carrier_name
-  - is_on_time
-  - flight_at
-dimensions:
-- flight_at
-- carrier
-```
-
-In `app/views/my_view.html.haml`, you can use ReportsKit's form helpers to create the controls:
+`app/views/users/index.html.haml`
 ```haml
-= render_report 'filters' do |f|
-  .pull-right
-    = f.date_range :flight_at
-  = f.multi_autocomplete :carrier, scope: 'top', placeholder: 'Carrier...'
-  = f.string_filter :carrier_name, placeholder: 'Carrier name (e.g. Airlines)...', style: 'width: 175px;'
-  .checkbox
-    = label_tag :is_on_time do
-      = f.check_box :is_on_time
-      On time
-```
-[<img src="docs/images/flights_with_filters.png?raw=true" width="500" />](docs/images/flights_with_filters.png?raw=true)
-
-#### Types
-
-##### Boolean
-
-Boolean filters can be used on any `boolean` columns, or you can define your own boolean filter (see [Custom Filters](#custom-filters)).
-
-```yaml
-measure:
-  key: flight
-  filters:
-  - key: is_on_time
-    criteria:
-      operator: true
-dimensions:
-- carrier
-```
-[<img src="docs/images/flights_with_configured_boolean.png?raw=true" width="500" />](docs/images/flights_with_configured_boolean.png?raw=true)
-
-##### Datetime
-
-Datetime filters can be used on any `datetime` or `timestamp` columns, or you can define your own datetime filter (see [Custom Filters](#custom-filters)).
-
-```yaml
-measure:
-  key: flight
-  filters:
-  - key: flight_at
-    criteria:
-      operator: between
-      value: Oct 1, 2016 - Jan 1, 2017
-dimensions:
-- carrier
-```
-[<img src="docs/images/flights_with_configured_datetime.png?raw=true" width="500" />](docs/images/flights_with_configured_datetime.png?raw=true)
-
-##### Number
-
-Number filters can be used on any `integer`, `float`, or `decimal` columns, or you can define your own number filter (see [Custom Filters](#custom-filters)).
-
-```yaml
-measure:
-  key: flight
-  filters:
-  - key: delay
-    criteria:
-      operator: '>'
-      value: 15
-dimensions:
-- carrier
-```
-[<img src="docs/images/flights_with_configured_number.png?raw=true" width="500" />](docs/images/flights_with_configured_number.png?raw=true)
-
-##### String
-
-String filters can be used on any `string` or `text` columns, or you can define your own number filter (see [Custom Filters](#custom-filters)).
-
-```yaml
-measure:
-  key: flight
-  filters:
-  - key: carrier_name
-    criteria:
-      operator: contains
-      value: airlines
-dimensions:
-- carrier
-```
-[<img src="docs/images/flights_with_configured_string.png?raw=true" width="500" />](docs/images/flights_with_configured_string.png?raw=true)
-
-##### Customer Filters
-
-You can define custom filters in your model. For example, if `Flight` has a column named `delay` (an integer with a unit of minutes), then we can define a `was_delayed` dimension:
-
-```ruby
-class Flight < ApplicationRecord
-  include ReportsKit::Model
-
-  reports_kit do
-    filter :was_delayed, :boolean, conditions: 'delay IS NOT NULL AND delay > 15'
-  end
-end
+= render_report 'my_users' do |f|
+  = f.date_range :created_at
 ```
 
-We can then use the `was_delayed` filter:
+[<img src="docs/images/users_by_created_at_with_filter.png?raw=true" width="500" />](docs/images/users_by_created_at_with_filter.png?raw=true)
 
-```yaml
-measure:
-  key: flight
-  filters:
-  - key: was_delayed
-    criteria:
-      operator: true
-dimensions:
-- carrier
-```
-[<img src="docs/images/flights_by_hours_delayed.png?raw=true" width="500" />](docs/images/flights_by_hours_delayed.png?raw=true)
+Many other form controls are available; see [Filters](docs/filters.md) for more.
 
-#### Form Controls
+### How It Works
 
-Most charting libraries don't provide interactive form controls, but ReportsKit does. It makes it easy to add form controls to allow end users to modify charts.
+In the Quick Start chart, `measure: 'user'` tells ReportsKit to count the number of `User` records, and `dimensions: ['created_at']` tells it to group by the week of the `created_at` column. Since `created_at` is a `datetime` column, ReportsKit knows that it should sort the results chronologically.
 
-##### Check Box
+To learn how to use more of ReportsKit's features, check out the following resources:
 
-Check boxes can be used with filters that have a `boolean` type.
-
-```yaml
-measure:
-  key: flight
-  filters:
-  - is_on_time
-dimensions:
-- flight_at
-- carrier
-```
-```haml
-= render_report 'filter_check_box' do |f|
-  .checkbox
-    = label_tag :is_on_time do
-      = f.check_box :is_on_time
-      On time
-```
-[<img src="docs/images/flights_with_check_box.png?raw=true" width="500" />](docs/images/flights_with_check_box.png?raw=true)
-
-##### Date Range
-
-Date ranges can be used with filters that have a `datetime` type.
-
-```yaml
-measure:
-  key: flight
-  filters:
-  - flight_at
-dimensions:
-- flight_at
-- carrier
-```
-```haml
-= render_report 'filter_date_range' do |f|
-  = f.date_range :flight_at
-```
-[<img src="docs/images/flights_with_date_range.png?raw=true" width="500" />](docs/images/flights_with_date_range.png?raw=true)
-
-##### Multi-Autocomplete
-
-```yaml
-measure:
-  key: flight
-  filters:
-  - carrier
-dimensions:
-- flight_at
-- carrier
-```
-```haml
-= render_report 'filter_multi_autocomplete' do |f|
-  = f.multi_autocomplete :carrier, scope: 'top', placeholder: 'Carrier...'
-```
-[<img src="docs/images/flights_with_multi_autocomplete.png?raw=true" width="500" />](docs/images/flights_with_multi_autocomplete.png?raw=true)
-
-##### String Filter
-
-```yaml
-measure:
-  key: flight
-  filters:
-  - carrier_name
-dimensions:
-- flight_at
-- carrier
-```
-```haml
-= render_report 'filter_string' do |f|
-  = f.string_filter :carrier_name, placeholder: 'Carrier name (e.g. Airlines)...', style: 'width: 175px;'
-```
-[<img src="docs/images/flights_with_string_filter.png?raw=true" width="500" />](docs/images/flights_with_string_filter.png?raw=true)
-
-### Display Options
-
-#### Overview
-
-Charts are rendered using [Chart.js](http://www.chartjs.org/). You can configure your ReportsKit chart using any [Chart.js options](http://www.chartjs.org/docs/).
-
-##### `type`
-
-You can use any `type` value supported by Chart.js, including `bar`, `line`, `horizontalBar`, `radar`, and more.
-
-Here's an example of a horizontal bar chart:
-
-```yaml
-measure: flight
-dimensions:
-- carrier
-chart:
-  type: horizontalBar
-  options:
-    scales:
-      xAxes:
-      - scaleLabel:
-          display: true
-          labelString: Flights
-      yAxes:
-      - scaleLabel:
-          display: true
-          labelString: Carrier
-```
-[<img src="docs/images/horizontal_bar.png?raw=true" width="500" />](docs/images/horizontal_bar.png?raw=true)
-
-##### `options`
-
-You can use any `options` that are supported by Chart.js.
-
-Here's an example of a chart with Chart.js options:
-
-```yaml
-measure: flight
-dimensions:
-- origin_market
-- carrier
-chart:
-  type: horizontalBar
-  options:
-    scales:
-      xAxes:
-      - stacked: true
-        scaleLabel:
-          display: true
-          labelString: Flights
-      yAxes:
-      - stacked: true
-        scaleLabel:
-          display: true
-          labelString: Market
-```
-[<img src="docs/images/chart_options.png?raw=true" width="500" />](docs/images/chart_options.png?raw=true)
-
-##### `datasets`
-
-You can use any `datasets` options that are supported by Chart.js.
-
-Here's an example of a chart with `datasets` options:
-
-```yaml
-measure: flight
-dimensions:
-- flight_at
-- key: carrier
-  limit: 3
-chart:
-  type: line
-  datasets:
-    fill: false
-    borderDash:
-      - 5
-      - 5
-```
-[<img src="docs/images/dashed_line.png?raw=true" width="500" />](docs/images/dashed_line.png?raw=true)
-
-### More Examples
-
-For more examples, see [reportskit.co](https://www.reportskit.co).
+* [Examples](https://www.reportskit.co/)
+* [Documentation](documentation)
 
 License
 -------
