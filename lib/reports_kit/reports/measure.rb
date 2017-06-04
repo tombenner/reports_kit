@@ -16,11 +16,15 @@ module ReportsKit
       end
 
       def key
-        properties[:key]
+        properties[:key].underscore
       end
 
       def label
         key.pluralize.titleize
+      end
+
+      def relation_name
+        key.tableize
       end
 
       def aggregate_function
@@ -32,7 +36,7 @@ module ReportsKit
       end
 
       def base_relation
-        return context_record.public_send(key.pluralize) if context_record
+        return context_record.public_send(relation_name) if context_record
         model_class
       end
 
