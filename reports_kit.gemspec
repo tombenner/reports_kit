@@ -3,7 +3,8 @@ require File.expand_path('../lib/reports_kit/version', __FILE__)
 Gem::Specification.new do |s|
   s.authors       = ['Tom Benner']
   s.email         = ['tombenner@gmail.com']
-  s.description = s.summary = 'Beautiful, interactive charts for Ruby on Rails'
+  s.summary       = 'Beautiful, interactive charts for Ruby on Rails'
+  s.description   = 'ReportsKit lets you easily create beautiful charts with customizable, interactive filters.'
   s.homepage      = 'https://github.com/tombenner/reports_kit'
 
   s.files         = `git ls-files`.split($\)
