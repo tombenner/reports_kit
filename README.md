@@ -2,8 +2,6 @@ ReportsKit
 =====
 ReportsKit lets you easily create beautiful charts with customizable, interactive filters.
 
-Add powerful reporting to your Rails app in minutes, not months!
-
 For interactive examples, see [reportskit.co](https://www.reportskit.co/).
 
 ---
