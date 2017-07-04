@@ -4,6 +4,7 @@ ActiveRecord::Schema.define do
   create_table :issues, :force => :cascade do |t|
     t.integer  :repo_id
     t.string   :title
+    t.text     :description
     t.integer  :source_user_id
     t.string   :state
     t.boolean  :locked

@@ -5,7 +5,8 @@ module ReportsKit
         :boolean,
         :datetime,
         :integer,
-        :string
+        :string,
+        :text
       ]
 
       attr_accessor :inferrable, :inferrable_type

@@ -12,6 +12,22 @@ describe ReportsKit::Reports::Dimension do
     end
   end
 
+  context 'with a string dimension' do
+    let(:properties) { 'title' }
+
+    it 'returns the settings' do
+      expect(subject.settings).to eq({ column: 'issues.title', group: "issues.title" })
+    end
+  end
+
+  context 'with a text dimension' do
+    let(:properties) { 'description' }
+
+    it 'returns the settings' do
+      expect(subject.settings).to eq({ column: 'issues.description', group: "issues.description" })
+    end
+  end
+
   context 'with a belongs_to association dimension' do
     let(:properties) { 'repo' }
 
