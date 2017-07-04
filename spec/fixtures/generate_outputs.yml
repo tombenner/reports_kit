@@ -25,6 +25,7 @@
       :legend:
         :labels:
           :usePointStyle: true
+      :maintainAspectRatio: false
       :tooltips:
         :xPadding: 8
         :yPadding: 7
@@ -55,6 +56,7 @@
       :legend:
         :labels:
           :usePointStyle: true
+      :maintainAspectRatio: false
       :tooltips:
         :xPadding: 8
         :yPadding: 7
@@ -86,6 +88,7 @@
       :legend:
         :labels:
           :usePointStyle: true
+      :maintainAspectRatio: false
       :tooltips:
         :xPadding: 8
         :yPadding: 7
@@ -116,6 +119,7 @@
       :legend:
         :labels:
           :usePointStyle: true
+      :maintainAspectRatio: false
       :tooltips:
         :xPadding: 8
         :yPadding: 7
@@ -146,6 +150,7 @@
       :legend:
         :labels:
           :usePointStyle: true
+      :maintainAspectRatio: false
       :tooltips:
         :xPadding: 8
         :yPadding: 7
@@ -172,6 +177,7 @@
       :legend:
         :labels:
           :usePointStyle: true
+      :maintainAspectRatio: false
       :tooltips:
         :xPadding: 8
         :yPadding: 7
@@ -202,6 +208,7 @@
       :legend:
         :labels:
           :usePointStyle: true
+      :maintainAspectRatio: false
       :tooltips:
         :xPadding: 8
         :yPadding: 7

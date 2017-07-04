@@ -44,6 +44,7 @@ module ReportsKit
               usePointStyle: true
             }
           },
+          maintainAspectRatio: false,
           tooltips: {
             xPadding: 8,
             yPadding: 7
