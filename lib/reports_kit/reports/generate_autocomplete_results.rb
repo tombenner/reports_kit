@@ -12,16 +12,24 @@ module ReportsKit
 
       def perform
         raise ArgumentError.new("Could not find a model for filter_key: '#{filter_key}'") unless model
-        results = model
+        results = relation
         results = results.public_send(scope) if scope
         results = results.limit(10_000)
         results = results.map { |result| { id: result.id, text: result.to_s } }
         results = results.sort_by { |result| result[:text].downcase }
         results = filter_results(results)
-        results
+        results.first(100)
       end
 
       private
+
+      def relation
+        if context_record
+          context_record.public_send(model.name.tableize)
+        else
+          model
+        end
+      end
 
       def filter_results(results)
         query = params[:q].try(:downcase)
