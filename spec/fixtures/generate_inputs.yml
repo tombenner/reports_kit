@@ -12,6 +12,11 @@
   - repo
   chart:
     foo: bar
+- measure: issue
+  dimensions:
+  - repo
+  chart:
+    type: pie
 - measure:
     key: issue
   dimensions:

@@ -98,6 +98,14 @@
     :datasets:
     - :label: Issues
       :data: []
+      :backgroundColor: []
+    :options: {}
+  :type: pie
+- :chart_data:
+    :labels: []
+    :datasets:
+    - :label: Issues
+      :data: []
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:

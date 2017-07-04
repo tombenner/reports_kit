@@ -74,6 +74,22 @@ module ReportsKit
         private
 
         def set_colors
+          if donut_or_pie_chart?
+            set_record_scoped_colors
+          else
+            set_dataset_scoped_colors
+          end
+        end
+
+        def set_record_scoped_colors
+          self.data[:chart_data][:datasets] = self.data[:chart_data][:datasets].map do |dataset|
+            length = dataset[:data].length
+            dataset[:backgroundColor] = DEFAULT_COLORS * (length.to_f / DEFAULT_COLORS.length).ceil
+            dataset
+          end
+        end
+
+        def set_dataset_scoped_colors
           self.data[:chart_data][:datasets] = data[:chart_data][:datasets].map.with_index do |dataset, index|
             color = DEFAULT_COLORS[index % DEFAULT_COLORS.length]
             dataset[:backgroundColor] = color
@@ -84,6 +100,8 @@ module ReportsKit
 
         def default_options
           @default_options ||= begin
+            return {} if donut_or_pie_chart?
+
             default_options = DEFAULT_OPTIONS.deep_dup
 
             x_axis_label = options[:x_axis_label]
@@ -126,6 +144,10 @@ module ReportsKit
         def set_type
           return if type.blank?
           self.data[:type] = type
+        end
+
+        def donut_or_pie_chart?
+          type.in?(%w(donut pie))
         end
       end
     end
