@@ -6,48 +6,83 @@ module ReportsKit
           time.strftime('%b %-d, \'%y')
         end
 
-        def self.populate_sparse_values(dimension_keys_values, use_first_value_key: false)
-          return dimension_keys_values if dimension_keys_values.blank?
-          first_key = dimension_keys_values.first.first
-          return dimension_keys_values unless first_key.is_a?(Time)
-
-          beginning_of_current_week = Time.now.utc.beginning_of_week(ReportsKit.configuration.first_day_of_week)
-          last_key = dimension_keys_values.to_a.last.first
-          last_key = [beginning_of_current_week, last_key].compact.max
-
-          time = first_key
-          full_dimension_instances_values = []
-          if use_first_value_key
-            first_value_key = dimension_keys_values.first.last.keys.first
-            blank_value = { first_value_key => 0 }
+        def self.populate_sparse_hash(hash, dimension:)
+          return hash if hash.blank?
+          keys = hash.keys
+          is_nested = false
+          if keys.first.is_a?(Array)
+            is_nested = true
+            keys_values = arrays_values_to_nested_hash(hash)
+            keys = keys_values.keys
           else
-            blank_value = 0
+            keys_values = hash
           end
-          loop do
-            full_dimension_instances_values << [time, dimension_keys_values[time] || blank_value]
-            break if time >= last_key
-            time += 1.week
+
+          first_key = dimension.first_key || keys.first
+          return hash unless first_key.is_a?(Time) || first_key.is_a?(Date)
+          keys_values = keys_values.map do |key, value|
+            key = key.to_date if key.is_a?(Time)
+            [key, value]
+          end.to_h
+
+          keys = populate_sparse_keys(keys, dimension: dimension)
+          populated_keys_values = {}
+          default_value = is_nested ? {} : 0
+          keys.each do |key|
+            populated_keys_values[key] = keys_values[key] || default_value
           end
-          Hash[full_dimension_instances_values]
+          return nested_hash_to_arrays_values(populated_keys_values) if is_nested
+          populated_keys_values
         end
 
-        def self.populate_sparse_keys(keys)
+        def self.populate_sparse_keys(keys, dimension:)
           return keys if keys.blank?
-          first_key = keys.first
-          return keys unless first_key.is_a?(Time)
-          keys = keys.sort
-          beginning_of_current_week = Time.now.utc.beginning_of_week(ReportsKit.configuration.first_day_of_week)
-          last_key = keys.last
-          last_key = [beginning_of_current_week, last_key].compact.max
+          first_key = dimension.first_key || keys.first
+          return keys unless first_key.is_a?(Time) || first_key.is_a?(Date)
+          granularity = dimension.granularity
 
-          time = first_key
+          first_key = first_key.beginning_of_week if granularity == 'week'
+          keys = keys.sort
+          last_key = dimension.last_key || keys.last
+          last_key = last_key.beginning_of_week if granularity == 'week'
+
+          if granularity == 'week'
+            beginning_of_current_week = Time.now.utc.beginning_of_week(ReportsKit.configuration.first_day_of_week)
+            last_key = [beginning_of_current_week, last_key].compact.max
+          end
+
+          date = first_key.to_date
           populated_keys = []
+          interval = granularity == 'week' ? 1.week : 1.day
           loop do
-            populated_keys << time
-            break if time >= last_key
-            time += 1.week
+            populated_keys << date
+            break if date >= last_key
+            date += interval
           end
           populated_keys
+        end
+
+        def self.arrays_values_to_nested_hash(arrays_values)
+          nested_hash = {}
+          arrays_values.each do |(key1, key2), value|
+            nested_hash[key1] ||= {}
+            nested_hash[key1][key2] ||= value
+          end
+          nested_hash
+        end
+
+        def self.nested_hash_to_arrays_values(nested_hash)
+          arrays_values = {}
+          nested_hash.each do |key1, key2s_values|
+            if key2s_values.blank?
+              arrays_values[[key1, nil]] = 0
+              next
+            end
+            key2s_values.each do |key2, value|
+              arrays_values[[key1, key2]] = value
+            end
+          end
+          arrays_values
         end
 
         def self.dimension_to_dimension_ids_dimension_instances(dimension, dimension_ids)
@@ -62,12 +97,12 @@ module ReportsKit
         def self.dimension_key_to_label(dimension_instance, dimension, ids_dimension_instances)
           return dimension_instance.to_s if dimension.configured_by_column? && dimension.column_type == :integer
           case dimension_instance
-          when Time
+          when Time, Date
             Utils.format_time(dimension_instance)
           when Fixnum
             raise ArgumentError.new("ids_dimension_instances must be present for Dimension with identifier: #{dimension_instance}") unless ids_dimension_instances
             instance = ids_dimension_instances[dimension_instance.to_i]
-            raise ArgumentError.new("instance could not be found for Dimension with identifier: #{dimension_instance}") unless instance
+            return unless instance
             instance.to_s
           else
             dimension_instance.to_s.gsub(/\.0$/, '')

@@ -2,6 +2,12 @@ module ReportsKit
   module Reports
     class Dimension
       DEFAULT_DIMENSION_INSTANCES_LIMIT = 30
+      DEFAULT_GRANULARITY = 'week'
+      VALID_GRANULARITIES = %w(day week).freeze
+      ADAPTER_NAMES_CLASSES = {
+        'mysql2' => Adapters::Mysql,
+        'postgresql' => Adapters::Postgresql
+      }.freeze
 
       attr_accessor :properties, :measure, :configuration
 
@@ -24,6 +30,15 @@ module ReportsKit
 
       def key
         properties[:key]
+      end
+
+      def granularity
+        @granularity ||= begin
+          return unless configured_by_time?
+          granularity = properties[:granularity] || DEFAULT_GRANULARITY
+          raise ArgumentError.new("Invalid granularity: #{granularity}") unless VALID_GRANULARITIES.include?(granularity)
+          granularity
+        end
       end
 
       def label
@@ -50,9 +65,9 @@ module ReportsKit
         elsif configured_by_association?
           "#{model_class.table_name}.#{reflection.foreign_key}"
         elsif configured_by_column? && configured_by_time?
-          "date_trunc('week', #{model_class.table_name}.#{key}::timestamp)"
+          granularity == 'day' ? day_expression : week_expression
         elsif configured_by_column?
-          "#{model_class.table_name}.#{key}"
+          column_expression
         else
           raise ArgumentError.new('Invalid group_expression')
         end
@@ -70,8 +85,44 @@ module ReportsKit
         end
       end
 
+      def first_key
+        return unless configured_by_time? && datetime_filters.present?
+        datetime_filters.map(&:start_at).compact.sort.first
+      end
+
+      def last_key
+        return unless configured_by_time? && datetime_filters.present?
+        datetime_filters.map(&:end_at).compact.sort.last
+      end
+
+      def datetime_filters
+        return [] unless measure.filters.present?
+        measure.filters.map(&:filter_type).select { |filter_type| filter_type.is_a?(FilterTypes::Datetime) }
+      end
+
       def should_be_sorted_by_count?
         !configured_by_time?
+      end
+
+      def adapter
+        @adapter ||= begin
+          adapter_name = model_class.connection_config[:adapter]
+          adapter = ADAPTER_NAMES_CLASSES[adapter_name]
+          raise ArgumentError.new("Unsupported adapter: #{adapter_name}") unless adapter
+          adapter
+        end
+      end
+
+      def column_expression
+        "#{model_class.table_name}.#{key}"
+      end
+
+      def day_expression
+        adapter.truncate_to_day(column_expression)
+      end
+
+      def week_expression
+        adapter.truncate_to_week(column_expression)
       end
     end
   end

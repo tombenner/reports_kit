@@ -18,66 +18,99 @@ describe ReportsKit::Reports::Data::Generate do
   let(:chart_options) { subject[:chart_data][:options] }
 
   context 'with a datetime dimension' do
-    let(:properties) do
-      {
-        measure: 'issue',
-        dimensions: %w(opened_at)
-      }
-    end
-    let!(:issues) do
-      [
-        create(:issue, repo: repo, opened_at: now - 2.weeks),
-        create(:issue, repo: repo, opened_at: now - 2.weeks),
-        create(:issue, repo: repo, opened_at: now)
-      ]
-    end
-
-    it 'returns the type' do
-      expect(chart_type).to eq('bar')
-    end
-
-    it 'returns the data' do
-      expect(chart_data).to eq({
-        labels: [
-          format_time(2),
-          format_time(1),
-          format_time(0)
-        ],
-        datasets: [
-          {
-            label: 'Issues',
-            data: [2, 0, 1]
-          }
-        ]
-      })
-    end
-
-    context 'with a datetime filter' do
+    context 'with default granularity' do
       let(:properties) do
         {
-          measure: {
-            key: 'issue',
-            filters: [
-              {
-                key: 'opened_at',
-                criteria: {
-                  operator: 'between',
-                  value: "#{date_string_for_filter(now - 1.week)} - #{date_string_for_filter(now)}"
-                }
-              }
-            ]
-          },
+          measure: 'issue',
           dimensions: %w(opened_at)
         }
       end
+      let!(:issues) do
+        [
+          create(:issue, repo: repo, opened_at: now - 2.weeks),
+          create(:issue, repo: repo, opened_at: now - 2.weeks),
+          create(:issue, repo: repo, opened_at: now)
+        ]
+      end
 
-      it 'returns the chart_data' do
+      it 'returns the type' do
+        expect(chart_type).to eq('bar')
+      end
+
+      it 'returns the data' do
         expect(chart_data).to eq({
-          labels: [format_time(0)],
+          labels: [
+            format_week_offset(2),
+            format_week_offset(1),
+            format_week_offset(0)
+          ],
           datasets: [
             {
-              label: "Issues",
-              data: [1.0]
+              label: 'Issues',
+              data: [2, 0, 1]
+            }
+          ]
+        })
+      end
+
+      context 'with a datetime filter' do
+        let(:properties) do
+          {
+            measure: {
+              key: 'issue',
+              filters: [
+                {
+                  key: 'opened_at',
+                  criteria: {
+                    operator: 'between',
+                    value: "#{date_string_for_filter(now - 1.week)} - #{date_string_for_filter(now)}"
+                  }
+                }
+              ]
+            },
+            dimensions: %w(opened_at)
+          }
+        end
+
+        it 'returns the chart_data' do
+          expect(chart_data).to eq({
+            labels: [format_week_offset(1), format_week_offset(0)],
+            datasets: [
+              {
+                label: "Issues",
+                data: [0, 1]
+              }
+            ]
+          })
+        end
+      end
+    end
+
+    context 'with day granularity' do
+      let(:properties) do
+        {
+          measure: 'issue',
+          dimensions: [{ key: 'opened_at', granularity: 'day' }]
+        }
+      end
+      let!(:issues) do
+        [
+          create(:issue, repo: repo, opened_at: now - 2.days),
+          create(:issue, repo: repo, opened_at: now)
+        ]
+      end
+
+      it 'returns the data' do
+        expect(chart_data).to eq({
+          labels: [
+            format_day_offset(2),
+            format_day_offset(1),
+            format_day_offset(0)
+          ],
+          datasets: [
+            {
+              label: 'Issues',
+              data: [1, 0, 1]
             }
           ]
         })
@@ -226,7 +259,7 @@ describe ReportsKit::Reports::Data::Generate do
 
     it 'returns the chart_data' do
       expect(chart_data).to eq({
-        labels: [format_time(2), format_time(1), format_time(0)],
+        labels: [format_week_offset(2), format_week_offset(1), format_week_offset(0)],
         datasets: [
           {
             label: repo.to_s,

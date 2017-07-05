@@ -11,6 +11,9 @@ require 'reports_kit/resources_controller'
 require 'reports_kit/reports_controller'
 require 'reports_kit/version'
 
+require 'reports_kit/reports/adapters/mysql'
+require 'reports_kit/reports/adapters/postgresql'
+
 require 'reports_kit/reports/data/chart_options'
 require 'reports_kit/reports/data/generate'
 require 'reports_kit/reports/data/one_dimension'

@@ -7,7 +7,11 @@ module Helpers
     time.strftime('%b %-d, %Y')
   end
 
-  def format_time(week_offset)
+  def format_day_offset(day_offset)
+    ReportsKit::Reports::Data::Utils.format_time((now - day_offset.days))
+  end
+
+  def format_week_offset(week_offset)
     ReportsKit::Reports::Data::Utils.format_time((now - week_offset.weeks).beginning_of_week)
   end
 end

@@ -8,7 +8,7 @@ describe ReportsKit::Reports::Dimension do
     let(:properties) { 'opened_at' }
 
     it 'returns the settings' do
-      expect(subject.settings).to eq({ column: 'issues.opened_at', group: "date_trunc('week', issues.opened_at::timestamp)" })
+      expect(subject.settings).to eq({ column: 'issues.opened_at', group: "DATE_TRUNC('week', issues.opened_at::timestamp)" })
     end
   end
 

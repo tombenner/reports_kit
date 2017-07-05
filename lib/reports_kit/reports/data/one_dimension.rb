@@ -32,7 +32,7 @@ module ReportsKit
               relation = relation.order('2')
             end
             dimension_keys_values = relation.distinct.public_send(*measure.aggregate_function)
-            dimension_keys_values = Utils.populate_sparse_values(dimension_keys_values)
+            dimension_keys_values = Utils.populate_sparse_hash(dimension_keys_values, dimension: dimension)
             dimension_keys_values.delete(nil)
             dimension_keys_values.delete('')
             dimension_keys_values
