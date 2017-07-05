@@ -3,6 +3,10 @@ module Helpers
     Time.zone.now
   end
 
+  def database_adapter
+    REPORTS_KIT_DATABASE_ADAPTER
+  end
+
   def date_string_for_filter(time)
     time.strftime('%b %-d, %Y')
   end

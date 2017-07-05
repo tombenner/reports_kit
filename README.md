@@ -115,6 +115,15 @@ To learn how to use more of ReportsKit's features, check out the following resou
 * [Examples](https://www.reportskit.co/)
 * [Documentation](docs)
 
+Testing
+-------
+
+ReportsKit is tested against PostgreSQL and MySQL. If you'd like to submit a PR, please be sure to use [Appraisal](https://github.com/thoughtbot/appraisal) to test your changes in both contexts:
+
+```bash
+appraisal rspec
+```
+
 License
 -------
 

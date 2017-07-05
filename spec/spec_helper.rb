@@ -12,13 +12,24 @@ Dir.glob("#{directory}/support/models/*.rb") { |file| require file }
 
 Time.zone = ActiveSupport::TimeZone.new('UTC')
 ActiveRecord::Base.default_timezone = :utc
-ActiveRecord::Base.establish_connection(
-  adapter: 'postgresql',
-  host: 'localhost',
-  database: 'reports_kit_test',
-  username: 'postgres',
-  encoding: 'unicode'
-)
+
+if Gem.loaded_specs.has_key?('mysql2')
+  REPORTS_KIT_DATABASE_ADAPTER = ReportsKit::Reports::Adapters::Mysql
+  ActiveRecord::Base.establish_connection(
+    adapter: 'mysql2',
+    host: 'localhost',
+    database: 'reports_kit_test',
+    username: 'root'
+  )
+else
+  REPORTS_KIT_DATABASE_ADAPTER = ReportsKit::Reports::Adapters::Postgresql
+  ActiveRecord::Base.establish_connection(
+    adapter: 'postgresql',
+    host: 'localhost',
+    database: 'reports_kit_test',
+    username: 'postgres'
+  )
+end
 require 'support/schema'
 
 RSpec.configure do |config|
