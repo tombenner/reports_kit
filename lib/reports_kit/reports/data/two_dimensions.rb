@@ -35,7 +35,7 @@ module ReportsKit
             else
               relation = relation.order('2')
             end
-            dimension_keys_values = relation.count
+            dimension_keys_values = relation.distinct.public_send(*measure.aggregate_function)
 
             if dimension.should_be_sorted_by_count?
               dimension_keys_values = sort_dimension_keys_values_by_count(dimension_keys_values)
