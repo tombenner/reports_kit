@@ -26,7 +26,7 @@ module ReportsKit
         self.measure = measure
 
         properties = { key: properties } if properties.is_a?(String)
-        raise ArgumentError.new("Measure properties must be a String or Hash, not a #{properties.class.name}: #{properties.inspect}") unless properties.is_a?(Hash)
+        raise ArgumentError.new("Filter properties must be a String or Hash, not a #{properties.class.name}: #{properties.inspect}") unless properties.is_a?(Hash)
         self.properties = properties.deep_symbolize_keys
         self.properties[:criteria] = filter_type.default_criteria unless self.properties[:criteria]
         self.properties = self.properties
