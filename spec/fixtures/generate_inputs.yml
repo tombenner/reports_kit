@@ -67,3 +67,12 @@
   - key: label
     dimensions:
     - repo
+- measures:
+  - key: issue
+    name: Repo Issues
+    dimensions:
+    - repo
+  - key: label
+    dimensions:
+    - repo
+  format: table

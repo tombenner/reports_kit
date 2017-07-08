@@ -11,7 +11,11 @@ ReportsKit.Report = (function(options) {
     self.initializeElements();
     self.initializeEvents();
 
-    self.chart = new ReportsKit.Chart({ report: self });
+    if (self.defaultProperties.format == 'table') {
+      self.visualization = new ReportsKit.Table({ report: self });
+    } else {
+      self.visualization = new ReportsKit.Chart({ report: self });
+    }
     self.render();
   };
 
@@ -101,7 +105,7 @@ ReportsKit.Report = (function(options) {
   };
 
   self.render = function() {
-    self.chart.render();
+    self.visualization.render();
   };
 
   self.initialize(options);

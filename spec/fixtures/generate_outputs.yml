@@ -389,3 +389,14 @@
         :xPadding: 8
         :yPadding: 7
   :type: bar
+- :type: table
+  :table_data:
+  - -
+    - Repo Issues
+    - Labels
+  - - foo/bar1
+    - 2.0
+    - 1.0
+  - - foo/bar2
+    - 0.0
+    - 2.0

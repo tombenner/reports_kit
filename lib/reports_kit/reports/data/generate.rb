@@ -22,7 +22,12 @@ module ReportsKit
             raise ArgumentError.new('The configuration of measurse and dimensions is invalid')
           end
 
-          ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
+          data = ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
+          if format == 'table'
+            data[:table_data] = format_table(data.delete(:chart_data))
+            data[:type] = format
+          end
+          data
         end
 
         private
@@ -53,6 +58,25 @@ module ReportsKit
               Measure.new(measure_hash, context_record: context_record)
             end
           end
+        end
+
+        def format
+          properties[:format]
+        end
+
+        def format_table(data)
+          column_names = [nil]
+          column_values = []
+          data[:datasets].each do |dataset|
+            column_names << dataset[:label]
+            column_values << dataset[:data]
+          end
+          rows = column_values.transpose
+          rows = rows.map.with_index do |row, index|
+            label = data[:labels][index]
+            row.unshift(label)
+          end
+          [column_names] + rows
         end
 
         def inferred_options

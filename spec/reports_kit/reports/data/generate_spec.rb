@@ -13,6 +13,9 @@ describe ReportsKit::Reports::Data::Generate do
     end
     chart_data
   end
+  let(:table_data) do
+    subject[:table_data]
+  end
 
   let(:chart_type) { subject[:type] }
   let(:chart_options) { subject[:chart_data][:options] }
@@ -337,6 +340,78 @@ describe ReportsKit::Reports::Data::Generate do
           }
         ]
       })
+    end
+
+    context "with format: 'table'" do
+      subject { described_class.new(properties.merge(format: 'table'), context_record: context_record).perform }
+
+      it 'returns the table_data' do
+        expect(table_data).to eq([
+          [nil, repo.to_s, repo2.to_s],
+          [format_week_offset(2), 1, 0],
+          [format_week_offset(1), 0, 0],
+          [format_week_offset(0), 1, 1]
+        ])
+      end
+    end
+  end
+
+  context 'with two measures' do
+    let(:properties) do
+      {
+        measures: [
+          {
+            key: 'issue',
+            dimensions: %w(created_at)
+          },
+          {
+            key: 'tag',
+            dimensions: %w(created_at)
+          },
+        ]
+      }
+    end
+    let!(:issues) do
+      [
+        create(:issue, repo: repo, created_at: now),
+        create(:issue, repo: repo, created_at: now - 2.weeks),
+        create(:issue, repo: repo2, created_at: now)
+      ]
+    end
+    let!(:tags) do
+      [
+        create(:tag, repo: repo, created_at: now - 1.week),
+        create(:tag, repo: repo, created_at: now - 2.weeks)
+      ]
+    end
+
+    it 'returns the chart_data' do
+      expect(chart_data).to eq({
+        labels: [format_week_offset(2), format_week_offset(1), format_week_offset(0)],
+        datasets: [
+          {
+            label: 'Issues',
+            data: [1, 0, 2]
+          },
+          {
+            label: 'Tags',
+            data: [1, 1, 0]
+          }
+        ]
+      })
+    end
+
+    context "with format: 'table'" do
+      subject { described_class.new(properties.merge(format: 'table'), context_record: context_record).perform }
+
+      it 'returns the table_data' do
+        expect(table_data).to eq([
+          [nil, 'Issues', 'Tags'],
+          [format_week_offset(2), 1, 1],
+          [format_week_offset(1), 0, 1],
+          [format_week_offset(0), 2, 0]
+        ])
+      end
     end
   end
 
