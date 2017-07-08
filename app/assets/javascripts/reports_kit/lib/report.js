@@ -4,6 +4,7 @@ ReportsKit.Report = (function(options) {
   self.initialize = function(options) {
     self.options = options;
     self.el = options.el;
+    self.visualizationEl = self.el.find('.reports_kit_visualization');
 
     self.defaultProperties = self.el.data('properties');
     self.form = self.el.find('.reports_kit_report_form');
@@ -20,6 +21,7 @@ ReportsKit.Report = (function(options) {
   };
 
   self.initializeElements = function() {
+    self.exportCsvButton = self.el.find('[data-role=reports_kit_export_csv]');
     self.form.find('.date_range_picker').daterangepicker({
       locale: {
         format: 'MMM D, YYYY'
@@ -79,6 +81,7 @@ ReportsKit.Report = (function(options) {
       self.render();
       return false;
     })
+    self.exportCsvButton.on('click', self.exportCsv);
   };
 
   self.properties = function() {
@@ -103,6 +106,13 @@ ReportsKit.Report = (function(options) {
 
     return properties;
   };
+
+  self.exportCsv = function() {
+    var path = self.exportCsvButton.data('path');
+    path += '?properties=' + JSON.stringify(self.properties());
+    window.open(path, '_blank');
+    return false;
+  }
 
   self.render = function() {
     self.visualization.render();

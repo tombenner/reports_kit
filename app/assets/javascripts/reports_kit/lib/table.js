@@ -6,7 +6,7 @@ ReportsKit.Table = (function(options) {
     self.report = options.report;
     self.el = self.report.el;
 
-    self.table = $('<table />', { 'class': 'table table-striped table-hover' }).appendTo(self.el);
+    self.table = $('<table />', { 'class': 'table table-striped table-hover' }).appendTo(self.report.visualizationEl);
   };
 
   self.render = function() {

@@ -391,12 +391,12 @@
   :type: bar
 - :type: table
   :table_data:
-  - -
+  - - 
     - Repo Issues
     - Labels
   - - foo/bar1
-    - 2.0
-    - 1.0
+    - 2
+    - 1
   - - foo/bar2
-    - 0.0
-    - 2.0
+    - 0
+    - 2

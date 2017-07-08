@@ -6,7 +6,7 @@ ReportsKit.Chart = (function(options) {
     self.report = options.report;
     self.el = self.report.el;
 
-    self.canvas = $('<canvas />').appendTo(self.el);
+    self.canvas = $('<canvas />').appendTo(self.report.visualizationEl);
   };
 
   self.render = function() {

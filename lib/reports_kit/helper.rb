@@ -8,12 +8,31 @@ module ReportsKit
       end
       builder = ReportsKit::ReportBuilder.new(properties)
       content_tag :div, nil, class: 'reports_kit_report', data: { properties: builder.properties, path: reports_kit_path } do
+        elements = []
         if block_given?
-          form_tag reports_kit_path, method: 'get', class: 'reports_kit_report_form' do
+          elements << form_tag(reports_kit_path, method: 'get', class: 'reports_kit_report_form') do
             capture(builder, &block)
           end
         end
+        elements << content_tag(:div, nil, class: 'reports_kit_visualization')
+        action_elements = action_elements_for_properties(properties)
+        if action_elements
+          elements << content_tag(:div, nil, class: 'reports_kit_actions') do
+            action_elements.map { |element| concat(element) }
+          end
+        end
+        elements.join.html_safe
       end
+    end
+
+    def action_elements_for_properties(properties)
+      return if properties['actions'].blank? || !properties['actions'].include?('export_csv')
+      data = {
+        role: 'reports_kit_export_csv',
+        path: reports_kit.reports_kit_reports_path(format: 'csv')
+      }
+      element = link_to('Download CSV', '#', class: 'btn btn-primary', data: data)
+      [element]
     end
   end
 end
