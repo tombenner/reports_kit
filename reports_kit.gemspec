@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.license       = 'MIT'
 
   s.add_dependency 'rails', '>= 3'
+  s.add_dependency 'spreadsheet', '>= 1.1'
 
   s.add_development_dependency 'appraisal'
   s.add_development_dependency 'rspec', '~> 3'

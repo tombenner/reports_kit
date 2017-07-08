@@ -3,6 +3,7 @@ PATH
   specs:
     reports_kit (0.1.0)
       rails (>= 3)
+      spreadsheet (>= 1.1)
 
 GEM
   remote: https://rubygems.org/
@@ -118,7 +119,10 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.6.0)
     rspec-support (3.6.0)
+    ruby-ole (1.2.12.1)
     slop (3.6.0)
+    spreadsheet (1.1.4)
+      ruby-ole (>= 1.0)
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)

@@ -1,5 +1,10 @@
 module ReportsKit
   module Helper
+    ACTION_KEYS_METHODS = {
+      'export_csv' => :export_csv_element,
+      'export_xls' => :export_xls_element
+    }
+
     def render_report(properties, &block)
       raise ArgumentError.new('`properties` must be a Hash or String') if properties.blank?
       if properties.is_a?(String)
@@ -25,14 +30,31 @@ module ReportsKit
       end
     end
 
+    private
+
     def action_elements_for_properties(properties)
-      return if properties['actions'].blank? || !properties['actions'].include?('export_csv')
+      return if properties['actions'].blank?
+      properties['actions'].map do |action|
+        element_method = ACTION_KEYS_METHODS[action]
+        raise ArgumentError.new("Invalid action: #{action}") unless element_method
+        send(element_method)
+      end
+    end
+
+    def export_csv_element
       data = {
-        role: 'reports_kit_export_csv',
+        role: 'reports_kit_export_button',
         path: reports_kit.reports_kit_reports_path(format: 'csv')
       }
-      element = link_to('Download CSV', '#', class: 'btn btn-primary', data: data)
-      [element]
+      link_to('Download CSV', '#', class: 'btn btn-primary', data: data)
+    end
+
+    def export_xls_element
+      data = {
+        role: 'reports_kit_export_button',
+        path: reports_kit.reports_kit_reports_path(format: 'xls')
+      }
+      link_to('Download Excel', '#', class: 'btn btn-primary', data: data)
     end
   end
 end
