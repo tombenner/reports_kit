@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    reports_kit (0.0.4)
+    reports_kit (0.1.0)
       rails (>= 3)
 
 GEM
