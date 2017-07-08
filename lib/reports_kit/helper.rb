@@ -9,7 +9,7 @@ module ReportsKit
       builder = ReportsKit::ReportBuilder.new(properties)
       content_tag :div, nil, class: 'reports_kit_report', data: { properties: builder.properties, path: reports_kit_path } do
         if block_given?
-          form_tag reports_kit_path, method: 'get', class: 'reports_kit_report_form form-inline' do
+          form_tag reports_kit_path, method: 'get', class: 'reports_kit_report_form' do
             capture(builder, &block)
           end
         end
