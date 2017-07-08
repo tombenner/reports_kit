@@ -1,9 +1,11 @@
 ---
 - :chart_data:
-    :labels: []
+    :labels:
+    - foo/bar1
     :datasets:
     - :label: Issues
-      :data: []
+      :data:
+      - 2.0
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -31,10 +33,12 @@
         :yPadding: 7
   :type: bar
 - :chart_data:
-    :labels: []
+    :labels:
+    - foo/bar1
     :datasets:
     - :label: Issues
-      :data: []
+      :data:
+      - 2.0
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -63,10 +67,12 @@
       :foo: bar
   :type: bar
 - :chart_data:
-    :labels: []
+    :labels:
+    - foo/bar1
     :datasets:
     - :label: Issues
-      :data: []
+      :data:
+      - 2.0
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -94,18 +100,42 @@
         :yPadding: 7
   :type: bar
 - :chart_data:
-    :labels: []
+    :labels:
+    - foo/bar1
     :datasets:
     - :label: Issues
-      :data: []
-      :backgroundColor: []
+      :data:
+      - 2.0
+      :backgroundColor:
+      - "#1f77b4"
+      - "#aec7e8"
+      - "#ff7f0e"
+      - "#ffbb78"
+      - "#2ca02c"
+      - "#98df8a"
+      - "#d62728"
+      - "#ff9896"
+      - "#9467bd"
+      - "#c5b0d5"
+      - "#8c564b"
+      - "#c49c94"
+      - "#e377c2"
+      - "#f7b6d2"
+      - "#7f7f7f"
+      - "#c7c7c7"
+      - "#bcbd22"
+      - "#dbdb8d"
+      - "#17becf"
+      - "#9edae5"
     :options: {}
   :type: pie
 - :chart_data:
-    :labels: []
+    :labels:
+    - foo/bar1
     :datasets:
     - :label: Issues
-      :data: []
+      :data:
+      - 2.0
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -133,10 +163,16 @@
         :yPadding: 7
   :type: bar
 - :chart_data:
-    :labels: []
+    :labels:
+    - Dec 14, '09
+    - Dec 21, '09
+    - Dec 28, '09
     :datasets:
     - :label: Issues
-      :data: []
+      :data:
+      - 1.0
+      - 0.0
+      - 1.0
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -164,8 +200,18 @@
         :yPadding: 7
   :type: bar
 - :chart_data:
-    :labels: []
-    :datasets: []
+    :labels:
+    - Dec 14, '09
+    - Dec 21, '09
+    - Dec 28, '09
+    :datasets:
+    - :label: foo/bar1
+      :data:
+      - 1
+      - 0
+      - 1
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
     :options:
       :scales:
         :xAxes:
@@ -191,10 +237,12 @@
         :yPadding: 7
   :type: bar
 - :chart_data:
-    :labels: []
+    :labels:
+    - foo/bar1
     :datasets:
     - :label: Issues
-      :data: []
+      :data:
+      - 2.0
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:

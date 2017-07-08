@@ -278,17 +278,32 @@ describe ReportsKit::Reports::Data::Generate do
   # When making functional modifications, run these to see whether the modifications impact the output in any cases.
   # If the output effects are desired, run `REWRITE_RESULTS=1 rspec` to write them to the outputs YAML file, then verify that the output
   # modifications are desired, then commit the result and uncomment the `skip`.
-  describe 'chart options' do
+  describe 'YAML-based output comparisons' do
     FIXTURES_DIRECTORY = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'fixtures'))
 
     let(:inputs) { YAML.load_file("#{FIXTURES_DIRECTORY}/generate_inputs.yml") }
     let(:outputs_path) { "#{FIXTURES_DIRECTORY}/generate_outputs.yml" }
     let(:outputs) { YAML.load_file(outputs_path) }
 
+    let!(:repo) { create(:repo, full_name: 'foo/bar1') }
+    let!(:repo2) { create(:repo, full_name: 'foo/bar2') }
+    let!(:issues) do
+      [
+        create(:issue, repo: repo, opened_at: now - 2.weeks),
+        create(:issue, repo: repo, opened_at: now)
+      ]
+    end
+    let!(:labels) do
+      [
+        create(:label, repo: repo2),
+        create(:label, repo: repo2)
+      ]
+    end
+
     context 'input examples' do
       YAML.load_file("#{FIXTURES_DIRECTORY}/generate_inputs.yml").each.with_index do |inputs, index|
         it 'returns the expected output' do
-          expect(described_class.new(inputs).perform).to eq(outputs[index])
+          expect(described_class.new(inputs).perform.to_yaml).to eq(outputs[index].to_yaml)
         end
       end
     end
