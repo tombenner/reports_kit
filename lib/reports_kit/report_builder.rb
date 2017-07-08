@@ -24,8 +24,9 @@ module ReportsKit
 
     def multi_autocomplete(filter_key, options={})
       validate_filter!(filter_key)
+      filter = measure_filters.find { |f| f.key == filter_key.to_s }
       reports_kit_path = Rails.application.routes.url_helpers.reports_kit_path
-      path = "#{reports_kit_path}reports_kit/resources/measures/#{measures.first.key}/filters/#{filter_key}/autocomplete"
+      path = "#{reports_kit_path}reports_kit/resources/measures/#{filter.measure.key}/filters/#{filter_key}/autocomplete"
       scope = options.delete(:scope)
       params = {}
       params[:scope] = scope if scope.present?

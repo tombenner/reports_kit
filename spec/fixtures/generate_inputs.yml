@@ -1,57 +1,69 @@
-- measure: issue
-  dimensions:
-  - repo
-- measure: issue
-  dimensions:
-  - repo
+- measure:
+    key: issue
+    dimensions:
+    - repo
+- measure:
+    key: issue
+    dimensions:
+    - repo
   chart:
     options:
       foo: bar
-- measure: issue
-  dimensions:
-  - repo
+- measure:
+    key: issue
+    dimensions:
+    - repo
   chart:
     foo: bar
-- measure: issue
-  dimensions:
-  - repo
+- measure:
+    key: issue
+    dimensions:
+    - repo
   chart:
     type: pie
 - measure:
     key: issue
-  dimensions:
-  - key: repo
+    dimensions:
+    - key: repo
 - measure:
     key: issue
-  dimensions:
-  - key: opened_at
+    dimensions:
+    - key: opened_at
 - measure:
     key: issue
-  dimensions:
-  - key: opened_at
-  - key: repo
+    dimensions:
+    - key: opened_at
+    - key: repo
 - measure:
     key: issue
     filters:
     - key: locked
     - key: title
     - key: opened_at
-  dimensions:
-  - key: repo
+    dimensions:
+    - key: repo
 - measures:
-  - issue
-  - label
-  dimensions:
-  - repo
+  - key: issue
+    dimensions:
+    - repo
+  - key: label
+    dimensions:
+    - repo
 - measures:
-  - issue
-  - label
-  - tag
-  dimensions:
-  - repo
+  - key: issue
+    dimensions:
+    - repo
+  - key: label
+    dimensions:
+    - repo
+  - key: tag
+    dimensions:
+    - repo
 - measures:
   - key: issue
     name: Repo Issues
-  - label
-  dimensions:
-  - repo
+    dimensions:
+    - repo
+  - key: label
+    dimensions:
+    - repo

@@ -21,8 +21,10 @@ describe ReportsKit::Reports::Data::Generate do
     context 'with default granularity' do
       let(:properties) do
         {
-          measure: 'issue',
-          dimensions: %w(opened_at)
+          measure: {
+            key: 'issue',
+            dimensions: %w(opened_at)
+          }
         }
       end
       let!(:issues) do
@@ -66,9 +68,9 @@ describe ReportsKit::Reports::Data::Generate do
                     value: "#{date_string_for_filter(now - 1.week)} - #{date_string_for_filter(now)}"
                   }
                 }
-              ]
-            },
-            dimensions: %w(opened_at)
+              ],
+              dimensions: %w(opened_at)
+            }
           }
         end
 
@@ -83,14 +85,74 @@ describe ReportsKit::Reports::Data::Generate do
             ]
           })
         end
+
+        context 'with multiple measures and datetime filters with different keys' do
+          let!(:tags) do
+            [
+              create(:tag, repo: repo, created_at: now - 1.weeks),
+              create(:tag, repo: repo, created_at: now)
+            ]
+          end
+          let(:properties) do
+            {
+              measures: [
+                {
+                  key: 'issue',
+                  filters: [
+                    {
+                      key: 'opened_at',
+                      criteria: {
+                        operator: 'between'
+                      }
+                    }
+                  ],
+                  dimensions: %w(opened_at)
+                },
+                {
+                  key: 'tag',
+                  filters: [
+                    {
+                      key: 'created_at',
+                      criteria: {
+                        operator: 'between'
+                      }
+                    }
+                  ],
+                  dimensions: %w(created_at)
+                }
+              ],
+              ui_filters: {
+                created_at: "#{date_string_for_filter(now - 1.week)} - #{date_string_for_filter(now)}"
+              }
+            }
+          end
+
+          it 'returns the chart_data' do
+            expect(chart_data).to eq({
+              labels: [format_week_offset(2), format_week_offset(1), format_week_offset(0)],
+              datasets: [
+                {
+                  label: "Issues",
+                  data: [2, 0, 1]
+                },
+                {
+                  label: "Tags",
+                  data: [0, 1, 1]
+                }
+              ]
+            })
+          end
+        end
       end
     end
 
     context 'with day granularity' do
       let(:properties) do
         {
-          measure: 'issue',
-          dimensions: [{ key: 'opened_at', granularity: 'day' }]
+          measure: {
+            key: 'issue',
+            dimensions: [{ key: 'opened_at', granularity: 'day' }]
+          }
         }
       end
       let!(:issues) do
@@ -121,8 +183,10 @@ describe ReportsKit::Reports::Data::Generate do
   context 'with an association dimension' do
     let(:properties) do
       {
-        measure: 'issue',
-        dimensions: %w(repo)
+        measure: {
+          key: 'issue',
+          dimensions: %w(repo)
+        }
       }
     end
     let!(:issues) do
@@ -164,9 +228,9 @@ describe ReportsKit::Reports::Data::Generate do
                   value: [repo.id]
                 }
               }
-            ]
-          },
-          dimensions: %w(repo)
+            ],
+            dimensions: %w(repo)
+          }
         }
       end
 
@@ -191,9 +255,9 @@ describe ReportsKit::Reports::Data::Generate do
                   value: [tag.id]
                 }
               }
-            ]
-          },
-          dimensions: %w(repo)
+            ],
+            dimensions: %w(repo)
+          }
         }
       end
       let(:tag) { create(:tag) }
@@ -223,9 +287,9 @@ describe ReportsKit::Reports::Data::Generate do
                   value: [label.id]
                 }
               }
-            ]
-          },
-          dimensions: %w(repo)
+            ],
+            dimensions: %w(repo)
+          }
         }
       end
       let(:label) { create(:label) }
@@ -245,8 +309,10 @@ describe ReportsKit::Reports::Data::Generate do
   context 'with datetime and association dimensions' do
     let(:properties) do
       {
-        measure: 'issue',
-        dimensions: %w(opened_at repo)
+        measure: {
+          key: 'issue',
+          dimensions: %w(opened_at repo)
+        }
       }
     end
     let!(:issues) do

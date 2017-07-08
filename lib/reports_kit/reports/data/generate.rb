@@ -13,11 +13,13 @@ module ReportsKit
         end
 
         def perform
-          if second_dimension
-            raise ArgumentError.new('When two dimensions are configured, only one measure is supported') if measures.length > 1
-            data = Data::TwoDimensions.new(measures.first, dimension, second_dimension).perform
+          if measures.length == 1 && measures.first.dimensions.length == 2
+            data = Data::TwoDimensions.new(measures.first).perform
+          elsif measures.length > 0
+            raise ArgumentError.new('When more than one measures are configured, only one dimension may be used per measure') if measures.any? { |measure| measure.dimensions.length > 1 }
+            data = Data::OneDimension.new(measures).perform
           else
-            data = Data::OneDimension.new(measures, dimension).perform
+            raise ArgumentError.new('The configuration of measurse and dimensions is invalid')
           end
 
           ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
@@ -30,7 +32,9 @@ module ReportsKit
           self.properties[:measures] = properties[:measures].map do |measure_properties|
             measure_properties[:filters] = measure_properties[:filters].map do |filter_properties|
               key = filter_properties[:key]
+              ui_key = filter_properties[:ui_key]
               value = properties[:ui_filters][key.to_sym]
+              value ||= properties[:ui_filters][ui_key.to_sym] if ui_key
               if value
                 criteria_key = value.in?([true, false]) ? :operator : :value
                 filter_properties[:criteria][criteria_key] = value
@@ -51,31 +55,9 @@ module ReportsKit
           end
         end
 
-        def dimension
-          @dimension ||= begin
-            Dimension.new(dimension_hashes[0])
-          end
-        end
-
-        def second_dimension
-          @second_dimension ||= begin
-            Dimension.new(dimension_hashes[1]) if dimension_hashes[1]
-          end
-        end
-
-        def dimension_hashes
-          @dimension_hashes ||= begin
-            dimension_hashes = properties[:dimensions]
-            raise ArgumentError.new('Blank dimensions') if dimension_hashes.blank?
-            raise ArgumentError.new('The number of dimensions must be 1-2') unless dimension_hashes.length.in?([1, 2])
-            dimension_hashes = dimension_hashes.values if dimension_hashes.is_a?(Hash) && dimension_hashes.key?(:'0')
-            dimension_hashes
-          end
-        end
-
         def inferred_options
           {
-            x_axis_label: dimension.label,
+            x_axis_label: measures.first.dimensions.first.label,
             y_axis_label: measures.length == 1 ? measures.first.label : nil
           }
         end

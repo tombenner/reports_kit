@@ -2,11 +2,10 @@ module ReportsKit
   module Reports
     module Data
       class OneDimension
-        attr_accessor :measures, :dimension
+        attr_accessor :measures
 
-        def initialize(measures, dimension)
+        def initialize(measures)
           self.measures = measures
-          self.dimension = dimension
         end
 
         def perform
@@ -59,7 +58,7 @@ module ReportsKit
         end
 
         def measure_to_dimension_keys_values(measure)
-          dimension_with_measure = DimensionWithMeasure.new(dimension: dimension, measure: measure)
+          dimension_with_measure = DimensionWithMeasure.new(dimension: measure.dimensions.first, measure: measure)
           relation = measure.filtered_relation
           relation = relation.group(dimension_with_measure.group_expression)
           relation = relation.joins(dimension_with_measure.joins) if dimension_with_measure.joins
@@ -107,7 +106,7 @@ module ReportsKit
         end
 
         def primary_dimension_with_measure
-          @primary_dimension_with_measure ||= DimensionWithMeasure.new(dimension: dimension, measure: primary_measure)
+          @primary_dimension_with_measure ||= DimensionWithMeasure.new(dimension: primary_measure.dimensions.first, measure: primary_measure)
         end
       end
     end

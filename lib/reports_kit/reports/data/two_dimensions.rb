@@ -4,10 +4,10 @@ module ReportsKit
       class TwoDimensions
         attr_accessor :measure, :dimension, :second_dimension
 
-        def initialize(measure, dimension, second_dimension)
+        def initialize(measure)
           self.measure = measure
-          self.dimension = DimensionWithMeasure.new(dimension: dimension, measure: measure)
-          self.second_dimension = DimensionWithMeasure.new(dimension: second_dimension, measure: measure)
+          self.dimension = measure.dimensions[0]
+          self.second_dimension = measure.dimensions[1]
         end
 
         def perform
