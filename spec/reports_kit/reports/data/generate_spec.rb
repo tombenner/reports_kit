@@ -295,6 +295,7 @@ describe ReportsKit::Reports::Data::Generate do
     end
     let!(:labels) do
       [
+        create(:label, repo: repo),
         create(:label, repo: repo2),
         create(:label, repo: repo2)
       ]

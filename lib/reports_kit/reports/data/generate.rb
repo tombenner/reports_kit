@@ -8,14 +8,16 @@ module ReportsKit
 
         def initialize(properties, context_record: nil)
           self.properties = properties.deep_symbolize_keys
+          apply_ui_filters
           self.context_record = context_record
         end
 
         def perform
           if second_dimension
-            data = Data::TwoDimensions.new(measure, dimension, second_dimension).perform
+            raise ArgumentError.new('When two dimensions are configured, only one measure is supported') if measures.length > 1
+            data = Data::TwoDimensions.new(measures.first, dimension, second_dimension).perform
           else
-            data = Data::OneDimension.new(measure, dimension).perform
+            data = Data::OneDimension.new(measures, dimension).perform
           end
 
           ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
@@ -23,11 +25,29 @@ module ReportsKit
 
         private
 
-        def measure
-          @measure ||= begin
-            measure_hash = properties[:measure]
-            raise ArgumentError.new('The number of measures must be exactly one') if measure_hash.blank?
-            Measure.new(measure_hash, context_record: context_record)
+        def apply_ui_filters
+          return if properties[:ui_filters].blank?
+          self.properties[:measures] = properties[:measures].map do |measure_properties|
+            measure_properties[:filters] = measure_properties[:filters].map do |filter_properties|
+              key = filter_properties[:key]
+              value = properties[:ui_filters][key.to_sym]
+              if value
+                criteria_key = value.in?([true, false]) ? :operator : :value
+                filter_properties[:criteria][criteria_key] = value
+              end
+              filter_properties
+            end
+            measure_properties
+          end
+        end
+
+        def measures
+          @measures ||= begin
+            measure_hashes = [properties[:measure]].compact + Array(properties[:measures])
+            raise ArgumentError.new('At least one measure must be configured') if measure_hashes.blank?
+            measure_hashes.map do |measure_hash|
+              Measure.new(measure_hash, context_record: context_record)
+            end
           end
         end
 
@@ -56,7 +76,7 @@ module ReportsKit
         def inferred_options
           {
             x_axis_label: dimension.label,
-            y_axis_label: measure.label
+            y_axis_label: measures.length == 1 ? measures.first.label : nil
           }
         end
       end

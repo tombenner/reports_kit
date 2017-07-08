@@ -38,3 +38,20 @@
     - key: opened_at
   dimensions:
   - key: repo
+- measures:
+  - issue
+  - label
+  dimensions:
+  - repo
+- measures:
+  - issue
+  - label
+  - tag
+  dimensions:
+  - repo
+- measures:
+  - key: issue
+    name: Repo Issues
+  - label
+  dimensions:
+  - repo

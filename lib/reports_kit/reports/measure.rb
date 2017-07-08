@@ -20,7 +20,7 @@ module ReportsKit
       end
 
       def label
-        key.pluralize.titleize
+        properties[:name].presence || key.pluralize.titleize
       end
 
       def relation_name

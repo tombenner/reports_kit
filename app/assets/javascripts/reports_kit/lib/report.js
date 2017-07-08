@@ -79,7 +79,6 @@ ReportsKit.Report = (function(options) {
 
   self.properties = function() {
     var filterKeysValues = {};
-    var checkboxKeysEnableds = {};
     self.form.find('select,:text').each(function(index, el) {
       var filter = $(el);
       var key = filter.attr('name');
@@ -88,24 +87,16 @@ ReportsKit.Report = (function(options) {
     self.form.find(':checkbox').each(function(index, el) {
       var filter = $(el);
       var key = filter.attr('name');
-      checkboxKeysEnableds[key] = filter.prop('checked');
+      filterKeysValues[key] = filter.prop('checked');
     });
     var properties = $.extend({}, self.defaultProperties);
-    properties.measure.filters = $.map(properties.measure.filters, function(filter) {
-      var value = filterKeysValues[filter.key];
-      if (value !== undefined) {
-        filter.criteria.value = value;
-      }
-      var enabled = checkboxKeysEnableds[filter.key];
-      if (enabled !== undefined) {
-        if (enabled) {
-          filter.criteria.operator = 'true';
-        } else {
-          filter.criteria = {};
-        }
-      }
-      return filter;
+
+    properties.ui_filters = {};
+    Object.keys(filterKeysValues).forEach(function(key, index) {
+      var value = filterKeysValues[key];
+      properties.ui_filters[key] = value;
     });
+
     return properties;
   };
 

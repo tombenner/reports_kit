@@ -17,6 +17,7 @@ module ReportsKit
 
         def start_at_end_at
           @start_at_end_at ||= begin
+            return unless valid?
             start_string, end_string = value.split(' - ')
             start_at = Date.parse(start_string)
             end_at = Date.parse(end_string)
@@ -25,11 +26,11 @@ module ReportsKit
         end
 
         def start_at
-          start_at_end_at[0]
+          start_at_end_at.try(:[], 0)
         end
 
         def end_at
-          start_at_end_at[1]
+          start_at_end_at.try(:[], 1)
         end
 
         def valid?

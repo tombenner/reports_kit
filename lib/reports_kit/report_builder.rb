@@ -5,7 +5,8 @@ module ReportsKit
     attr_accessor :properties
 
     def initialize(properties)
-      self.properties = normalize_properties(properties)
+      self.properties = properties.deep_symbolize_keys
+      self.properties = normalize_properties(self.properties)
     end
 
     def check_box(filter_key, options={})
@@ -24,7 +25,7 @@ module ReportsKit
     def multi_autocomplete(filter_key, options={})
       validate_filter!(filter_key)
       reports_kit_path = Rails.application.routes.url_helpers.reports_kit_path
-      path = "#{reports_kit_path}reports_kit/resources/measures/#{measure.key}/filters/#{filter_key}/autocomplete"
+      path = "#{reports_kit_path}reports_kit/resources/measures/#{measures.first.key}/filters/#{filter_key}/autocomplete"
       scope = options.delete(:scope)
       params = {}
       params[:scope] = scope if scope.present?
@@ -59,17 +60,31 @@ module ReportsKit
     end
 
     def filters
-      measure.filters
+      ui_filters + measure_filters
     end
 
-    def measure
-      Reports::Measure.new(properties[:measure])
+    def measure_filters
+      measures.map(&:filters).reduce(&:+)
+    end
+
+    def ui_filters
+      return [] if properties[:ui_filters].blank?
+      properties[:ui_filters].map do |ui_filter_properties|
+        Reports::Filter.new(ui_filter_properties)
+      end
+    end
+
+    def measures
+      hashes = properties[:measure] ? [properties[:measure]] : properties[:measures]
+      hashes.map do |measure_properties|
+        Reports::Measure.new(measure_properties)
+      end
     end
 
     def normalize_properties(properties)
-      properties = properties.deep_symbolize_keys
-      measure = Reports::Measure.new(properties[:measure])
-      properties[:measure] = measure.properties_with_filters
+      properties = properties.dup
+      properties.delete(:measure)
+      properties[:measures] = measures.map(&:properties_with_filters)
       properties
     end
   end

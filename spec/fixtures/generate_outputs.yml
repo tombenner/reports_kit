@@ -269,3 +269,123 @@
         :xPadding: 8
         :yPadding: 7
   :type: bar
+- :chart_data:
+    :labels:
+    - foo/bar1
+    - foo/bar2
+    :datasets:
+    - :label: Issues
+      :data:
+      - 2.0
+      - 0.0
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
+    - :label: Labels
+      :data:
+      - 1.0
+      - 2.0
+      :backgroundColor: "#aec7e8"
+      :borderColor: "#aec7e8"
+    :options:
+      :scales:
+        :xAxes:
+        - :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Repo
+        :yAxes:
+        - :ticks:
+            :beginAtZero: true
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :maintainAspectRatio: false
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels:
+    - foo/bar1
+    - foo/bar2
+    :datasets:
+    - :label: Issues
+      :data:
+      - 2.0
+      - 0.0
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
+    - :label: Labels
+      :data:
+      - 1.0
+      - 2.0
+      :backgroundColor: "#aec7e8"
+      :borderColor: "#aec7e8"
+    - :label: Tags
+      :data:
+      - 0.0
+      - 0.0
+      :backgroundColor: "#ff7f0e"
+      :borderColor: "#ff7f0e"
+    :options:
+      :scales:
+        :xAxes:
+        - :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Repo
+        :yAxes:
+        - :ticks:
+            :beginAtZero: true
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :maintainAspectRatio: false
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels:
+    - foo/bar1
+    - foo/bar2
+    :datasets:
+    - :label: Repo Issues
+      :data:
+      - 2.0
+      - 0.0
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
+    - :label: Labels
+      :data:
+      - 1.0
+      - 2.0
+      :backgroundColor: "#aec7e8"
+      :borderColor: "#aec7e8"
+    :options:
+      :scales:
+        :xAxes:
+        - :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Repo
+        :yAxes:
+        - :ticks:
+            :beginAtZero: true
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :maintainAspectRatio: false
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
