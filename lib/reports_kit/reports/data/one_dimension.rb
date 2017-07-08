@@ -6,7 +6,7 @@ module ReportsKit
 
         def initialize(measure, dimension)
           self.measure = measure
-          self.dimension = dimension
+          self.dimension = DimensionWithMeasure.new(dimension: dimension, measure: measure)
         end
 
         def perform

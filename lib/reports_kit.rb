@@ -28,6 +28,7 @@ require 'reports_kit/reports/filter_types/records'
 require 'reports_kit/reports/filter_types/string'
 
 require 'reports_kit/reports/dimension'
+require 'reports_kit/reports/dimension_with_measure'
 require 'reports_kit/reports/filter'
 require 'reports_kit/reports/generate_autocomplete_results'
 require 'reports_kit/reports/inferrable_configuration'

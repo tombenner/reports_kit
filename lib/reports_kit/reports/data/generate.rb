@@ -33,13 +33,13 @@ module ReportsKit
 
         def dimension
           @dimension ||= begin
-            Dimension.new(dimension_hashes[0], measure: measure)
+            Dimension.new(dimension_hashes[0])
           end
         end
 
         def second_dimension
           @second_dimension ||= begin
-            Dimension.new(dimension_hashes[1], measure: measure) if dimension_hashes[1]
+            Dimension.new(dimension_hashes[1]) if dimension_hashes[1]
           end
         end
 

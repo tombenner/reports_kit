@@ -6,8 +6,8 @@ module ReportsKit
 
         def initialize(measure, dimension, second_dimension)
           self.measure = measure
-          self.dimension = dimension
-          self.second_dimension = second_dimension
+          self.dimension = DimensionWithMeasure.new(dimension: dimension, measure: measure)
+          self.second_dimension = DimensionWithMeasure.new(dimension: second_dimension, measure: measure)
         end
 
         def perform
