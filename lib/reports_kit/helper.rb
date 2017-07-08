@@ -7,7 +7,7 @@ module ReportsKit
         properties = YAML.load_file(path)
       end
       builder = ReportsKit::ReportBuilder.new(properties)
-      content_tag :div, nil, class: 'reports_kit_report', data: { properties: builder.properties, path: reports_kit_path } do
+      content_tag :div, nil, class: 'reports_kit_report form-inline', data: { properties: builder.properties, path: reports_kit_path } do
         elements = []
         if block_given?
           elements << form_tag(reports_kit_path, method: 'get', class: 'reports_kit_report_form') do
