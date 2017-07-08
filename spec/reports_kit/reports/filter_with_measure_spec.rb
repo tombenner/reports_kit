@@ -1,7 +1,8 @@
 require 'spec_helper'
 
-describe ReportsKit::Reports::Filter do
-  subject { described_class.new(properties, measure: measure) }
+describe ReportsKit::Reports::FilterWithMeasure do
+  subject { described_class.new(filter: filter, measure: measure) }
+  let(:filter) { ReportsKit::Reports::Filter.new(properties) }
   let(:measure) { ReportsKit::Reports::Measure.new('issue') }
 
   context 'with a datetime filter' do

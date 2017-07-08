@@ -42,7 +42,7 @@ module ReportsKit
       def model
         @model ||= begin
           measure = Measure.new(measure_key, context_record: context_record)
-          filter = Filter.new(filter_key, measure: measure)
+          filter = FilterWithMeasure.new(filter: Filter.new(filter_key), measure: measure)
           filter.instance_class
         end
       end

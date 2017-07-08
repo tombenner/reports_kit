@@ -11,7 +11,7 @@ module ReportsKit
         filter_hashes = filter_hashes.values if filter_hashes.is_a?(Hash) && filter_hashes.key?(:'0')
 
         self.properties = properties
-        self.filters = filter_hashes.map { |filter_hash| Filter.new(filter_hash, measure: self) }
+        self.filters = filter_hashes.map { |filter_hash| FilterWithMeasure.new(filter: Filter.new(filter_hash), measure: self) }
         self.context_record = context_record
       end
 
