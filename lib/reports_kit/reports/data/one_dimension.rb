@@ -2,62 +2,23 @@ module ReportsKit
   module Reports
     module Data
       class OneDimension
-        attr_accessor :measures
+        attr_accessor :measure
 
-        def initialize(measures)
-          self.measures = measures
+        def initialize(measure)
+          self.measure = measure
         end
 
         def perform
-          {
-            chart_data: {
-              labels: labels,
-              datasets: datasets
-            }
-          }
+          dimension_keys_values
         end
 
         private
 
-        def sparse_measures_dimension_keys_values
-          @measures_dimension_keys_values ||= begin
-            Hash[measures.map { |measure| [measure, measure_to_dimension_keys_values(measure)] }]
-          end
-        end
-
         def dimension_keys
-          sparse_measures_dimension_keys_values.map do |measure, dimension_keys_values|
-            dimension_keys_values.keys
-          end.reduce(&:+).uniq
+          dimension_keys_values.keys
         end
 
-        def measures_dimension_keys_values
-          keys_sums = Hash.new(0)
-          measures_dimension_keys_values = sparse_measures_dimension_keys_values.map do |measure, dimension_keys_values|
-            dimension_keys.each do |key|
-              dimension_keys_values[key] ||= 0
-              keys_sums[key] += dimension_keys_values[key]
-            end
-            [measure, dimension_keys_values]
-          end
-          if should_be_sorted_by_count?
-            sorted_keys = keys_sums.sort_by(&:last).reverse.map(&:first)
-          else
-            sorted_keys = dimension_keys.sort
-          end
-          measures_dimension_keys_values = measures_dimension_keys_values.map do |measure, dimension_keys_values|
-            dimension_keys_values = Hash[dimension_keys_values.sort_by { |key, value| sorted_keys.index(key) }]
-            [measure, dimension_keys_values]
-          end
-          Hash[measures_dimension_keys_values]
-        end
-
-        def should_be_sorted_by_count?
-          return @should_be_sorted_by_count unless @should_be_sorted_by_count.nil?
-          @should_be_sorted_by_count = primary_dimension_with_measure.should_be_sorted_by_count?
-        end
-
-        def measure_to_dimension_keys_values(measure)
+        def dimension_keys_values
           dimension_with_measure = DimensionWithMeasure.new(dimension: measure.dimensions.first, measure: measure)
           relation = measure.filtered_relation
           relation = relation.group(dimension_with_measure.group_expression)
@@ -75,17 +36,8 @@ module ReportsKit
           dimension_keys_values
         end
 
-        def datasets
-          measures.map do |measure|
-            {
-              label: measure.label,
-              data: values(measure)
-            }
-          end
-        end
-
-        def values(measure)
-          measures_dimension_keys_values[measure].values.map { |value| value.round(Generate::ROUND_PRECISION) }
+        def values
+          dimension_keys_values.values.map { |value| value.round(Generate::ROUND_PRECISION) }
         end
 
         def labels
@@ -96,17 +48,13 @@ module ReportsKit
 
         def dimension_ids_dimension_instances
           @dimension_ids_dimension_instances ||= begin
-            dimension_ids = measures_dimension_keys_values[primary_measure].keys
+            dimension_ids = dimension_keys_values.keys
             Utils.dimension_to_dimension_ids_dimension_instances(primary_dimension_with_measure, dimension_ids)
           end
         end
 
-        def primary_measure
-          measures.first
-        end
-
         def primary_dimension_with_measure
-          @primary_dimension_with_measure ||= DimensionWithMeasure.new(dimension: primary_measure.dimensions.first, measure: primary_measure)
+          @primary_dimension_with_measure ||= DimensionWithMeasure.new(dimension: measure.dimensions.first, measure: measure)
         end
       end
     end

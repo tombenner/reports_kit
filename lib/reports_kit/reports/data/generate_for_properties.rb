@@ -1,7 +1,7 @@
 module ReportsKit
   module Reports
     module Data
-      class Generate
+      class GenerateForProperties
         ROUND_PRECISION = 3
 
         attr_accessor :properties, :context_record
@@ -13,31 +13,24 @@ module ReportsKit
         end
 
         def perform
-          if two_dimensions?
-            chart_data = Data::FormatTwoDimensions.new(measures.first, measures_results.first.last).perform
+          if aggregation
+            raise ArgumentError.new('Aggregations require at least one measure') if measures.length == 0
+            measures_dimension_keys_values = Data::Aggregation.new(properties, measures).perform
+          elsif measures.length == 1 && measures.first.dimensions.length == 2
+            dimension_keys_values = Data::TwoDimensions.new(measures.first).perform
+            measures_dimension_keys_values = { measures.first => dimension_keys_values }
+          elsif measures.length > 0
+            raise ArgumentError.new('When more than one measures are configured, only one dimension may be used per measure') if measures.any? { |measure| measure.dimensions.length > 1 }
+            measures_dimension_keys_values = Hash[measures.map { |measure| [measure, Data::OneDimension.new(measure).perform] }]
+            measures_dimension_keys_values = Data::PopulateOneDimension.new(measures_dimension_keys_values).perform
           else
-            chart_data = Data::FormatOneDimension.new(measures_results).perform
+            raise ArgumentError.new('The configuration of measurse and dimensions is invalid')
           end
 
-          data = { chart_data: chart_data }
-          data = ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
-          if format == 'table'
-            data[:table_data] = format_table(data.delete(:chart_data))
-            data[:type] = format
-          end
-          data
+          measures_dimension_keys_values
         end
 
         private
-
-        def measures_results
-          @measures_results ||= GenerateForProperties.new(properties, context_record: context_record).perform
-        end
-
-        def two_dimensions?
-          dimension_keys = measures_results.first.last.keys
-          dimension_keys.first.is_a?(Array)
-        end
 
         def aggregation
           properties[:aggregation]
@@ -65,46 +58,28 @@ module ReportsKit
           end
         end
 
-        def measures
-          @measures ||= begin
+        def all_measures
+          @all_measures ||= begin
             measure_hashes = [properties[:measure]].compact + Array(properties[:measures])
             raise ArgumentError.new('At least one measure must be configured') if measure_hashes.blank?
             measure_hashes.map do |measure_hash|
-              Measure.new(measure_hash, context_record: context_record)
+              if measure_hash[:aggregation].present?
+                AggregationMeasure.new(measure_hash)
+              else
+                Measure.new(measure_hash, context_record: context_record)
+              end
             end
           end
         end
 
-        def format
-          properties[:format]
-        end
-
-        def format_table(data)
-          column_names = [nil]
-          column_values = []
-          data[:datasets].each do |dataset|
-            column_names << dataset[:label]
-            column_values << dataset[:data].map { |number| format_number(number) }
-          end
-          rows = column_values.transpose
-          rows = rows.map.with_index do |row, index|
-            label = data[:labels][index]
-            row.unshift(label)
-          end
-          [column_names] + rows
+        def measures
+          @measures ||= all_measures.grep(Measure)
         end
 
         def format_number(number)
           number_i = number.to_i
           return number_i if number == number_i
           number
-        end
-
-        def inferred_options
-          {
-            x_axis_label: measures.first.dimensions.first.label,
-            y_axis_label: measures.length == 1 ? measures.first.label : nil
-          }
         end
       end
     end

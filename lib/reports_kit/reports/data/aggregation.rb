@@ -2,7 +2,7 @@ module ReportsKit
   module Reports
     module Data
       class Aggregation
-        attr_accessor :aggregation, :measures, :name
+        attr_accessor :aggregation, :measures, :properties
 
         AGGREGATIONS_OPERATORS = {
           '+' => :+,
@@ -17,33 +17,31 @@ module ReportsKit
           }
         }
 
-        def initialize(aggregation:, name:, measures:)
-          self.aggregation = aggregation
+        def initialize(properties, measures)
+          self.properties = properties
+          self.aggregation = properties[:aggregation]
           self.measures = measures
-          self.name = name
-          raise ArgumentError.new('Aggregations must have a "name" attribute') if name.blank?
         end
 
         def perform
-          return data_for_one_dimension if dimension_count == 1
+          return measures_results_for_one_dimension if dimension_count == 1
           raise ArgumentError.new("Aggregations' measures can only have one dimension")
         end
 
         private
 
-        def data_for_one_dimension
-          data = OneDimension.new(measures).perform
-          individual_datasets = data[:chart_data][:datasets]
-          individual_datas = individual_datasets.map { |dataset| dataset[:data] }
-          aggregated_data = individual_datas.transpose.map do |data|
-            reduce(data)
-          end
-          dataset = {
-            label: name,
-            data: aggregated_data
-          }
-          data[:chart_data][:datasets] = [dataset]
-          data
+        def measures_results_for_one_dimension
+          measures_results = Hash[measures.map { |measure| [measure, OneDimension.new(measure).perform] }]
+          measures_results = Data::PopulateOneDimension.new(measures_results).perform
+          value_lists = measures_results.values.map(&:values)
+          aggregated_values = value_lists.transpose.map { |data| reduce(data) }
+          dimension_keys = measures_results.values.first.keys
+          aggregated_keys_values = Hash[dimension_keys.zip(aggregated_values)]
+          { aggregation_measure => aggregated_keys_values }
+        end
+
+        def aggregation_measure
+          AggregationMeasure.new(properties)
         end
 
         def reduce(values)
