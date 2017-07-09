@@ -73,25 +73,44 @@ module ReportsKit
       def inferred_settings
         return { column: "#{model_class.table_name}.#{key}" } if configured_by_column?
         if configured_by_association?
-          return { column: "#{model_class.table_name}.#{reflection.foreign_key}" } if reflection.macro == :belongs_to
+          return inferred_settings_from_belongs_to_or_has_one if inferred_settings_from_belongs_to_or_has_one
           return inferred_settings_from_has_many if inferred_settings_from_has_many
         end
         {}
       end
 
+      def inferred_settings_from_belongs_to_or_has_one
+        @inferred_settings_from_belongs_to_or_has_one ||= begin
+          return unless reflection.macro.in?([:belongs_to, :has_one])
+          through_reflection = reflection.through_reflection
+          if through_reflection
+            {
+              joins: through_reflection.name,
+              column: "#{through_reflection.table_name}.#{reflection.source_reflection.foreign_key}"
+            }
+          else
+            {
+              column: "#{model_class.table_name}.#{reflection.foreign_key}"
+            }
+          end
+        end
+      end
+
       def inferred_settings_from_has_many
-        return unless reflection.macro == :has_many
-        through_reflection = reflection.through_reflection
-        if through_reflection
-          {
-            joins: through_reflection.name,
-            column: "#{through_reflection.table_name}.#{reflection.source_reflection.foreign_key}"
-          }
-        else
-          {
-            joins: reflection.name,
-            column: "#{reflection.klass.table_name}.#{reflection.klass.primary_key}"
-          }
+        @inferred_settings_from_has_many ||= begin
+          return unless reflection.macro == :has_many
+          through_reflection = reflection.through_reflection
+          if through_reflection
+            {
+              joins: through_reflection.name,
+              column: "#{through_reflection.table_name}.#{reflection.source_reflection.foreign_key}"
+            }
+          else
+            {
+              joins: reflection.name,
+              column: "#{reflection.klass.table_name}.#{reflection.klass.primary_key}"
+            }
+          end
         end
       end
 
