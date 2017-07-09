@@ -21,7 +21,7 @@ module ReportsKit
             return unless valid?
             start_string, end_string = value.split(SEPARATOR)
             start_at = Date.parse(start_string)
-            end_at = Date.parse(end_string)
+            end_at = Date.parse(end_string).end_of_day
             [start_at, end_at]
           end
         end
