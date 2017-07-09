@@ -12,6 +12,8 @@ module ReportsKit
             records.where("(#{conditions}) #{sql_operator} true")
           when ::Hash
             boolean_operator ? records.where(conditions) : records.not.where(conditions)
+          when ::Proc
+            conditions.call(records)
           else
             raise ArgumentError.new("Unsupported conditions type: '#{conditions}'")
           end
