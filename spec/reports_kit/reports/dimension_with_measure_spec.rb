@@ -49,7 +49,7 @@ describe ReportsKit::Reports::DimensionWithMeasure do
     let(:properties) { 'labels' }
 
     it 'returns the settings' do
-      expect(subject.settings).to eq({ joins: :issues_labels, column: 'issues_labels.label_id', group: 'issues.label_id' })
+      expect(subject.settings).to eq({ joins: :issues_labels, column: 'issues_labels.label_id', group: 'issues_labels.label_id' })
     end
   end
 end

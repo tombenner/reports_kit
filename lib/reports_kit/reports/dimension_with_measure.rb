@@ -51,7 +51,7 @@ module ReportsKit
         if configured_by_model?
           settings_from_model[:group]
         elsif configured_by_association?
-          "#{model_class.table_name}.#{reflection.foreign_key}"
+          inferred_settings_from_association[:column]
         elsif configured_by_column? && configured_by_time?
           granularity == 'day' ? day_expression : week_expression
         elsif configured_by_column?
@@ -61,8 +61,23 @@ module ReportsKit
         end
       end
 
+      def inferred_settings_from_association
+        through_reflection = reflection.through_reflection
+        if through_reflection
+          {
+            joins: through_reflection.name,
+            column: "#{through_reflection.table_name}.#{reflection.source_reflection.foreign_key}"
+          }
+        else
+          {
+            column: "#{model_class.table_name}.#{reflection.foreign_key}"
+          }
+        end
+      end
+
       def joins
-        settings_from_model[:joins] if configured_by_model?
+        return settings_from_model[:joins] if configured_by_model?
+        inferred_settings_from_association[:joins] if configured_by_association?
       end
 
       def dimension_instances_limit
