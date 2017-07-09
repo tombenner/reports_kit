@@ -13,7 +13,10 @@ module ReportsKit
         end
 
         def perform
-          if measures.length == 1 && measures.first.dimensions.length == 2
+          if aggregation
+            raise ArgumentError.new('Aggregations require at least one measure') if measures.length == 0
+            data = Data::Aggregation.new(aggregation: aggregation, measures: measures, name: name).perform
+          elsif measures.length == 1 && measures.first.dimensions.length == 2
             data = Data::TwoDimensions.new(measures.first).perform
           elsif measures.length > 0
             raise ArgumentError.new('When more than one measures are configured, only one dimension may be used per measure') if measures.any? { |measure| measure.dimensions.length > 1 }
@@ -31,6 +34,14 @@ module ReportsKit
         end
 
         private
+
+        def aggregation
+          properties[:aggregation]
+        end
+
+        def name
+          properties[:name]
+        end
 
         def apply_ui_filters
           return if properties[:ui_filters].blank?

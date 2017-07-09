@@ -415,6 +415,74 @@ describe ReportsKit::Reports::Data::Generate do
     end
   end
 
+  describe 'aggregations' do
+    context 'with two measures' do
+      let(:properties) do
+        {
+          name: name,
+          aggregation: aggregation,
+          measures: [
+            {
+              key: 'issue',
+              dimensions: %w(created_at)
+            },
+            {
+              key: 'tag',
+              dimensions: %w(created_at)
+            }
+          ]
+        }
+      end
+      let!(:issues) do
+        [
+          create(:issue, repo: repo, created_at: now),
+          create(:issue, repo: repo, created_at: now - 2.weeks),
+          create(:issue, repo: repo2, created_at: now)
+        ]
+      end
+      let!(:tags) do
+        [
+          create(:tag, repo: repo, created_at: now),
+          create(:tag, repo: repo, created_at: now - 1.week),
+          create(:tag, repo: repo, created_at: now - 1.week)
+        ]
+      end
+      let(:name) { 'My Name' }
+
+      context 'with +' do
+        let(:aggregation) { '+' }
+
+        it 'returns the chart_data' do
+          expect(chart_data).to eq({
+            labels: [format_week_offset(2), format_week_offset(1), format_week_offset(0)],
+            datasets: [
+              {
+                label: name,
+                data: [1, 2, 3]
+              }
+            ]
+          })
+        end
+      end
+
+      context 'with %' do
+        let(:aggregation) { '%' }
+
+        it 'returns the chart_data' do
+          expect(chart_data).to eq({
+            labels: [format_week_offset(2), format_week_offset(1), format_week_offset(0)],
+            datasets: [
+              {
+                label: name,
+                data: [0, 0, 200]
+              }
+            ]
+          })
+        end
+      end
+    end
+  end
+
   # These examples allow for quick comparisons of many types of inputs and outputs.
   # When making functional modifications, run these to see whether the modifications impact the output in any cases.
   # If the output effects are desired, run `REWRITE_RESULTS=1 rspec` to write them to the outputs YAML file, then verify that the output
