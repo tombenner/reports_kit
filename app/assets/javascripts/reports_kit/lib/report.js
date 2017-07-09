@@ -26,8 +26,6 @@ ReportsKit.Report = (function(options) {
       locale: {
         format: 'MMM D, YYYY'
       },
-      startDate: moment().subtract(3, 'months'),
-      endDate: moment(),
       ranges: {
         'Today': [moment(), moment()],
         'Last 7 Days': [moment().subtract(7, 'days'), moment()],
@@ -36,7 +34,8 @@ ReportsKit.Report = (function(options) {
         'Last 3 Months': [moment().subtract(3, 'months'), moment()],
         'Last 4 Months': [moment().subtract(4, 'months'), moment()],
         'Last 6 Months': [moment().subtract(6, 'months'), moment()],
-        'Last 12 Months': [moment().subtract(12, 'months'), moment()]
+        'Last 12 Months': [moment().subtract(12, 'months'), moment()],
+        'Year To Date': [moment().startOf('year'), moment()]
       }
     });
     self.form.find('.select2').each(function(index, el) {

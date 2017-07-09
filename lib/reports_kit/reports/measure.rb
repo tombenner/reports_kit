@@ -57,9 +57,9 @@ module ReportsKit
         relation
       end
 
-      def properties_with_filters
+      def normalized_properties
         all_properties = properties
-        all_properties[:filters] = filters.map(&:properties)
+        all_properties[:filters] = filters.map(&:normalized_properties)
         all_properties
       end
     end

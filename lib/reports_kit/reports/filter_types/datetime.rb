@@ -5,6 +5,7 @@ module ReportsKit
         DEFAULT_CRITERIA = {
           operator: 'between'
         }
+        SEPARATOR = ' - '
 
         def apply_conditions(records)
           case criteria[:operator]
@@ -18,7 +19,7 @@ module ReportsKit
         def start_at_end_at
           @start_at_end_at ||= begin
             return unless valid?
-            start_string, end_string = value.split(' - ')
+            start_string, end_string = value.split(SEPARATOR)
             start_at = Date.parse(start_string)
             end_at = Date.parse(end_string)
             [start_at, end_at]

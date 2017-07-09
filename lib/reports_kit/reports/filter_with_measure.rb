@@ -30,6 +30,16 @@ module ReportsKit
         self.properties[:criteria] = filter_type.default_criteria unless self.properties[:criteria]
       end
 
+      def normalized_properties
+        return properties unless configured_by_time?
+        criteria = properties[:criteria]
+        return properties if criteria.blank? || criteria[:value].blank?
+        values = criteria[:value].split(ReportsKit::Reports::FilterTypes::Datetime::SEPARATOR)
+        values = values.map { |value| ReportsKit::Reports::Data::Utils.format_time_value(value) }
+        properties[:criteria][:value] = values.join(ReportsKit::Reports::FilterTypes::Datetime::SEPARATOR)
+        properties
+      end
+
       def settings
         inferred_settings.merge(settings_from_model)
       end

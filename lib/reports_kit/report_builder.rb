@@ -85,7 +85,7 @@ module ReportsKit
     def normalize_properties(properties)
       properties = properties.dup
       properties.delete(:measure)
-      properties[:measures] = measures.map(&:properties_with_filters)
+      properties[:measures] = measures.map(&:normalized_properties)
       properties
     end
   end

@@ -2,8 +2,19 @@ module ReportsKit
   module Reports
     module Data
       class Utils
-        def self.format_time(time)
+        def self.format_display_time(time)
           time.strftime('%b %-d, \'%y')
+        end
+
+        def self.format_configuration_time(time)
+          time.strftime('%b %-d, %Y')
+        end
+
+        def self.format_time_value(value)
+          return Utils.format_configuration_time(Time.zone.now) if value == 'now'
+          duration = RelativeTime.parse(value, prevent_exceptions: true)
+          return value unless duration
+          Utils.format_configuration_time(duration)
         end
 
         def self.populate_sparse_hash(hash, dimension:)
@@ -98,7 +109,7 @@ module ReportsKit
           return dimension_instance.to_s if dimension.configured_by_column? && dimension.column_type == :integer
           case dimension_instance
           when Time, Date
-            Utils.format_time(dimension_instance)
+            Utils.format_display_time(dimension_instance)
           when Fixnum
             raise ArgumentError.new("ids_dimension_instances must be present for Dimension with identifier: #{dimension_instance}") unless ids_dimension_instances
             instance = ids_dimension_instances[dimension_instance.to_i]

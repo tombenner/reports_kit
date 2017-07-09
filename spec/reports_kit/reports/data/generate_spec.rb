@@ -68,7 +68,7 @@ describe ReportsKit::Reports::Data::Generate do
                   key: 'opened_at',
                   criteria: {
                     operator: 'between',
-                    value: "#{date_string_for_filter(now - 1.week)} - #{date_string_for_filter(now)}"
+                    value: "#{format_criteria_time(now - 1.week)} - #{format_criteria_time(now)}"
                   }
                 }
               ],
@@ -125,7 +125,7 @@ describe ReportsKit::Reports::Data::Generate do
                 }
               ],
               ui_filters: {
-                created_at: "#{date_string_for_filter(now - 1.week)} - #{date_string_for_filter(now)}"
+                created_at: "#{format_criteria_time(now - 1.week)} - #{format_criteria_time(now)}"
               }
             }
           end

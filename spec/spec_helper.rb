@@ -47,8 +47,9 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 
+  TIMECOP_TIME = Time.utc(2010)
   config.before(:each) do
-    Timecop.freeze(Time.utc(2010))
+    Timecop.freeze(TIMECOP_TIME)
   end
   config.after(:each) do
     Timecop.return
