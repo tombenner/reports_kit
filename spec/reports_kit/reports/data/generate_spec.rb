@@ -530,6 +530,45 @@ describe ReportsKit::Reports::Data::Generate do
             ]
           })
         end
+
+        context 'with two dimensions' do
+          let(:properties) do
+            {
+              measures: [
+                {
+                  name: name,
+                  aggregation: '+',
+                  measures: [
+                    {
+                      key: 'issue',
+                      dimensions: %w(created_at repo)
+                    },
+                    {
+                      key: 'tag',
+                      dimensions: %w(created_at repo)
+                    }
+                  ]
+                }
+              ]
+            }
+          end
+
+          it 'returns the chart_data' do
+            expect(chart_data).to eq({
+              labels: [format_week_offset(2), format_week_offset(1), format_week_offset(0)],
+              datasets: [
+                {
+                  label: repo.to_s,
+                  data: [1, 2, 2]
+                },
+                {
+                  label: repo2.to_s,
+                  data: [0, 0, 1]
+                }
+              ]
+            })
+          end
+        end
       end
     end
   end

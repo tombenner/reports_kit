@@ -17,9 +17,13 @@ module ReportsKit
             raise ArgumentError.new('Aggregations require at least one measure') if all_measures.length == 0
             dimension_keys_values = Data::Aggregation.new(properties, context_record: context_record).perform
             measures_dimension_keys_values = { AggregationMeasure.new(properties) => dimension_keys_values }
+          elsif all_measures.length == 1 && aggregation_measures.length == 1
+            dimension_keys_values = Data::Aggregation.new(aggregation_measures.first.properties, context_record: context_record).perform
+            measures_dimension_keys_values = { all_measures.first => dimension_keys_values }
           elsif all_measures.length == 1 && all_measures.first.dimensions.length == 2
             dimension_keys_values = Data::TwoDimensions.new(all_measures.first).perform
             measures_dimension_keys_values = { all_measures.first => dimension_keys_values }
+            measures_dimension_keys_values = Data::PopulateTwoDimensions.new(measures_dimension_keys_values).perform
           elsif all_measures.length > 0
             measures_dimension_keys_values = measures_dimension_keys_values_for_one_dimension
           else
@@ -75,6 +79,10 @@ module ReportsKit
 
         def all_measures
           @all_measures ||= Measure.new_from_properties!(properties, context_record: context_record)
+        end
+
+        def aggregation_measures
+          @aggregation_measures ||= all_measures.grep(AggregationMeasure)
         end
 
         def measures

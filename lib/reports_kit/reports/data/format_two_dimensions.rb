@@ -29,11 +29,10 @@ module ReportsKit
         def datasets
           secondary_keys_values = secondary_keys.map do |secondary_key|
             values = primary_keys.map do |primary_key|
-              primary_keys_secondary_keys_values[primary_key].try(:[], secondary_key) || 0
+              primary_keys_secondary_keys_values[primary_key][secondary_key]
             end
             [secondary_key, values]
           end
-          secondary_keys_values = secondary_keys_values.sort_by { |_, values| values.sum }.reverse
           secondary_keys_values.map do |secondary_key, values|
             next if secondary_key.blank?
             {
@@ -41,17 +40,6 @@ module ReportsKit
               data: values
             }
           end.compact
-        end
-
-        def populated_dimension_keys_values
-          secondary_keys_values = secondary_keys.map do |secondary_key|
-            values = primary_keys.map do |primary_key|
-              primary_keys_secondary_keys_values[primary_key].try(:[], secondary_key) || 0
-            end
-            [secondary_key, values]
-          end
-          secondary_keys_values = secondary_keys_values.sort_by { |_, values| values.sum }.reverse
-          secondary_keys_values
         end
 
         def primary_keys_secondary_keys_values
@@ -81,7 +69,7 @@ module ReportsKit
 
         def primary_keys
           @primary_keys ||= begin
-            keys = Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:first).uniq, dimension: dimension)
+            keys = dimension_keys_values.keys.map(&:first).uniq
             if dimension.should_be_sorted_by_count?
               limit = dimension.dimension_instances_limit
               keys = keys.first(limit) if limit
@@ -92,7 +80,7 @@ module ReportsKit
 
         def secondary_keys
           @secondary_keys ||= begin
-            keys = Utils.populate_sparse_keys(dimension_keys_values.keys.map(&:last).uniq, dimension: second_dimension)
+            keys = dimension_keys_values.keys.map(&:last).uniq
             limit = second_dimension.dimension_instances_limit
             keys = keys.first(limit) if limit
             keys

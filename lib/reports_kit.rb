@@ -23,6 +23,7 @@ require 'reports_kit/reports/data/generate'
 require 'reports_kit/reports/data/generate_for_properties'
 require 'reports_kit/reports/data/one_dimension'
 require 'reports_kit/reports/data/populate_one_dimension'
+require 'reports_kit/reports/data/populate_two_dimensions'
 require 'reports_kit/reports/data/two_dimensions'
 require 'reports_kit/reports/data/utils'
 

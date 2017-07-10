@@ -25,7 +25,8 @@ module ReportsKit
 
         def perform
           return measures_results_for_one_dimension if dimension_count == 1
-          raise ArgumentError.new("Aggregations' measures can only have one dimension")
+          return measures_results_for_two_dimensions if dimension_count == 2
+          raise ArgumentError.new("Aggregations' measures can only have 1-2 dimensions")
         end
 
         private
@@ -33,6 +34,16 @@ module ReportsKit
         def measures_results_for_one_dimension
           measures_results = Hash[measures.map { |measure| [measure, OneDimension.new(measure).perform] }]
           measures_results = Data::PopulateOneDimension.new(measures_results).perform
+          value_lists = measures_results.values.map(&:values)
+          aggregated_values = value_lists.transpose.map { |data| reduce(data) }
+          dimension_keys = measures_results.values.first.keys
+          aggregated_keys_values = Hash[dimension_keys.zip(aggregated_values)]
+          aggregated_keys_values
+        end
+
+        def measures_results_for_two_dimensions
+          measures_results = Hash[measures.map { |measure| [measure, TwoDimensions.new(measure).perform] }]
+          measures_results = Data::PopulateTwoDimensions.new(measures_results).perform
           value_lists = measures_results.values.map(&:values)
           aggregated_values = value_lists.transpose.map { |data| reduce(data) }
           dimension_keys = measures_results.values.first.keys
