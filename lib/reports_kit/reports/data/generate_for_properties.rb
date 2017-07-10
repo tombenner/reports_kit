@@ -14,15 +14,14 @@ module ReportsKit
 
         def perform
           if aggregation
-            raise ArgumentError.new('Aggregations require at least one measure') if measures.length == 0
-            measures_dimension_keys_values = Data::Aggregation.new(properties, measures).perform
-          elsif measures.length == 1 && measures.first.dimensions.length == 2
-            dimension_keys_values = Data::TwoDimensions.new(measures.first).perform
-            measures_dimension_keys_values = { measures.first => dimension_keys_values }
-          elsif measures.length > 0
-            raise ArgumentError.new('When more than one measures are configured, only one dimension may be used per measure') if measures.any? { |measure| measure.dimensions.length > 1 }
-            measures_dimension_keys_values = Hash[measures.map { |measure| [measure, Data::OneDimension.new(measure).perform] }]
-            measures_dimension_keys_values = Data::PopulateOneDimension.new(measures_dimension_keys_values).perform
+            raise ArgumentError.new('Aggregations require at least one measure') if all_measures.length == 0
+            dimension_keys_values = Data::Aggregation.new(properties, context_record: context_record).perform
+            measures_dimension_keys_values = { AggregationMeasure.new(properties) => dimension_keys_values }
+          elsif all_measures.length == 1 && all_measures.first.dimensions.length == 2
+            dimension_keys_values = Data::TwoDimensions.new(all_measures.first).perform
+            measures_dimension_keys_values = { all_measures.first => dimension_keys_values }
+          elsif all_measures.length > 0
+            measures_dimension_keys_values = measures_dimension_keys_values_for_one_dimension
           else
             raise ArgumentError.new('The configuration of measurse and dimensions is invalid')
           end
@@ -58,18 +57,24 @@ module ReportsKit
           end
         end
 
-        def all_measures
-          @all_measures ||= begin
-            measure_hashes = [properties[:measure]].compact + Array(properties[:measures])
-            raise ArgumentError.new('At least one measure must be configured') if measure_hashes.blank?
-            measure_hashes.map do |measure_hash|
-              if measure_hash[:aggregation].present?
-                AggregationMeasure.new(measure_hash)
-              else
-                Measure.new(measure_hash, context_record: context_record)
-              end
+        def measures_dimension_keys_values_for_one_dimension
+          multi_dimension_measures_exist = all_measures.any? { |measure| measure.dimensions.length > 1 }
+          raise ArgumentError.new('When more than one measures are configured, only one dimension may be used per measure') if multi_dimension_measures_exist
+
+          measures_dimension_keys_values = all_measures.map do |measure|
+            if measure.is_a?(AggregationMeasure)
+              dimension_keys_values = Data::Aggregation.new(measure.properties, context_record: context_record).perform
+            else
+              dimension_keys_values = Data::OneDimension.new(measure).perform
             end
+            [measure, dimension_keys_values]
           end
+          measures_dimension_keys_values = Hash[measures_dimension_keys_values]
+          Data::PopulateOneDimension.new(measures_dimension_keys_values).perform
+        end
+
+        def all_measures
+          @all_measures ||= Measure.new_from_properties!(properties, context_record: context_record)
         end
 
         def measures

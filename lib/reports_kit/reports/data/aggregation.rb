@@ -2,7 +2,7 @@ module ReportsKit
   module Reports
     module Data
       class Aggregation
-        attr_accessor :aggregation, :measures, :properties
+        attr_accessor :aggregation, :properties, :context_record
 
         AGGREGATIONS_OPERATORS = {
           '+' => :+,
@@ -17,10 +17,10 @@ module ReportsKit
           }
         }
 
-        def initialize(properties, measures)
+        def initialize(properties, context_record:)
           self.properties = properties
           self.aggregation = properties[:aggregation]
-          self.measures = measures
+          self.context_record = context_record
         end
 
         def perform
@@ -37,11 +37,7 @@ module ReportsKit
           aggregated_values = value_lists.transpose.map { |data| reduce(data) }
           dimension_keys = measures_results.values.first.keys
           aggregated_keys_values = Hash[dimension_keys.zip(aggregated_values)]
-          { aggregation_measure => aggregated_keys_values }
-        end
-
-        def aggregation_measure
-          AggregationMeasure.new(properties)
+          aggregated_keys_values
         end
 
         def reduce(values)
@@ -64,6 +60,10 @@ module ReportsKit
           unique_dimension_counts = measures.map { |measure| measure.dimensions.length }.uniq
           raise ArgumentError.new('All measures must have the same number of dimensions') if unique_dimension_counts.length > 1
           unique_dimension_counts.first
+        end
+
+        def measures
+          @measures ||= Measure.new_from_properties!(properties, context_record: context_record)
         end
       end
     end

@@ -480,6 +480,57 @@ describe ReportsKit::Reports::Data::Generate do
           })
         end
       end
+
+      context 'with a nested aggregation' do
+        let(:properties) do
+          {
+            measures: [
+              {
+                name: name,
+                aggregation: '+',
+                measures: [
+                  {
+                    key: 'issue',
+                    dimensions: %w(created_at)
+                  },
+                  {
+                    key: 'tag',
+                    dimensions: %w(created_at)
+                  }
+                ]
+              },
+              {
+                key: 'issue',
+                dimensions: %w(created_at)
+              },
+              {
+                key: 'tag',
+                dimensions: %w(created_at)
+              }
+            ]
+          }
+        end
+
+        it 'returns the chart_data' do
+          expect(chart_data).to eq({
+            labels: [format_week_offset(2), format_week_offset(1), format_week_offset(0)],
+            datasets: [
+              {
+                label: name,
+                data: [1, 2, 3]
+              },
+              {
+                label: 'Issues',
+                data: [1, 0, 2]
+              },
+              {
+                label: 'Tags',
+                data: [0, 2, 1]
+              }
+            ]
+          })
+        end
+      end
     end
   end
 
@@ -513,6 +564,7 @@ describe ReportsKit::Reports::Data::Generate do
     context 'input examples' do
       YAML.load_file("#{FIXTURES_DIRECTORY}/generate_inputs.yml").each.with_index do |inputs, index|
         it 'returns the expected output' do
+          # puts described_class.new(inputs).perform.to_yaml
           expect(described_class.new(inputs).perform.to_yaml).to eq(outputs[index].to_yaml)
         end
       end

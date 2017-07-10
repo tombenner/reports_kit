@@ -66,13 +66,7 @@ module ReportsKit
         end
 
         def measures
-          @measures ||= begin
-            measure_hashes = [properties[:measure]].compact + Array(properties[:measures])
-            raise ArgumentError.new('At least one measure must be configured') if measure_hashes.blank?
-            measure_hashes.map do |measure_hash|
-              Measure.new(measure_hash, context_record: context_record)
-            end
-          end
+          @measures ||= Measure.new_from_properties!(properties, context_record: context_record)
         end
 
         def format

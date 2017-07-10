@@ -62,6 +62,19 @@ module ReportsKit
         all_properties[:filters] = filters.map(&:normalized_properties)
         all_properties
       end
+
+      def self.new_from_properties!(properties, context_record:)
+        measure_hashes = [properties[:measure]].compact + Array(properties[:measures])
+        raise ArgumentError.new('At least one measure must be configured') if measure_hashes.blank?
+
+        measure_hashes.map do |measure_hash|
+          if measure_hash[:aggregation].present?
+            AggregationMeasure.new(measure_hash)
+          else
+            new(measure_hash, context_record: context_record)
+          end
+        end
+      end
     end
   end
 end
