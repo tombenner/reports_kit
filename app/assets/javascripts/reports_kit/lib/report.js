@@ -109,7 +109,8 @@ ReportsKit.Report = (function(options) {
   self.onClickExportButton = function(event) {
     var el = $(event.target);
     var path = el.data('path');
-    path += '?properties=' + JSON.stringify(self.properties());
+    var separator = path.indexOf('?') === -1 ? '?' : '&';
+    path += separator + 'properties=' + JSON.stringify(self.properties());
     window.open(path, '_blank');
     return false;
   }

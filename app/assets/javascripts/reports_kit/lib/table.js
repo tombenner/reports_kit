@@ -10,8 +10,9 @@ ReportsKit.Table = (function(options) {
   };
 
   self.render = function() {
-    var path = self.el.data('path') + 'reports_kit/reports.json';
-    path += '?properties=' + JSON.stringify(self.report.properties());
+    var path = self.el.data('path');
+    var separator = path.indexOf('?') === -1 ? '?' : '&';
+    path += separator + 'properties=' + JSON.stringify(self.report.properties());
     $.getJSON(path, function(response) {
       var data = response.data;
       var tableData = data.table_data;

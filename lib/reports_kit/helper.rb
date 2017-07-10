@@ -12,10 +12,11 @@ module ReportsKit
         properties = YAML.load_file(path)
       end
       builder = ReportsKit::ReportBuilder.new(properties)
-      content_tag :div, nil, class: 'reports_kit_report form-inline', data: { properties: builder.properties, path: reports_kit_path } do
+      path = reports_kit.reports_kit_reports_path({ format: 'json' }.merge(additional_params))
+      content_tag :div, nil, class: 'reports_kit_report form-inline', data: { properties: builder.properties, path: path } do
         elements = []
         if block_given?
-          elements << form_tag(reports_kit_path, method: 'get', class: 'reports_kit_report_form') do
+          elements << form_tag(path, method: 'get', class: 'reports_kit_report_form') do
             capture(builder, &block)
           end
         end
@@ -32,6 +33,15 @@ module ReportsKit
 
     private
 
+    def additional_params
+      @additional_params ||= begin
+        context_params_method = ReportsKit.configuration.context_params_method
+        return {} unless context_params_method
+        context_params = instance_eval(&context_params_method)
+        { context_params: context_params }
+      end
+    end
+
     def action_elements_for_properties(properties)
       return if properties['actions'].blank?
       properties['actions'].map do |action|
@@ -44,7 +54,7 @@ module ReportsKit
     def export_csv_element
       data = {
         role: 'reports_kit_export_button',
-        path: reports_kit.reports_kit_reports_path(format: 'csv')
+        path: reports_kit.reports_kit_reports_path({ format: 'csv' }.merge(additional_params))
       }
       link_to('Download CSV', '#', class: 'btn btn-primary', data: data)
     end
@@ -52,7 +62,7 @@ module ReportsKit
     def export_xls_element
       data = {
         role: 'reports_kit_export_button',
-        path: reports_kit.reports_kit_reports_path(format: 'xls')
+        path: reports_kit.reports_kit_reports_path({ format: 'xls' }.merge(additional_params))
       }
       link_to('Download Excel', '#', class: 'btn btn-primary', data: data)
     end
