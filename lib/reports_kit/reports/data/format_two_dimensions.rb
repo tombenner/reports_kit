@@ -70,7 +70,7 @@ module ReportsKit
         def primary_keys
           @primary_keys ||= begin
             keys = dimension_keys_values.keys.map(&:first).uniq
-            if dimension.should_be_sorted_by_count?
+            unless dimension.configured_by_time?
               limit = dimension.dimension_instances_limit
               keys = keys.first(limit) if limit
             end

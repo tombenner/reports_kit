@@ -602,18 +602,17 @@ describe ReportsKit::Reports::Data::Generate do
 
     context 'input examples' do
       YAML.load_file("#{FIXTURES_DIRECTORY}/generate_inputs.yml").each.with_index do |inputs, index|
-        it 'returns the expected output' do
-          # puts described_class.new(inputs).perform.to_yaml
+        it "returns the expected output for input ##{index}: #{inputs.to_json}" do
           expect(described_class.new(inputs).perform.to_yaml).to eq(outputs[index].to_yaml)
         end
       end
     end
 
     context 'writing the outputs' do
-      # For documentation about this `skip`, see the comment at the top of this `describe` block.
-      skip unless ENV['REWRITE_RESULTS'] == '1'
-
       it 'writes the outputs' do
+        # For documentation about this `skip`, see the comment at the top of this `describe` block.
+        skip unless ENV['REWRITE_RESULTS'] == '1'
+
         outputs = inputs.map do |example|
           described_class.new(example).perform
         end

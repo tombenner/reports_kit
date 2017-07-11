@@ -34,9 +34,10 @@ module ReportsKit
         def measures_results_for_one_dimension
           measures_results = Hash[measures.map { |measure| [measure, OneDimension.new(measure).perform] }]
           measures_results = Data::PopulateOneDimension.new(measures_results).perform
-          value_lists = measures_results.values.map(&:values)
+          sorted_dimension_keys_values = sort_dimension_keys_values(measures_results)
+          value_lists = sorted_dimension_keys_values.map(&:values)
           aggregated_values = value_lists.transpose.map { |data| reduce(data) }
-          dimension_keys = measures_results.values.first.keys
+          dimension_keys = sorted_dimension_keys_values.first.keys
           aggregated_keys_values = Hash[dimension_keys.zip(aggregated_values)]
           aggregated_keys_values
         end
@@ -49,6 +50,15 @@ module ReportsKit
           dimension_keys = measures_results.values.first.keys
           aggregated_keys_values = Hash[dimension_keys.zip(aggregated_values)]
           aggregated_keys_values
+        end
+
+        # Before performing an aggregation of values, we need to make sure that the values are sorted by the same dimension key.
+        def sort_dimension_keys_values(measures_results)
+          dimension_keys_values_list = measures_results.values
+          sorted_dimension_keys_values = dimension_keys_values_list.map do |dimension_keys_values|
+            Hash[dimension_keys_values.sort_by(&:first)]
+          end
+          sorted_dimension_keys_values
         end
 
         def reduce(values)
