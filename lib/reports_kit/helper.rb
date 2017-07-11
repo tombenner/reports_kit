@@ -11,7 +11,7 @@ module ReportsKit
         path = Rails.root.join('config', 'reports_kit', 'reports', "#{properties}.yml")
         properties = YAML.load_file(path)
       end
-      builder = ReportsKit::ReportBuilder.new(properties)
+      builder = ReportsKit::ReportBuilder.new(properties, additional_params: additional_params)
       path = reports_kit.reports_kit_reports_path({ format: 'json' }.merge(additional_params))
       content_tag :div, nil, class: 'reports_kit_report form-inline', data: { properties: builder.properties, path: path } do
         elements = []

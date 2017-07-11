@@ -2,11 +2,12 @@ module ReportsKit
   class ReportBuilder
     include ActionView::Helpers
 
-    attr_accessor :properties
+    attr_accessor :properties, :additional_params
 
-    def initialize(properties)
+    def initialize(properties, additional_params: nil)
       self.properties = properties.deep_symbolize_keys
       self.properties = normalize_properties(self.properties)
+      self.additional_params = additional_params
     end
 
     def check_box(filter_key, options={})
@@ -26,7 +27,8 @@ module ReportsKit
       validate_filter!(filter_key)
       filter = measure_filters.find { |f| f.key == filter_key.to_s }
       reports_kit_path = Rails.application.routes.url_helpers.reports_kit_path
-      path = "#{reports_kit_path}reports_kit/resources/measures/#{filter.measure.key}/filters/#{filter_key}/autocomplete"
+      path = "#{reports_kit_path}reports_kit/resources/measures/#{filter.measure.key}/filters/#{filter_key}/autocomplete?"
+      path += additional_params.to_query if additional_params.present?
       scope = options.delete(:scope)
       params = {}
       params[:scope] = scope if scope.present?
