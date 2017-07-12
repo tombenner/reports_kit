@@ -1,6 +1,7 @@
 require 'rails/all'
 
 require 'reports_kit/base_controller'
+require 'reports_kit/cache'
 require 'reports_kit/configuration'
 require 'reports_kit/engine'
 require 'reports_kit/helper'

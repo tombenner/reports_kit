@@ -13,6 +13,9 @@ module ReportsKit
         end
 
         def perform
+          data = ReportsKit::Cache.get(properties, context_record)
+          return data if data
+
           if two_dimensions?
             chart_data = Data::FormatTwoDimensions.new(measures.first, measures_results.first.last).perform
           else
@@ -25,6 +28,7 @@ module ReportsKit
             data[:table_data] = format_table(data.delete(:chart_data))
             data[:type] = format
           end
+          ReportsKit::Cache.set(properties, context_record, data)
           data
         end
 
