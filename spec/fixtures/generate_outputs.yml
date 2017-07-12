@@ -164,9 +164,9 @@
   :type: bar
 - :chart_data:
     :labels:
-    - Dec 14, '09
-    - Dec 21, '09
-    - Dec 28, '09
+    - Dec 13, '09
+    - Dec 20, '09
+    - Dec 27, '09
     :datasets:
     - :label: Issues
       :data:
@@ -201,9 +201,9 @@
   :type: bar
 - :chart_data:
     :labels:
-    - Dec 14, '09
-    - Dec 21, '09
-    - Dec 28, '09
+    - Dec 13, '09
+    - Dec 20, '09
+    - Dec 27, '09
     :datasets:
     - :label: foo/bar1
       :data:

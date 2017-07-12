@@ -50,19 +50,20 @@ module ReportsKit
           return keys if keys.blank?
           first_key = dimension.first_key || keys.first
           return keys unless first_key.is_a?(Time) || first_key.is_a?(Date)
+          first_key = first_key.to_date
           granularity = dimension.granularity
 
-          first_key = first_key.beginning_of_week if granularity == 'week'
+          first_key = first_key.beginning_of_week(ReportsKit.configuration.first_day_of_week) if granularity == 'week'
           keys = keys.sort
-          last_key = dimension.last_key || keys.last
-          last_key = last_key.beginning_of_week if granularity == 'week'
+          last_key = (dimension.last_key || keys.last).to_date
+          last_key = last_key.beginning_of_week(ReportsKit.configuration.first_day_of_week) if granularity == 'week'
 
           if granularity == 'week'
-            beginning_of_current_week = Time.now.utc.beginning_of_week(ReportsKit.configuration.first_day_of_week)
+            beginning_of_current_week = Date.today.beginning_of_week(ReportsKit.configuration.first_day_of_week)
             last_key = [beginning_of_current_week, last_key].compact.max
           end
 
-          date = first_key.to_date
+          date = first_key
           populated_keys = []
           interval = granularity == 'week' ? 1.week : 1.day
           loop do

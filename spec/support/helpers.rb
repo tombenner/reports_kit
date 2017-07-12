@@ -16,6 +16,6 @@ module Helpers
   end
 
   def format_week_offset(week_offset)
-    ReportsKit::Reports::Data::Utils.format_display_time((now - week_offset.weeks).beginning_of_week)
+    ReportsKit::Reports::Data::Utils.format_display_time((now - week_offset.weeks).beginning_of_week(ReportsKit.configuration.first_day_of_week))
   end
 end
