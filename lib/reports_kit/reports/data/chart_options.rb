@@ -67,6 +67,7 @@ module ReportsKit
           set_colors
           set_chart_options
           set_dataset_options
+          set_standard_options
           set_type
           data
         end
@@ -139,6 +140,10 @@ module ReportsKit
           self.data[:chart_data][:datasets] = self.data[:chart_data][:datasets].map do |dataset|
             dataset.merge(dataset_options)
           end
+        end
+
+        def set_standard_options
+          self.data[:chart_data][:standard_options] = options[:standard_options] if options[:standard_options].present?
         end
 
         def set_type

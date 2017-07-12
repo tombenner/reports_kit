@@ -15,23 +15,42 @@ ReportsKit.Chart = (function(options) {
     path += separator + 'properties=' + JSON.stringify(self.report.properties());
     $.getJSON(path, function(response) {
       var data = response.data;
-      var chart_data = data.chart_data;
-      var options = chart_data.options;
+      var chartData = data.chart_data;
+      var options = chartData.options;
+      options = self.addAdditionalOptions(options, chartData.standard_options)
 
       var args = {
         type: data.type,
-        data: chart_data,
+        data: chartData,
         options: options
       };
 
       if (self.chart) {
-        self.chart.data.datasets = chart_data.datasets;
-        self.chart.data.labels = chart_data.labels;
+        self.chart.data.datasets = chartData.datasets;
+        self.chart.data.labels = chartData.labels;
         self.chart.update();
       } else {
         self.chart = new Chart(self.canvas, args);
       }
     });
+  };
+
+  self.addAdditionalOptions = function(options, standardOptions) {
+    var additionalOptions = {};
+    var maxItems = standardOptions && standardOptions.legend && standardOptions.legend.max_items;
+    if (maxItems) {
+      additionalOptions = {
+        legend: {
+          labels: {
+            filter: function(item) {
+              return item.index < maxItems;
+            }
+          }
+        }
+      };
+      options = $.extend(true, options, additionalOptions);
+    }
+    return options;
   };
 
   self.initialize(options);
