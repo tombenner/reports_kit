@@ -110,7 +110,7 @@ ReportsKit.Report = (function(options) {
     var el = $(event.target);
     var path = el.data('path');
     var separator = path.indexOf('?') === -1 ? '?' : '&';
-    path += separator + 'properties=' + JSON.stringify(self.properties());
+    path += separator + 'properties=' + encodeURIComponent(JSON.stringify(self.properties()));
     window.open(path, '_blank');
     return false;
   }
