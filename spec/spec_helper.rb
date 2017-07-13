@@ -2,6 +2,7 @@ require 'reports_kit'
 
 require 'database_cleaner'
 require 'pry'
+require 'pry-byebug'
 require 'timecop'
 require 'support/factory_girl'
 require 'support/helpers'
