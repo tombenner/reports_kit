@@ -114,6 +114,8 @@ module ReportsKit
         end
 
         def self.dimension_key_to_label(dimension_instance, dimension, ids_dimension_instances)
+          label = dimension.key_to_label(dimension_instance)
+          return label if label
           return dimension_instance.to_s if dimension.configured_by_column? && dimension.column_type == :integer
           case dimension_instance
           when Time, Date

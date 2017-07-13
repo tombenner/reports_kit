@@ -98,6 +98,11 @@ module ReportsKit
         datetime_filters.map(&:end_at).compact.sort.last
       end
 
+      def key_to_label(key)
+        return unless settings[:key_to_label]
+        settings[:key_to_label].call(key)
+      end
+
       def datetime_filters
         return [] unless measure.filters.present?
         measure.filters.map(&:filter_type).select { |filter_type| filter_type.is_a?(FilterTypes::Datetime) }
