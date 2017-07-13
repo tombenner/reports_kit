@@ -55,11 +55,6 @@ ReportsKit.Report = (function(options) {
               page: params.page
             };
             data = $.extend(data, elParams);
-            var staticParams = $('[data-role=static_params]').val();
-            if (staticParams) {
-              staticParams = JSON.parse(staticParams);
-              data = $.extend(data, staticParams);
-            }
             return data;
           },
           processResults: function(data, params) {
