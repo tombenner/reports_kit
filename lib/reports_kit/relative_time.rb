@@ -12,6 +12,7 @@ module ReportsKit
     LETTERS = LETTERS_DURATION_METHODS.keys.join
 
     def self.parse(string, prevent_exceptions: false)
+      return Time.zone.now if string == 'now'
       original_string = string
       string = string.to_s.strip
       is_negative = string[0, 1] == '-'

@@ -20,8 +20,8 @@ module ReportsKit
           @start_at_end_at ||= begin
             return unless valid?
             start_string, end_string = value.split(SEPARATOR)
-            start_at = Date.parse(start_string)
-            end_at = Date.parse(end_string).end_of_day
+            start_at = ReportsKit::Reports::Data::Utils.parse_date_string(start_string)
+            end_at = ReportsKit::Reports::Data::Utils.parse_date_string(end_string).end_of_day
             [start_at, end_at]
           end
         end

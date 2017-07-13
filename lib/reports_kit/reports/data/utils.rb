@@ -11,10 +11,17 @@ module ReportsKit
         end
 
         def self.format_time_value(value)
-          return Utils.format_configuration_time(Time.zone.now) if value == 'now'
-          duration = RelativeTime.parse(value, prevent_exceptions: true)
-          return value unless duration
-          Utils.format_configuration_time(duration)
+          time = RelativeTime.parse(value, prevent_exceptions: true)
+          return value unless time
+          Utils.format_configuration_time(time)
+        end
+
+        def self.parse_date_string(string)
+          begin
+            Date.parse(string)
+          rescue ArgumentError
+            RelativeTime.parse(string)
+          end
         end
 
         def self.populate_sparse_hash(hash, dimension:)
