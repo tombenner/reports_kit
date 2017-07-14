@@ -2,13 +2,12 @@ module ReportsKit
   module Reports
     module Data
       class FormatOneDimension
-        attr_accessor :measures_results, :measures
+        attr_accessor :measures_results, :measures, :order
 
-        delegate :order_column, :order_direction, to: :primary_dimension_with_measure
-
-        def initialize(measures_results)
+        def initialize(measures_results, order:)
           self.measures_results = measures_results
           self.measures = measures_results.keys
+          self.order = order
         end
 
         def perform
@@ -21,7 +20,7 @@ module ReportsKit
         private
 
         def labels
-          dimension_keys.map do |key|
+          sorted_dimension_keys.map do |key|
             Utils.dimension_key_to_label(key, primary_dimension_with_measure, dimension_ids_dimension_instances)
           end
         end
@@ -36,8 +35,23 @@ module ReportsKit
           end
         end
 
-        def dimension_keys
+        def dimension_summaries
+          @dimension_summaries ||= dimension_keys.map do |dimension_key|
+            label = Utils.dimension_key_to_label(dimension_key, primary_dimension_with_measure, dimension_ids_dimension_instances)
+            KeyLabel.new(dimension_key, label)
+          end
+        end
+
+        def sorted_dimension_keys
           sorted_measures_results.first.last.keys
+        end
+
+        def dimension_keys_sorted_by_label
+          @dimension_keys_sorted_by_label ||= dimension_summaries.sort_by(&:label).map(&:key)
+        end
+
+        def dimension_keys
+          measures_results.first.last.keys
         end
 
         def dimension_ids_dimension_instances
@@ -48,18 +62,28 @@ module ReportsKit
         end
 
         def primary_dimension_with_measure
-          @primary_dimension_with_measure ||= DimensionWithMeasure.new(dimension: measures.first.dimensions.first, measure: measures.first)
+          @primary_dimension_with_measure ||= DimensionWithMeasure.new(dimension: primary_measure.dimensions.first, measure: primary_measure)
+        end
+
+        def primary_measure
+          measures.first
         end
 
         def sorted_measures_results
           @sorted_measures_results ||= begin
-            if order_column == 'time'
+            if order.relation == 'dimension1' && order.field == 'label'
               sorted_measures_results = measures_results.map do |measure, dimension_keys_values|
-                sorted_dimension_keys_values = dimension_keys_values.sort_by(&:first)
-                sorted_dimension_keys_values = sorted_dimension_keys_values.reverse if order_direction == 'desc'
+                sorted_dimension_keys_values = dimension_keys_values.sort_by { |key, _| dimension_keys_sorted_by_label.index(key) }
+                sorted_dimension_keys_values = sorted_dimension_keys_values.reverse if order.direction == 'desc'
                 [measure, Hash[sorted_dimension_keys_values]]
               end
-            elsif order_column == 'count'
+            elsif order.relation == 'dimension1' && order.field.nil?
+              sorted_measures_results = measures_results.map do |measure, dimension_keys_values|
+                sorted_dimension_keys_values = dimension_keys_values.sort_by(&:first)
+                sorted_dimension_keys_values = sorted_dimension_keys_values.reverse if order.direction == 'desc'
+                [measure, Hash[sorted_dimension_keys_values]]
+              end
+            elsif order.relation == 'count'
               dimension_keys_sums = Hash.new(0)
               measures_results.values.each do |dimension_keys_values|
                 dimension_keys_values.each do |dimension_key, value|
@@ -67,7 +91,7 @@ module ReportsKit
                 end
               end
               sorted_dimension_keys = dimension_keys_sums.sort_by(&:last).map(&:first)
-              sorted_dimension_keys = sorted_dimension_keys.reverse if order_direction == 'desc'
+              sorted_dimension_keys = sorted_dimension_keys.reverse if order.direction == 'desc'
               sorted_measures_results = measures_results.map do |measure, dimension_keys_values|
                 dimension_keys_values = dimension_keys_values.sort_by { |dimension_key, _| sorted_dimension_keys.index(dimension_key) }
                 [measure, Hash[dimension_keys_values]]

@@ -588,8 +588,8 @@ describe ReportsKit::Reports::Data::Generate do
     let!(:repo2) { create(:repo, full_name: 'foo/bar2') }
     let!(:issues) do
       [
-        create(:issue, repo: repo, opened_at: now - 2.weeks),
-        create(:issue, repo: repo, opened_at: now)
+        create(:issue, repo: repo, state: 'open', opened_at: now - 2.weeks),
+        create(:issue, repo: repo, state: 'closed', opened_at: now)
       ]
     end
     let!(:labels) do

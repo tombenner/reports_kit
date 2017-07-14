@@ -17,9 +17,9 @@ module ReportsKit
           return data if data
 
           if two_dimensions?
-            chart_data = Data::FormatTwoDimensions.new(measures.first, measures_results.first.last).perform
+            chart_data = Data::FormatTwoDimensions.new(measures.first, measures_results.first.last, order: order).perform
           else
-            chart_data = Data::FormatOneDimension.new(measures_results).perform
+            chart_data = Data::FormatOneDimension.new(measures_results, order: order).perform
           end
 
           data = { chart_data: chart_data }
@@ -49,6 +49,18 @@ module ReportsKit
 
         def name
           properties[:name]
+        end
+
+        def order
+          @order ||= begin
+            return Order.parse(properties[:order]) if properties[:order].present?
+            inferred_order
+          end
+        end
+
+        def inferred_order
+          return Order.new('dimension1', nil, 'asc') if primary_dimension.configured_by_time?
+          Order.new('count', nil, 'desc')
         end
 
         def apply_ui_filters
@@ -98,9 +110,13 @@ module ReportsKit
           number
         end
 
+        def primary_dimension
+          measures.first.dimensions.first
+        end
+
         def inferred_options
           {
-            x_axis_label: measures.first.dimensions.first.label,
+            x_axis_label: primary_dimension.label,
             y_axis_label: measures.length == 1 ? measures.first.label : nil
           }
         end

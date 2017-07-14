@@ -76,3 +76,69 @@
     dimensions:
     - repo
   format: table
+- measure:
+    key: label
+    dimensions:
+    - repo
+  order: dimension1.label
+- measure:
+    key: label
+    dimensions:
+    - repo
+  order: dimension1.label desc
+- measure:
+    key: label
+    dimensions:
+    - repo
+  order: count
+- measure:
+    key: label
+    dimensions:
+    - repo
+  order: count desc
+- measure:
+    key: issue
+    dimensions:
+    - opened_at
+  order: dimension1
+- measure:
+    key: issue
+    dimensions:
+    - opened_at
+  order: dimension1 desc
+- measure:
+    key: issue
+    dimensions:
+    - key: opened_at
+    - key: repo
+  order: dimension1
+- measure:
+    key: issue
+    dimensions:
+    - key: opened_at
+    - key: repo
+  order: dimension1 desc
+- measure:
+    key: label
+    dimensions:
+    - key: repo
+    - key: created_at
+  order: dimension1.label
+- measure:
+    key: label
+    dimensions:
+    - key: repo
+    - key: created_at
+  order: dimension1.label desc
+- measure:
+    key: issue
+    dimensions:
+    - key: opened_at
+    - key: repo
+  order: count
+- measure:
+    key: issue
+    dimensions:
+    - key: opened_at
+    - key: repo
+  order: count desc
