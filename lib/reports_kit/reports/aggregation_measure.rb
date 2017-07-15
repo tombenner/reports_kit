@@ -1,6 +1,6 @@
 module ReportsKit
   module Reports
-    class AggregationMeasure
+    class AggregationMeasure < AbstractMeasure
       attr_accessor :properties
 
       def initialize(properties)

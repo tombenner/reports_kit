@@ -31,6 +31,7 @@ else
     username: 'postgres'
   )
 end
+require 'support/config'
 require 'support/schema'
 
 RSpec.configure do |config|

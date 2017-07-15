@@ -37,6 +37,7 @@ module ReportsKit
           secondary_keys_values.map do |secondary_key, values|
             next if secondary_key.blank?
             values = values.map { |value| Utils.format_number(value) }
+            values = values.map { |value| measure.value_format_method.call(value) } if measure.value_format_method
             {
               label: Utils.dimension_key_to_label(secondary_key, second_dimension, second_dimension_ids_dimension_instances),
               data: values

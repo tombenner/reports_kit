@@ -516,6 +516,39 @@ describe ReportsKit::Reports::Data::Generate do
         end
       end
 
+      context 'with % and a custom value_format_method' do
+        let(:aggregation) { '%' }
+        let(:properties) do
+          {
+            name: name,
+            aggregation: aggregation,
+            value_format_method: 'format_percentage',
+            measures: [
+              {
+                key: 'issue',
+                dimensions: %w(created_at)
+              },
+              {
+                key: 'tag',
+                dimensions: %w(created_at)
+              }
+            ]
+          }
+        end
+
+        it 'returns the chart_data' do
+          expect(chart_data).to eq({
+            labels: [format_week_offset(2), format_week_offset(1), format_week_offset(0)],
+            datasets: [
+              {
+                label: name,
+                data: ['0%', '0%', '200%']
+              }
+            ]
+          })
+        end
+      end
+
       context 'with a nested aggregation' do
         let(:properties) do
           {

@@ -1,6 +1,6 @@
 module ReportsKit
   module Reports
-    class Measure
+    class Measure < AbstractMeasure
       attr_accessor :properties, :dimensions, :filters, :context_record
 
       def initialize(properties, context_record: nil)
@@ -34,10 +34,6 @@ module ReportsKit
 
       def aggregate_function
         :count
-      end
-
-      def conditions
-        nil
       end
 
       def base_relation

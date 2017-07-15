@@ -28,6 +28,7 @@ module ReportsKit
         def datasets
           sorted_measures_results.map do |measure, result|
             values = result.values.map { |value| Utils.format_number(value) }
+            values = values.map { |value| measure.value_format_method.call(value) } if measure.value_format_method
             {
               label: measure.label,
               data: values

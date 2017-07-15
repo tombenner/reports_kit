@@ -19,7 +19,6 @@ module ReportsKit
         def dimension_keys_values
           @dimension_keys_values ||= begin
             relation = measure.filtered_relation
-            relation = measure.conditions.call(relation) if measure.conditions
             relation = relation.group(dimension.group_expression, second_dimension.group_expression)
 
             relation = relation.joins(dimension.joins) if dimension.joins

@@ -37,6 +37,7 @@ require 'reports_kit/reports/filter_types/number'
 require 'reports_kit/reports/filter_types/records'
 require 'reports_kit/reports/filter_types/string'
 
+require 'reports_kit/reports/abstract_measure'
 require 'reports_kit/reports/aggregation_measure'
 require 'reports_kit/reports/dimension'
 require 'reports_kit/reports/dimension_with_measure'
