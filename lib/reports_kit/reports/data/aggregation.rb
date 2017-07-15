@@ -56,7 +56,11 @@ module ReportsKit
         def sort_dimension_keys_values(measures_results)
           dimension_keys_values_list = measures_results.values
           sorted_dimension_keys_values = dimension_keys_values_list.map do |dimension_keys_values|
-            Hash[dimension_keys_values.sort_by(&:first)]
+            dimension_keys_values = dimension_keys_values.sort_by do |dimension_key, value|
+              is_boolean = dimension_key.is_a?(TrueClass) || dimension_key.is_a?(FalseClass)
+              is_boolean ? (dimension_key ? 0 : 1) : dimension_key
+            end
+            Hash[dimension_keys_values]
           end
           sorted_dimension_keys_values
         end

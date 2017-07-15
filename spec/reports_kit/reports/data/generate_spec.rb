@@ -344,6 +344,31 @@ describe ReportsKit::Reports::Data::Generate do
     end
   end
 
+  context 'with a boolean dimension' do
+    let(:properties) do
+      {
+        measure: {
+          key: 'issue',
+          dimensions: %w(locked)
+        }
+      }
+    end
+    let!(:issues) do
+      [
+        create(:issue, locked: true),
+        create(:issue, locked: false),
+        create(:issue, locked: false)
+      ]
+    end
+
+    it 'returns the chart_data' do
+      expect(chart_data).to eq({
+        labels: ['false', 'true'],
+        datasets: [{ label: 'Issues', data: [2, 1] }]
+      })
+    end
+  end
+
   context 'with datetime and association dimensions' do
     let(:properties) do
       {
@@ -548,6 +573,46 @@ describe ReportsKit::Reports::Data::Generate do
           })
         end
       end
+
+      context 'with a boolean dimension' do
+        let!(:issues) do
+          [
+            create(:issue, locked: true),
+            create(:issue, locked: false),
+            create(:issue, locked: false)
+          ]
+        end
+        let(:aggregation) { '+' }
+        let(:properties) do
+          {
+            name: name,
+            aggregation: aggregation,
+            measures: [
+              {
+                key: 'issue',
+                dimensions: %w(locked)
+              },
+              {
+                key: 'issue',
+                dimensions: %w(locked)
+              }
+            ]
+          }
+        end
+
+        it 'returns the chart_data' do
+          expect(chart_data).to eq({
+            labels: ['false', 'true'],
+            datasets: [
+              {
+                label: name,
+                data: [4, 2]
+              }
+            ]
+          })
+        end
+      end
+
 
       context 'with a nested aggregation' do
         let(:properties) do
