@@ -88,12 +88,6 @@ module ReportsKit
         def measures
           @measures ||= all_measures.grep(Measure)
         end
-
-        def format_number(number)
-          number_i = number.to_i
-          return number_i if number == number_i
-          number
-        end
       end
     end
   end

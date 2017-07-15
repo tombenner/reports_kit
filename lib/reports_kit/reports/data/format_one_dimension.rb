@@ -27,7 +27,7 @@ module ReportsKit
 
         def datasets
           sorted_measures_results.map do |measure, result|
-            values = result.values.map { |value| value.round(Generate::ROUND_PRECISION) }
+            values = result.values.map { |value| Utils.format_number(value) }
             {
               label: measure.label,
               data: values

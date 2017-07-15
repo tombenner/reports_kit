@@ -16,6 +16,12 @@ module ReportsKit
           Utils.format_configuration_time(time)
         end
 
+        def self.format_number(number)
+          number_i = number.to_i
+          return number_i if number == number_i
+          number.round(Generate::ROUND_PRECISION)
+        end
+
         def self.parse_date_string(string)
           begin
             Date.parse(string)

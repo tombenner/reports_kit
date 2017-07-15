@@ -5,7 +5,7 @@
     :datasets:
     - :label: Issues
       :data:
-      - 2.0
+      - 2
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -38,7 +38,7 @@
     :datasets:
     - :label: Issues
       :data:
-      - 2.0
+      - 2
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -72,7 +72,7 @@
     :datasets:
     - :label: Issues
       :data:
-      - 2.0
+      - 2
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -105,7 +105,7 @@
     :datasets:
     - :label: Issues
       :data:
-      - 2.0
+      - 2
       :backgroundColor:
       - "#1f77b4"
       - "#aec7e8"
@@ -135,7 +135,7 @@
     :datasets:
     - :label: Issues
       :data:
-      - 2.0
+      - 2
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -170,9 +170,9 @@
     :datasets:
     - :label: Issues
       :data:
-      - 1.0
-      - 0.0
-      - 1.0
+      - 1
+      - 0
+      - 1
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -242,7 +242,7 @@
     :datasets:
     - :label: Issues
       :data:
-      - 2.0
+      - 2
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -276,14 +276,14 @@
     :datasets:
     - :label: Issues
       :data:
-      - 2.0
-      - 0.0
+      - 2
+      - 0
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     - :label: Labels
       :data:
-      - 1.0
-      - 2.0
+      - 1
+      - 2
       :backgroundColor: "#aec7e8"
       :borderColor: "#aec7e8"
     :options:
@@ -314,20 +314,20 @@
     :datasets:
     - :label: Issues
       :data:
-      - 2.0
-      - 0.0
+      - 2
+      - 0
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     - :label: Labels
       :data:
-      - 1.0
-      - 2.0
+      - 1
+      - 2
       :backgroundColor: "#aec7e8"
       :borderColor: "#aec7e8"
     - :label: Tags
       :data:
-      - 0.0
-      - 0.0
+      - 0
+      - 0
       :backgroundColor: "#ff7f0e"
       :borderColor: "#ff7f0e"
     :options:
@@ -358,14 +358,14 @@
     :datasets:
     - :label: Repo Issues
       :data:
-      - 2.0
-      - 0.0
+      - 2
+      - 0
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     - :label: Labels
       :data:
-      - 1.0
-      - 2.0
+      - 1
+      - 2
       :backgroundColor: "#aec7e8"
       :borderColor: "#aec7e8"
     :options:
@@ -407,8 +407,8 @@
     :datasets:
     - :label: Labels
       :data:
-      - 1.0
-      - 2.0
+      - 1
+      - 2
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -442,8 +442,8 @@
     :datasets:
     - :label: Labels
       :data:
-      - 2.0
-      - 1.0
+      - 2
+      - 1
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -477,8 +477,8 @@
     :datasets:
     - :label: Labels
       :data:
-      - 1.0
-      - 2.0
+      - 1
+      - 2
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -512,8 +512,8 @@
     :datasets:
     - :label: Labels
       :data:
-      - 2.0
-      - 1.0
+      - 2
+      - 1
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -548,9 +548,9 @@
     :datasets:
     - :label: Issues
       :data:
-      - 1.0
-      - 0.0
-      - 1.0
+      - 1
+      - 0
+      - 1
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:
@@ -585,9 +585,9 @@
     :datasets:
     - :label: Issues
       :data:
-      - 1.0
-      - 0.0
-      - 1.0
+      - 1
+      - 0
+      - 1
       :backgroundColor: "#1f77b4"
       :borderColor: "#1f77b4"
     :options:

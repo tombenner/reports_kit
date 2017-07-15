@@ -94,7 +94,7 @@ module ReportsKit
           column_values = []
           data[:datasets].each do |dataset|
             column_names << dataset[:label]
-            column_values << dataset[:data].map { |number| format_number(number) }
+            column_values << dataset[:data]
           end
           rows = column_values.transpose
           rows = rows.map.with_index do |row, index|
@@ -102,12 +102,6 @@ module ReportsKit
             row.unshift(label)
           end
           [column_names] + rows
-        end
-
-        def format_number(number)
-          number_i = number.to_i
-          return number_i if number == number_i
-          number
         end
 
         def primary_dimension
