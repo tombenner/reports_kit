@@ -25,11 +25,9 @@ module ReportsKit
         end
 
         def self.populate_sparse_hash(hash, dimension:)
-          return hash if hash.blank?
           keys = hash.keys
-          is_nested = false
-          if keys.first.is_a?(Array)
-            is_nested = true
+          is_nested = dimension.measure.has_two_dimensions?
+          if is_nested
             keys_values = arrays_values_to_nested_hash(hash)
             keys = keys_values.keys
           else
@@ -54,7 +52,6 @@ module ReportsKit
         end
 
         def self.populate_sparse_keys(keys, dimension:)
-          return keys if keys.blank?
           first_key = dimension.first_key || keys.first
           return keys unless first_key.is_a?(Time) || first_key.is_a?(Date)
           first_key = first_key.to_date

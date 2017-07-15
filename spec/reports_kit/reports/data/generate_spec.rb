@@ -89,6 +89,41 @@ describe ReportsKit::Reports::Data::Generate do
           })
         end
 
+        context 'with zero results' do
+          let(:properties) do
+            {
+              measure: {
+                key: 'tag',
+                filters: [
+                  {
+                    key: 'created_at',
+                    criteria: {
+                      operator: 'between',
+                      value: "#{format_criteria_time(now - 1.week)} - #{format_criteria_time(now)}"
+                    }
+                  }
+                ],
+                dimensions: %w(created_at)
+              }
+            }
+          end
+
+          it 'returns the data' do
+            expect(chart_data).to eq({
+              labels: [
+                format_week_offset(1),
+                format_week_offset(0)
+              ],
+              datasets: [
+                {
+                  label: 'Tags',
+                  data: [0, 0]
+                }
+              ]
+            })
+          end
+        end
+
         context 'with multiple measures and datetime filters with different keys' do
           let!(:tags) do
             [

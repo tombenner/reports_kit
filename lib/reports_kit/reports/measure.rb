@@ -63,6 +63,10 @@ module ReportsKit
         all_properties
       end
 
+      def has_two_dimensions?
+        dimensions.length == 2
+      end
+
       def self.new_from_properties!(properties, context_record:)
         measure_hashes = [properties[:measure]].compact + Array(properties[:measures])
         raise ArgumentError.new('At least one measure must be configured') if measure_hashes.blank?
