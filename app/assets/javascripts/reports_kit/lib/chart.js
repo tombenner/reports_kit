@@ -6,6 +6,7 @@ ReportsKit.Chart = (function(options) {
     self.report = options.report;
     self.el = self.report.el;
 
+    self.noResultsEl = $('<div>No data was found</div>').appendTo(self.report.visualizationEl).hide();
     self.canvas = $('<canvas />').appendTo(self.report.visualizationEl);
   };
 
@@ -32,6 +33,7 @@ ReportsKit.Chart = (function(options) {
       } else {
         self.chart = new Chart(self.canvas, args);
       }
+      self.noResultsEl.toggle(self.chart.data.labels.length === 0);
     });
   };
 
