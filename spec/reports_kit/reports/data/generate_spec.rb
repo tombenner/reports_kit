@@ -664,6 +664,84 @@ describe ReportsKit::Reports::Data::Generate do
           })
         end
 
+        context 'with ui_filters' do
+          let(:properties) do
+            {
+              measures: [
+                {
+                  name: name,
+                  aggregation: '+',
+                  measures: [
+                    {
+                      key: 'issue',
+                      filters: [
+                        {
+                          key: 'created_at',
+                          criteria: { operator: 'between' }
+                        }
+                      ],
+                      dimensions: %w(created_at)
+                    },
+                    {
+                      key: 'tag',
+                      filters: [
+                        {
+                          key: 'created_at',
+                          criteria: { operator: 'between' }
+                        }
+                      ],
+                      dimensions: %w(created_at)
+                    }
+                  ]
+                },
+                {
+                  key: 'issue',
+                  filters: [
+                    {
+                      key: 'created_at',
+                      criteria: { operator: 'between' }
+                    }
+                  ],
+                  dimensions: %w(created_at)
+                },
+                {
+                  key: 'tag',
+                  filters: [
+                    {
+                      key: 'created_at',
+                      criteria: { operator: 'between' }
+                    }
+                  ],
+                  dimensions: %w(created_at)
+                }
+              ],
+              ui_filters: {
+                created_at: "#{format_criteria_time(now - 1.week)} - #{format_criteria_time(now)}"
+              }
+            }
+          end
+
+          it 'returns the chart_data' do
+            expect(chart_data).to eq({
+              labels: [format_week_offset(1), format_week_offset(0)],
+              datasets: [
+                {
+                  label: name,
+                  data: [2, 3]
+                },
+                {
+                  label: 'Issues',
+                  data: [0, 2]
+                },
+                {
+                  label: 'Tags',
+                  data: [2, 1]
+                }
+              ]
+            })
+          end
+        end
+
         context 'with two dimensions' do
           let(:properties) do
             {

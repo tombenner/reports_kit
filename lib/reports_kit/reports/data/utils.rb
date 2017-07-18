@@ -132,6 +132,28 @@ module ReportsKit
             dimension_instance.to_s.gsub(/\.0$/, '')
           end
         end
+
+        def self.apply_ui_filters(properties, ui_filters: nil)
+          ui_filters ||= properties[:ui_filters]
+          return properties if ui_filters.blank? || properties[:measures].blank?
+          properties[:measures] = properties[:measures].map do |measure_properties|
+            measure_properties = apply_ui_filters(measure_properties, ui_filters: ui_filters)
+            next(measure_properties) if measure_properties[:filters].blank?
+            measure_properties[:filters] = measure_properties[:filters].map do |filter_properties|
+              key = filter_properties[:key]
+              ui_key = filter_properties[:ui_key]
+              value = ui_filters[key.to_sym]
+              value ||= ui_filters[ui_key.to_sym] if ui_key
+              if value
+                criteria_key = value.in?([true, false]) ? :operator : :value
+                filter_properties[:criteria][criteria_key] = value
+              end
+              filter_properties
+            end
+            measure_properties
+          end
+          properties
+        end
       end
     end
   end

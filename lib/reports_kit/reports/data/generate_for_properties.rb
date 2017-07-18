@@ -8,7 +8,6 @@ module ReportsKit
 
         def initialize(properties, context_record: nil)
           self.properties = properties.deep_symbolize_keys
-          apply_ui_filters
           self.context_record = context_record
         end
 
@@ -41,24 +40,6 @@ module ReportsKit
 
         def name
           properties[:name]
-        end
-
-        def apply_ui_filters
-          return if properties[:ui_filters].blank?
-          self.properties[:measures] = properties[:measures].map do |measure_properties|
-            measure_properties[:filters] = measure_properties[:filters].map do |filter_properties|
-              key = filter_properties[:key]
-              ui_key = filter_properties[:ui_key]
-              value = properties[:ui_filters][key.to_sym]
-              value ||= properties[:ui_filters][ui_key.to_sym] if ui_key
-              if value
-                criteria_key = value.in?([true, false]) ? :operator : :value
-                filter_properties[:criteria][criteria_key] = value
-              end
-              filter_properties
-            end
-            measure_properties
-          end
         end
 
         def measures_dimension_keys_values_for_one_dimension
