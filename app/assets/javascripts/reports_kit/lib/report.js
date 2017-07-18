@@ -108,7 +108,7 @@ ReportsKit.Report = (function(options) {
     path += separator + 'properties=' + encodeURIComponent(JSON.stringify(self.properties()));
     window.open(path, '_blank');
     return false;
-  }
+  };
 
   self.render = function() {
     self.visualization.render();

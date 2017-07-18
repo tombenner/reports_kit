@@ -7,6 +7,7 @@ ReportsKit.Chart = (function(options) {
     self.el = self.report.el;
 
     self.noResultsEl = $('<div>No data was found</div>').appendTo(self.report.visualizationEl).hide();
+    self.loadingIndicatorEl = $('<div class="loading_indicator"></div>').appendTo(self.report.visualizationEl).hide();
     self.canvas = $('<canvas />').appendTo(self.report.visualizationEl);
   };
 
@@ -14,6 +15,7 @@ ReportsKit.Chart = (function(options) {
     var path = self.el.data('path');
     var separator = path.indexOf('?') === -1 ? '?' : '&';
     path += separator + 'properties=' + encodeURIComponent(JSON.stringify(self.report.properties()));
+    self.loadingIndicatorEl.fadeIn(5000);
     $.getJSON(path, function(response) {
       var data = response.data;
       var chartData = data.chart_data;
@@ -25,6 +27,7 @@ ReportsKit.Chart = (function(options) {
         data: chartData,
         options: options
       };
+      self.loadingIndicatorEl.stop(true, true).hide();
 
       if (self.chart) {
         self.chart.data.datasets = chartData.datasets;
