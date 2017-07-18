@@ -112,38 +112,6 @@ module ReportsKit
         !configured_by_time?
       end
 
-      def order
-        @order ||= begin
-          order = properties[:order]
-          return order if order
-          if configured_by_time?
-            'time asc'
-          else
-            'count desc'
-          end
-        end
-      end
-
-      def order_parts
-        order.split(' ')
-      end
-
-      def order_column
-        @order_column ||= begin
-          order_column = order_parts[0]
-          raise ArgumentError.new("Invalid order column: #{order_column}") unless order_column.in?(%w(count time name))
-          order_column
-        end
-      end
-
-      def order_direction
-        @order_direction ||= begin
-          order_direction = order_parts[1] || 'asc'
-          raise ArgumentError.new("Invalid order direction: #{order_direction}") unless order_direction.in?(%w(asc desc))
-          order_direction
-        end
-      end
-
       def adapter
         @adapter ||= begin
           adapter_name = model_class.connection_config[:adapter]

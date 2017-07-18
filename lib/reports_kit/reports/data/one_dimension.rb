@@ -24,13 +24,7 @@ module ReportsKit
           relation = relation.group(dimension_with_measure.group_expression)
           relation = relation.joins(dimension_with_measure.joins) if dimension_with_measure.joins
           relation = relation.limit(dimension_with_measure.dimension_instances_limit) if dimension_with_measure.dimension_instances_limit
-          # If the dimension's order_column is 'name', we can't sort it in SQL and will instead need to sort it in memory, where we have
-          # access to the #to_s method of the dimension instances.
-          if dimension_with_measure.order_column == 'count'
-            relation = relation.order("1 #{dimension_with_measure.order_direction}")
-          elsif dimension_with_measure.order_column == 'time'
-            relation = relation.order("2 #{dimension_with_measure.order_direction}")
-          end
+          relation = relation.order('2')
           dimension_keys_values = relation.distinct.public_send(*measure.aggregate_function)
           dimension_keys_values = Utils.populate_sparse_hash(dimension_keys_values, dimension: dimension_with_measure)
           dimension_keys_values.delete(nil)
