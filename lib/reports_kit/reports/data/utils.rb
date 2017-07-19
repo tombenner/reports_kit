@@ -133,24 +133,32 @@ module ReportsKit
           end
         end
 
-        def self.apply_ui_filters(properties, ui_filters: nil)
+        def self.normalize_filters(measure_properties, ui_filters)
+          measure_properties[:filters] = measure_properties[:filters].map do |filter_properties|
+            filter_properties = { key: filter_properties } if filter_properties.is_a?(String)
+            key = filter_properties[:key]
+            ui_key = filter_properties[:ui_key]
+            value = ui_filters[key.to_sym]
+            value ||= ui_filters[ui_key.to_sym] if ui_key
+            if value
+              criteria_key = value.in?([true, false]) ? :operator : :value
+              filter_properties[:criteria] ||= {}
+              filter_properties[:criteria][criteria_key] = value
+            end
+            filter_properties
+          end
+          measure_properties
+        end
+
+        def self.normalize_properties(properties, ui_filters: nil)
           ui_filters ||= properties[:ui_filters]
+          properties = properties.dup
+          properties[:measures] = [properties.delete(:measure)] if properties[:measure]
           return properties if ui_filters.blank? || properties[:measures].blank?
           properties[:measures] = properties[:measures].map do |measure_properties|
-            measure_properties = apply_ui_filters(measure_properties, ui_filters: ui_filters)
+            measure_properties = normalize_properties(measure_properties, ui_filters: ui_filters)
             next(measure_properties) if measure_properties[:filters].blank?
-            measure_properties[:filters] = measure_properties[:filters].map do |filter_properties|
-              key = filter_properties[:key]
-              ui_key = filter_properties[:ui_key]
-              value = ui_filters[key.to_sym]
-              value ||= ui_filters[ui_key.to_sym] if ui_key
-              if value
-                criteria_key = value.in?([true, false]) ? :operator : :value
-                filter_properties[:criteria][criteria_key] = value
-              end
-              filter_properties
-            end
-            measure_properties
+            normalize_filters(measure_properties, ui_filters)
           end
           properties
         end

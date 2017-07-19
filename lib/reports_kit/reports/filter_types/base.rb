@@ -27,7 +27,7 @@ module ReportsKit
         end
 
         def criteria
-          properties[:criteria]
+          @criteria ||= default_criteria.merge(properties[:criteria])
         end
 
         def value

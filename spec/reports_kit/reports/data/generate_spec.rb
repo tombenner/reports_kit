@@ -136,26 +136,12 @@ describe ReportsKit::Reports::Data::Generate do
               measures: [
                 {
                   key: 'issue',
-                  filters: [
-                    {
-                      key: 'opened_at',
-                      criteria: {
-                        operator: 'between'
-                      }
-                    }
-                  ],
+                  filters: %w(opened_at),
                   dimensions: %w(opened_at)
                 },
                 {
                   key: 'tag',
-                  filters: [
-                    {
-                      key: 'created_at',
-                      criteria: {
-                        operator: 'between'
-                      }
-                    }
-                  ],
+                  filters: %w(created_at),
                   dimensions: %w(created_at)
                 }
               ],
@@ -674,44 +660,24 @@ describe ReportsKit::Reports::Data::Generate do
                   measures: [
                     {
                       key: 'issue',
-                      filters: [
-                        {
-                          key: 'created_at',
-                          criteria: { operator: 'between' }
-                        }
-                      ],
+                      filters: %w(created_at),
                       dimensions: %w(created_at)
                     },
                     {
                       key: 'tag',
-                      filters: [
-                        {
-                          key: 'created_at',
-                          criteria: { operator: 'between' }
-                        }
-                      ],
+                      filters: %w(created_at),
                       dimensions: %w(created_at)
                     }
                   ]
                 },
                 {
                   key: 'issue',
-                  filters: [
-                    {
-                      key: 'created_at',
-                      criteria: { operator: 'between' }
-                    }
-                  ],
+                  filters: %w(created_at),
                   dimensions: %w(created_at)
                 },
                 {
                   key: 'tag',
-                  filters: [
-                    {
-                      key: 'created_at',
-                      criteria: { operator: 'between' }
-                    }
-                  ],
+                  filters: %w(created_at),
                   dimensions: %w(created_at)
                 }
               ],

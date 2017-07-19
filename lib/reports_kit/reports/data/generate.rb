@@ -8,7 +8,7 @@ module ReportsKit
 
         def initialize(properties, context_record: nil)
           self.properties = properties.deep_symbolize_keys
-          self.properties = Utils.apply_ui_filters(self.properties)
+          self.properties = Utils.normalize_properties(self.properties)
           self.context_record = context_record
         end
 
