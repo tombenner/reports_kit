@@ -53,12 +53,6 @@ module ReportsKit
         relation
       end
 
-      def normalized_properties
-        all_properties = properties
-        all_properties[:filters] = filters.map(&:normalized_properties)
-        all_properties
-      end
-
       def has_two_dimensions?
         dimensions.length == 2
       end
