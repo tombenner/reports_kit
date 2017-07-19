@@ -22,13 +22,7 @@ describe ReportsKit::ReportBuilder do
     end
 
     it 'transforms the filter criteria' do
-      expect(subject.properties[:measures][0][:filters][0]).to eq({
-        key: 'opened_at',
-        criteria: {
-          operator: 'between',
-          value: "#{format_criteria_time(1.week.ago)} - #{format_criteria_time(Time.zone.now)}"
-        }
-      })
+      expect(subject.date_range('opened_at')).to include("#{format_criteria_time(1.week.ago)} - #{format_criteria_time(Time.zone.now)}")
     end
   end
 end
