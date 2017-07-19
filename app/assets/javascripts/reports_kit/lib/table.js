@@ -6,6 +6,7 @@ ReportsKit.Table = (function(options) {
     self.report = options.report;
     self.el = self.report.el;
 
+    self.loadingIndicatorEl = $('<div class="loading_indicator"></div>').appendTo(self.report.visualizationEl).hide();
     self.table = $('<table />', { 'class': 'table table-striped table-hover' }).appendTo(self.report.visualizationEl);
   };
 
@@ -13,9 +14,12 @@ ReportsKit.Table = (function(options) {
     var path = self.el.data('path');
     var separator = path.indexOf('?') === -1 ? '?' : '&';
     path += separator + 'properties=' + encodeURIComponent(JSON.stringify(self.report.properties()));
+    self.loadingIndicatorEl.fadeIn(100);
     $.getJSON(path, function(response) {
       var data = response.data;
       var tableData = data.table_data;
+
+      self.loadingIndicatorEl.stop(true, true).hide();
 
       var html = '';
       for(var i = 0; i < tableData.length; i++) {
