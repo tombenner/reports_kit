@@ -400,6 +400,26 @@ describe ReportsKit::Reports::Data::Generate do
         ])
       end
     end
+
+    context "with a data_format_method" do
+      subject { described_class.new(properties.merge(data_format_method: 'add_label_suffix'), context_record: context_record).perform }
+
+      it 'returns the chart_data' do
+        expect(chart_data).to eq({
+          labels: ["#{format_week_offset(2)} Foo", "#{format_week_offset(1)} Foo", "#{format_week_offset(0)} Foo"],
+          datasets: [
+            {
+              label: repo.to_s,
+              data: [1, 0, 1]
+            },
+            {
+              label: repo2.to_s,
+              data: [0, 0, 1]
+            }
+          ]
+        })
+      end
+    end
   end
 
   context 'with two measures' do

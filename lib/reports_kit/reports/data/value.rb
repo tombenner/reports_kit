@@ -1,7 +1,7 @@
 module ReportsKit
   module Reports
     module Data
-      KeyLabel = Struct.new(:key, :label)
+      Value = Struct.new(:raw, :formatted)
     end
   end
 end

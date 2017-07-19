@@ -11,5 +11,12 @@ module ReportsKit
       self.custom_methods = {}
       self.first_day_of_week = :sunday
     end
+
+    def custom_method(method_name)
+      return if method_name.blank?
+      method = custom_methods[method_name.to_sym]
+      raise ArgumentError.new("A method named '#{method_name}' is not defined") unless method
+      method
+    end
   end
 end

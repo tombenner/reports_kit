@@ -17,10 +17,12 @@ module ReportsKit
           return data if data
 
           if two_dimensions?
-            chart_data = Data::FormatTwoDimensions.new(measures.first, measures_results.first.last, order: order).perform
+            raw_data = Data::FormatTwoDimensions.new(measures.first, measures_results.first.last, order: order).perform
           else
-            chart_data = Data::FormatOneDimension.new(measures_results, order: order).perform
+            raw_data = Data::FormatOneDimension.new(measures_results, order: order).perform
           end
+          raw_data = data_format_method.call(raw_data) if data_format_method
+          chart_data = format_chart_data(raw_data)
 
           data = { chart_data: chart_data }
           data = ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
@@ -33,6 +35,18 @@ module ReportsKit
         end
 
         private
+
+        def format_chart_data(raw_data)
+          chart_data = {}
+          chart_data[:labels] = raw_data[:entities].map(&:label)
+          chart_data[:datasets] = raw_data[:datasets].map do |raw_dataset|
+            {
+              label: raw_dataset[:entity].label,
+              data: raw_dataset[:values].map(&:formatted)
+            }
+          end
+          chart_data
+        end
 
         def measures_results
           @measures_results ||= GenerateForProperties.new(properties, context_record: context_record).perform
@@ -65,6 +79,10 @@ module ReportsKit
 
         def measures
           @measures ||= Measure.new_from_properties!(properties, context_record: context_record)
+        end
+
+        def data_format_method
+          ReportsKit.configuration.custom_method(properties[:data_format_method])
         end
 
         def format

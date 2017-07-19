@@ -12,26 +12,27 @@ module ReportsKit
 
         def perform
           {
-            labels: labels,
+            entities: entities,
             datasets: datasets
           }
         end
 
         private
 
-        def labels
+        def entities
           sorted_dimension_keys.map do |key|
-            Utils.dimension_key_to_label(key, primary_dimension_with_measure, dimension_ids_dimension_instances)
+            Utils.dimension_key_to_entity(key, primary_dimension_with_measure, dimension_ids_dimension_instances)
           end
         end
 
         def datasets
           sorted_measures_results.map do |measure, result|
-            values = result.values.map { |value| Utils.format_number(value) }
-            values = values.map { |value| measure.value_format_method.call(value) } if measure.value_format_method
+            values = result.values.map do |raw_value|
+              Utils.raw_value_to_value(raw_value, measure.value_format_method)
+            end
             {
-              label: measure.label,
-              data: values
+              entity: measure,
+              values: values
             }
           end
         end
@@ -39,7 +40,7 @@ module ReportsKit
         def dimension_summaries
           @dimension_summaries ||= dimension_keys.map do |dimension_key|
             label = Utils.dimension_key_to_label(dimension_key, primary_dimension_with_measure, dimension_ids_dimension_instances)
-            KeyLabel.new(dimension_key, label)
+            [dimension_key, label]
           end
         end
 
@@ -48,7 +49,7 @@ module ReportsKit
         end
 
         def dimension_keys_sorted_by_label
-          @dimension_keys_sorted_by_label ||= dimension_summaries.sort_by(&:label).map(&:key)
+          @dimension_keys_sorted_by_label ||= dimension_summaries.sort_by(&:last).map(&:first)
         end
 
         def dimension_keys

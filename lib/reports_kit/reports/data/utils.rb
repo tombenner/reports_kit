@@ -116,6 +116,12 @@ module ReportsKit
           Hash[dimension_ids_dimension_instances]
         end
 
+        def self.dimension_key_to_entity(dimension_key, dimension, dimension_ids_dimension_instances)
+          instance = dimension_ids_dimension_instances ? dimension_ids_dimension_instances[dimension_key] : dimension_key
+          label = dimension_key_to_label(dimension_key, dimension, dimension_ids_dimension_instances)
+          Entity.new(dimension_key, label, instance)
+        end
+
         def self.dimension_key_to_label(dimension_instance, dimension, ids_dimension_instances)
           label = dimension.key_to_label(dimension_instance)
           return label if label
@@ -131,6 +137,12 @@ module ReportsKit
           else
             dimension_instance.to_s.gsub(/\.0$/, '')
           end
+        end
+
+        def self.raw_value_to_value(raw_value, value_format_method)
+          formatted_value = format_number(raw_value)
+          formatted_value = value_format_method.call(raw_value) if value_format_method
+          Value.new(raw_value, formatted_value)
         end
 
         def self.normalize_filters(measure_properties, ui_filters)

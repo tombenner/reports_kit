@@ -14,33 +14,34 @@ module ReportsKit
 
         def perform
           {
-            labels: labels,
+            entities: entities,
             datasets: datasets
           }
         end
 
         private
 
-        def labels
+        def entities
           sorted_primary_keys.map do |primary_key|
-            Utils.dimension_key_to_label(primary_key, dimension, dimension_ids_dimension_instances)
+            Utils.dimension_key_to_entity(primary_key, dimension, dimension_ids_dimension_instances)
           end
         end
 
         def datasets
           secondary_keys_values = sorted_secondary_keys.map do |secondary_key|
-            values = sorted_primary_keys.map do |primary_key|
+            raw_values = sorted_primary_keys.map do |primary_key|
               primary_keys_secondary_keys_values[primary_key][secondary_key]
+            end
+            values = raw_values.map do |raw_value|
+              Utils.raw_value_to_value(raw_value, measure.value_format_method)
             end
             [secondary_key, values]
           end
           secondary_keys_values.map do |secondary_key, values|
             next if secondary_key.blank?
-            values = values.map { |value| Utils.format_number(value) }
-            values = values.map { |value| measure.value_format_method.call(value) } if measure.value_format_method
             {
-              label: Utils.dimension_key_to_label(secondary_key, second_dimension, second_dimension_ids_dimension_instances),
-              data: values
+              entity: Utils.dimension_key_to_entity(secondary_key, second_dimension, second_dimension_ids_dimension_instances),
+              values: values
             }
           end.compact
         end
@@ -119,12 +120,12 @@ module ReportsKit
         def primary_summaries
           primary_keys.map do |key|
             label = Utils.dimension_key_to_label(key, dimension, dimension_ids_dimension_instances)
-            KeyLabel.new(key, label)
+            [key, label]
           end
         end
 
         def primary_dimension_keys_sorted_by_label
-          @primary_dimension_keys_sorted_by_label ||= primary_summaries.sort_by(&:label).map(&:key)
+          @primary_dimension_keys_sorted_by_label ||= primary_summaries.sort_by(&:last).map(&:first)
         end
 
         def primary_keys
