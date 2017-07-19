@@ -6,13 +6,12 @@ module ReportsKit
 
     def initialize(properties, additional_params: nil)
       self.properties = properties.deep_symbolize_keys
-      self.properties = normalize_properties(self.properties)
       self.additional_params = additional_params
     end
 
     def check_box(filter_key, options={})
       filter = validate_filter!(filter_key)
-      checked = filter.properties[:criteria][:operator] == 'true'
+      checked = filter.normalized_properties[:criteria][:operator] == 'true'
       check_box_tag(filter_key, '1', checked, options)
     end
 
@@ -20,7 +19,7 @@ module ReportsKit
       filter = validate_filter!(filter_key)
       defaults = { class: 'form-control input-sm date_range_picker' }
       options = defaults.deep_merge(options)
-      text_field_tag(filter_key, filter.properties[:criteria][:value], options)
+      text_field_tag(filter_key, filter.normalized_properties[:criteria][:value], options)
     end
 
     def multi_autocomplete(filter_key, options={})
@@ -50,7 +49,7 @@ module ReportsKit
       filter = validate_filter!(filter_key)
       defaults = { class: 'form-control input-sm' }
       options = defaults.deep_merge(options)
-      text_field_tag(filter_key, filter.properties[:criteria][:value], options)
+      text_field_tag(filter_key, filter.normalized_properties[:criteria][:value], options)
     end
 
     private
@@ -67,7 +66,7 @@ module ReportsKit
     end
 
     def measure_filters
-      measures.map(&:filters).reduce(&:+)
+      measures.map(&:filters).flatten
     end
 
     def ui_filters
@@ -78,17 +77,7 @@ module ReportsKit
     end
 
     def measures
-      hashes = properties[:measure] ? [properties[:measure]] : properties[:measures]
-      hashes.map do |measure_properties|
-        Reports::Measure.new(measure_properties)
-      end
-    end
-
-    def normalize_properties(properties)
-      properties = properties.dup
-      properties.delete(:measure)
-      properties[:measures] = measures.map(&:normalized_properties)
-      properties
+      Reports::Measure.new_from_properties!(properties, context_record: nil)
     end
   end
 end

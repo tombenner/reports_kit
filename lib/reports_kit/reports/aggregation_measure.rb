@@ -19,8 +19,16 @@ module ReportsKit
         properties[:aggregation]
       end
 
+      def measures
+        @measures ||= Reports::Measure.new_from_properties!(properties, context_record: nil)
+      end
+
+      def filters
+        measures.map(&:filters).flatten
+      end
+
       def primary_measure
-        Measure.new(properties[:measures][0])
+        measures.first
       end
 
       def dimensions

@@ -16,6 +16,10 @@ module ReportsKit
       def label
         key.titleize
       end
+
+      def normalized_properties
+        properties
+      end
     end
   end
 end
