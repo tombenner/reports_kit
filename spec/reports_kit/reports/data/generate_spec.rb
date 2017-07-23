@@ -481,12 +481,12 @@ describe ReportsKit::Reports::Data::Generate do
     end
   end
 
-  describe 'aggregations' do
+  describe 'composite aggregations' do
     context 'with two measures' do
       let(:properties) do
         {
           name: name,
-          aggregation: aggregation,
+          composite_operator: composite_operator,
           measures: [
             {
               key: 'issue',
@@ -516,7 +516,7 @@ describe ReportsKit::Reports::Data::Generate do
       let(:name) { 'My Name' }
 
       context 'with +' do
-        let(:aggregation) { '+' }
+        let(:composite_operator) { '+' }
 
         it 'returns the chart_data' do
           expect(chart_data).to eq({
@@ -532,7 +532,7 @@ describe ReportsKit::Reports::Data::Generate do
       end
 
       context 'with %' do
-        let(:aggregation) { '%' }
+        let(:composite_operator) { '%' }
 
         it 'returns the chart_data' do
           expect(chart_data).to eq({
@@ -548,11 +548,11 @@ describe ReportsKit::Reports::Data::Generate do
       end
 
       context 'with % and a custom value_format_method' do
-        let(:aggregation) { '%' }
+        let(:composite_operator) { '%' }
         let(:properties) do
           {
             name: name,
-            aggregation: aggregation,
+            composite_operator: composite_operator,
             value_format_method: 'format_percentage',
             measures: [
               {
@@ -588,11 +588,11 @@ describe ReportsKit::Reports::Data::Generate do
             create(:issue, locked: false)
           ]
         end
-        let(:aggregation) { '+' }
+        let(:composite_operator) { '+' }
         let(:properties) do
           {
             name: name,
-            aggregation: aggregation,
+            composite_operator: composite_operator,
             measures: [
               {
                 key: 'issue',
@@ -620,13 +620,13 @@ describe ReportsKit::Reports::Data::Generate do
       end
 
 
-      context 'with a nested aggregation' do
+      context 'with a nested composite aggregation' do
         let(:properties) do
           {
             measures: [
               {
                 name: name,
-                aggregation: '+',
+                composite_operator: '+',
                 measures: [
                   {
                     key: 'issue',
@@ -676,7 +676,7 @@ describe ReportsKit::Reports::Data::Generate do
               measures: [
                 {
                   name: name,
-                  aggregation: '+',
+                  composite_operator: '+',
                   measures: [
                     {
                       key: 'issue',
@@ -734,7 +734,7 @@ describe ReportsKit::Reports::Data::Generate do
               measures: [
                 {
                   name: name,
-                  aggregation: '+',
+                  composite_operator: '+',
                   measures: [
                     {
                       key: 'issue',

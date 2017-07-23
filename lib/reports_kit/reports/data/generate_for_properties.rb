@@ -12,12 +12,12 @@ module ReportsKit
         end
 
         def perform
-          if aggregation
+          if composite_operator
             raise ArgumentError.new('Aggregations require at least one measure') if all_measures.length == 0
-            dimension_keys_values = Data::Aggregation.new(properties, context_record: context_record).perform
-            measures_dimension_keys_values = { AggregationMeasure.new(properties) => dimension_keys_values }
-          elsif all_measures.length == 1 && aggregation_measures.length == 1
-            dimension_keys_values = Data::Aggregation.new(aggregation_measures.first.properties, context_record: context_record).perform
+            dimension_keys_values = Data::CompositeAggregation.new(properties, context_record: context_record).perform
+            measures_dimension_keys_values = { CompositeMeasure.new(properties) => dimension_keys_values }
+          elsif all_measures.length == 1 && composite_measures.length == 1
+            dimension_keys_values = Data::CompositeAggregation.new(composite_measures.first.properties, context_record: context_record).perform
             measures_dimension_keys_values = { all_measures.first => dimension_keys_values }
           elsif all_measures.length == 1 && all_measures.first.dimensions.length == 2
             dimension_keys_values = Data::TwoDimensions.new(all_measures.first).perform
@@ -34,8 +34,8 @@ module ReportsKit
 
         private
 
-        def aggregation
-          properties[:aggregation]
+        def composite_operator
+          properties[:composite_operator]
         end
 
         def name
@@ -47,8 +47,8 @@ module ReportsKit
           raise ArgumentError.new('When more than one measures are configured, only one dimension may be used per measure') if multi_dimension_measures_exist
 
           measures_dimension_keys_values = all_measures.map do |measure|
-            if measure.is_a?(AggregationMeasure)
-              dimension_keys_values = Data::Aggregation.new(measure.properties, context_record: context_record).perform
+            if measure.is_a?(CompositeMeasure)
+              dimension_keys_values = Data::CompositeAggregation.new(measure.properties, context_record: context_record).perform
             else
               dimension_keys_values = Data::OneDimension.new(measure).perform
             end
@@ -62,8 +62,8 @@ module ReportsKit
           @all_measures ||= Measure.new_from_properties!(properties, context_record: context_record)
         end
 
-        def aggregation_measures
-          @aggregation_measures ||= all_measures.grep(AggregationMeasure)
+        def composite_measures
+          @composite_measures ||= all_measures.grep(CompositeMeasure)
         end
 
         def measures

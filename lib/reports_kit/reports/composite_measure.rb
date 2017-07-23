@@ -1,6 +1,6 @@
 module ReportsKit
   module Reports
-    class AggregationMeasure < AbstractMeasure
+    class CompositeMeasure < AbstractMeasure
       attr_accessor :properties
 
       def initialize(properties)
@@ -15,8 +15,8 @@ module ReportsKit
         properties[:name]
       end
 
-      def aggregation
-        properties[:aggregation]
+      def composite_operator
+        properties[:composite_operator]
       end
 
       def measures

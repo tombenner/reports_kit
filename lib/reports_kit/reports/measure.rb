@@ -62,8 +62,8 @@ module ReportsKit
         raise ArgumentError.new('At least one measure must be configured') if measure_hashes.blank?
 
         measure_hashes.map do |measure_hash|
-          if measure_hash[:aggregation].present?
-            AggregationMeasure.new(measure_hash)
+          if measure_hash[:composite_operator].present?
+            CompositeMeasure.new(measure_hash)
           else
             new(measure_hash, context_record: context_record)
           end

@@ -57,14 +57,6 @@ module ReportsKit
           dimension_keys.first.is_a?(Array)
         end
 
-        def aggregation
-          properties[:aggregation]
-        end
-
-        def name
-          properties[:name]
-        end
-
         def order
           @order ||= begin
             return Order.parse(properties[:order]) if properties[:order].present?
