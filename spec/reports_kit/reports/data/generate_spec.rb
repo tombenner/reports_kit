@@ -239,6 +239,24 @@ describe ReportsKit::Reports::Data::Generate do
       end
     end
 
+    context 'with a dimension limit' do
+      let(:properties) do
+        {
+          measure: {
+            key: 'issue',
+            dimensions: [{ key: 'repo', limit: 1 }]
+          }
+        }
+      end
+
+      it 'returns the chart_data' do
+        expect(chart_data).to eq({
+          labels: [repo.to_s],
+          datasets: [{ label: 'Issues', data: [2] }]
+        })
+      end
+    end
+
     context 'with a custom aggregation' do
       let(:properties) do
         {
