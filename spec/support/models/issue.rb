@@ -7,6 +7,7 @@ class Issue < ActiveRecord::Base
   has_many :tags
 
   reports_kit do
+    aggregation :average_duration, [:average, REPORTS_KIT_DATABASE_TYPE == :mysql ? 'DATEDIFF(closed_at, opened_at)' : '(closed_at::date - opened_at::date)']
     dimension :titleized_state, group: 'issues.state', key_to_label: -> (state) { state.try(:titleize) }
   end
 end

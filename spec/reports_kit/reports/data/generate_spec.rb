@@ -239,6 +239,33 @@ describe ReportsKit::Reports::Data::Generate do
       end
     end
 
+    context 'with a custom aggregation' do
+      let(:properties) do
+        {
+          measure: {
+            key: 'issue',
+            name: 'Average Durations',
+            aggregation: 'average_duration',
+            dimensions: %w(repo)
+          }
+        }
+      end
+      let!(:issues) do
+        [
+          create(:issue, repo: repo, opened_at: now, closed_at: now),
+          create(:issue, repo: repo, opened_at: now - 2.weeks, closed_at: now),
+          create(:issue, repo: repo2, opened_at: now - 2.weeks, closed_at: now)
+        ]
+      end
+
+      it 'returns the chart_data' do
+        expect(chart_data).to eq({
+          labels: [repo2.to_s, repo.to_s],
+          datasets: [{ label: 'Average Durations', data: [14, 7] }]
+        })
+      end
+    end
+
     context 'with a belongs_to association filter' do
       let(:properties) do
         {
@@ -481,6 +508,34 @@ describe ReportsKit::Reports::Data::Generate do
     end
   end
 
+  context 'with two dimensions' do
+    context 'with a custom aggregation' do
+      let(:properties) do
+        {
+          measure: {
+            key: 'issue',
+            aggregation: 'average_duration',
+            dimensions: %w(repo created_at)
+          }
+        }
+      end
+      let!(:issues) do
+        [
+          create(:issue, repo: repo, opened_at: now, closed_at: now),
+          create(:issue, repo: repo, opened_at: now - 2.weeks, closed_at: now),
+          create(:issue, repo: repo2, opened_at: now - 2.weeks, closed_at: now)
+        ]
+      end
+
+      it 'returns the chart_data' do
+        expect(chart_data).to eq({
+          labels: [repo2.to_s, repo.to_s],
+          datasets: [{ label: format_week_offset(0), data: [14, 7] }]
+        })
+      end
+    end
+  end
+
   describe 'composite aggregations' do
     context 'with two measures' do
       let(:properties) do
@@ -618,7 +673,6 @@ describe ReportsKit::Reports::Data::Generate do
           })
         end
       end
-
 
       context 'with a nested composite aggregation' do
         let(:properties) do

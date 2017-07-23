@@ -9,13 +9,13 @@ require 'support/helpers'
 
 directory = File.dirname(File.absolute_path(__FILE__))
 Dir.glob("#{directory}/factories/*.rb") { |file| require file }
-Dir.glob("#{directory}/support/models/*.rb") { |file| require file }
 
 Time.zone = ActiveSupport::TimeZone.new('UTC')
 ActiveRecord::Base.default_timezone = :utc
 
 if Gem.loaded_specs.has_key?('mysql2')
   REPORTS_KIT_DATABASE_ADAPTER = ReportsKit::Reports::Adapters::Mysql
+  REPORTS_KIT_DATABASE_TYPE = :mysql
   ActiveRecord::Base.establish_connection(
     adapter: 'mysql2',
     host: 'localhost',
@@ -24,6 +24,7 @@ if Gem.loaded_specs.has_key?('mysql2')
   )
 else
   REPORTS_KIT_DATABASE_ADAPTER = ReportsKit::Reports::Adapters::Postgresql
+  REPORTS_KIT_DATABASE_TYPE = :postgresql
   ActiveRecord::Base.establish_connection(
     adapter: 'postgresql',
     host: 'localhost',
@@ -31,6 +32,7 @@ else
     username: 'postgres'
   )
 end
+Dir.glob("#{directory}/support/models/*.rb") { |file| require file }
 require 'support/config'
 require 'support/schema'
 

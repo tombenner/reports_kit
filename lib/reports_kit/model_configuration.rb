@@ -1,11 +1,16 @@
 module ReportsKit
   class ModelConfiguration
-    attr_accessor :dimensions, :filters, :autocomplete_scopes
+    attr_accessor :aggregations, :dimensions, :filters, :autocomplete_scopes
 
     def initialize
+      self.aggregations = []
       self.dimensions = []
       self.filters = []
       self.autocomplete_scopes = []
+    end
+
+    def aggregation(key, expression, properties={})
+      aggregations << { key: key.to_s, expression: expression }.merge(properties).symbolize_keys
     end
 
     def dimension(key, properties)

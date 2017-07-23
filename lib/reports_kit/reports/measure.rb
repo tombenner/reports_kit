@@ -33,7 +33,31 @@ module ReportsKit
       end
 
       def aggregate_function
-        :count
+        aggregation_expression || :count
+      end
+
+      def aggregation_expression
+        return unless aggregation_config
+        expression = aggregation_config[:expression]
+        if expression.is_a?(Array)
+          expression
+        else
+          raise ArgumentError.new("The '#{aggregation_key}' aggregation on the #{model_class} model isn't valid")
+        end
+      end
+
+      def aggregation_key
+        properties[:aggregation]
+      end
+
+      def aggregation_config
+        @aggregation_config ||= begin
+          return unless aggregation_key
+          raise ArgumentError.new("A '#{aggregation_key}' aggregation on the #{model_class} model hasn't been configured") unless model_class.respond_to?(:reports_kit_configuration)
+          config = model_class.reports_kit_configuration.aggregations.find { |aggregation| aggregation[:key] == aggregation_key }
+          raise ArgumentError.new("A '#{aggregation_key}' aggregation on the #{model_class} model hasn't been configured") unless config
+          config
+        end
       end
 
       def base_relation
