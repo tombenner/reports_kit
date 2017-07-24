@@ -69,7 +69,7 @@ In any view, create a chart that shows the number of records of a model (e.g. `u
 
 `app/views/users/index.html.haml`
 ```haml
-= render_report measure: 'user', dimensions: ['created_at']
+= render_report measure: { key: 'user', dimensions: ['created_at'] }
 ```
 
 You're done! `render_report` will render the following chart:
@@ -80,9 +80,10 @@ Instead of passing a hash to `render_report`, you can alternatively configure yo
 
 `config/reports_kit/reports/my_users.yml`
 ```yaml
-measure: user
-dimensions:
-- created_at
+measure:
+  key: user
+  dimensions:
+  - created_at
 ```
 
 `app/views/users/index.html.haml`
@@ -108,7 +109,7 @@ Many other form controls are available; see [Filters](docs/filters.md) for more.
 
 ### How It Works
 
-In the Quick Start chart, `measure: 'user'` tells ReportsKit to count the number of `User` records, and `dimensions: ['created_at']` tells it to group by the week of the `created_at` column. Since `created_at` is a `datetime` column, ReportsKit knows that it should sort the results chronologically.
+In the Quick Start chart, `key: 'user'` tells ReportsKit to count the number of `User` records, and `dimensions: ['created_at']` tells it to group by the week of the `created_at` column. Since `created_at` is a `datetime` column, ReportsKit knows that it should sort the results chronologically.
 
 To learn how to use more of ReportsKit's features, check out the following resources:
 

@@ -15,64 +15,71 @@ end
 You can then use `dimensions: ['carrier']` to count the number of Flights per Carrier:
 
 ```yaml
-measure: flight
-dimensions:
-- carrier
+measure:
+  key: flight
+  dimensions:
+  - carrier
 ```
 [<img src="images/flights_by_carrier.png?raw=true" width="500" />](images/flights_by_carrier.png?raw=true)
 
 You can also use two dimensions:
 
 ```yaml
-measure: flight
-dimensions:
-- carrier
-- flight_at
+measure:
+  key: flight
+  dimensions:
+  - carrier
+  - flight_at
 ```
 [<img src="images/flights_by_carrier_and_flight_at.png?raw=true" width="500" />](images/flights_by_carrier_and_flight_at.png?raw=true)
 
 Dimensions can be configured using a string (`carrier`):
 
 ```yaml
-measure: flight
-dimensions:
-- carrier
+measure:
+  key: flight
+  dimensions:
+  - carrier
 ```
 
 Or, if you need to use options, you can configure them using a hash:
 
 ```yaml
-measure: flight
-dimensions:
-- key: carrier
-  limit: 5
+measure:
+  key: flight
+  dimensions:
+  - key: carrier
+    limit: 5
 ```
 #### Types
 
 ##### Association
 
 ```yaml
-measure: flight
-dimensions:
-- carrier
+measure:
+  key: flight
+  dimensions:
+  - carrier
 ```
 [<img src="images/flights_by_carrier.png?raw=true" width="500" />](images/flights_by_carrier.png?raw=true)
 
 ##### Datetime Column
 
 ```yaml
-measure: flight
-dimensions:
-- flight_at
+measure:
+  key: flight
+  dimensions:
+  - flight_at
 ```
 [<img src="images/flights_by_flight_at.png?raw=true" width="500" />](images/flights_by_flight_at.png?raw=true)
 
 ##### Integer Column
 
 ```yaml
-measure: flight
-dimensions:
-- delay
+measure:
+  key: flight
+  dimensions:
+  - delay
 ```
 [<img src="images/flights_by_delay.png?raw=true" width="500" />](images/flights_by_delay.png?raw=true)
 
@@ -93,9 +100,10 @@ end
 We can then use the `hours_delayed` dimension:
 
 ```yaml
-measure: flight
-dimensions:
-- hours_delayed
+measure:
+  key: flight
+  dimensions:
+  - hours_delayed
 ```
 [<img src="images/flights_by_hours_delayed.png?raw=true" width="500" />](images/flights_by_hours_delayed.png?raw=true)
 
