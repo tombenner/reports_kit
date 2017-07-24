@@ -13,7 +13,7 @@ module ReportsKit
 
     def check_box(filter_key, options={})
       filter = validate_filter!(filter_key)
-      checked = filter.normalized_properties[:criteria][:operator] == 'true'
+      checked = filter.normalized_properties[:criteria][:value] == 'true'
       check_box_tag(filter_key, '1', checked, options)
     end
 

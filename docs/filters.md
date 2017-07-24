@@ -60,7 +60,7 @@ measure:
   filters:
   - key: is_on_time
     criteria:
-      operator: true
+      value: true
 dimensions:
 - carrier
 ```
@@ -139,7 +139,7 @@ measure:
   filters:
   - key: was_delayed
     criteria:
-      operator: true
+      value: true
 dimensions:
 - carrier
 ```

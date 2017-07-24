@@ -153,9 +153,8 @@ module ReportsKit
             value = ui_filters[key.to_sym]
             value ||= ui_filters[ui_key.to_sym] if ui_key
             if value
-              criteria_key = value.in?([true, false]) ? :operator : :value
               filter_properties[:criteria] ||= {}
-              filter_properties[:criteria][criteria_key] = value
+              filter_properties[:criteria][:value] = value
             end
             filter_properties
           end

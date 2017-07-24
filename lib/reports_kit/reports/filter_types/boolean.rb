@@ -3,7 +3,7 @@ module ReportsKit
     module FilterTypes
       class Boolean < Base
         DEFAULT_CRITERIA = {
-          operator: nil
+          value: nil
         }
 
         def apply_conditions(records)
@@ -11,7 +11,7 @@ module ReportsKit
           when ::String
             records.where("(#{conditions}) #{sql_operator} true")
           when ::Hash
-            boolean_operator ? records.where(conditions) : records.not.where(conditions)
+            boolean_value ? records.where(conditions) : records.not.where(conditions)
           when ::Proc
             conditions.call(records)
           else
@@ -19,23 +19,23 @@ module ReportsKit
           end
         end
 
-        def boolean_operator
-          case criteria[:operator]
+        def boolean_value
+          case criteria[:value]
           when true, 'true'
             true
           when false, 'false'
             false
           else
-            raise ArgumentError.new("Unsupported operator: '#{criteria[:operator]}'")
+            raise ArgumentError.new("Unsupported value: '#{criteria[:value]}'")
           end
         end
 
         def sql_operator
-          boolean_operator ? '=' : '!='
+          boolean_value ? '=' : '!='
         end
 
         def valid?
-          criteria[:operator].present?
+          criteria[:value].present?
         end
 
         def conditions
