@@ -616,6 +616,146 @@
   :type: bar
 - :chart_data:
     :labels:
+    - foo/bar1
+    - foo/bar2
+    :datasets:
+    - :label: Labels
+      :data:
+      - 1
+      - 2
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Repo
+        :yAxes:
+        - :ticks:
+            :beginAtZero: true
+          :scaleLabel:
+            :display: true
+            :labelString: Labels
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :maintainAspectRatio: false
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels:
+    - foo/bar2
+    - foo/bar1
+    :datasets:
+    - :label: Labels
+      :data:
+      - 2
+      - 1
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Repo
+        :yAxes:
+        - :ticks:
+            :beginAtZero: true
+          :scaleLabel:
+            :display: true
+            :labelString: Labels
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :maintainAspectRatio: false
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels:
+    - foo/bar1
+    - foo/bar2
+    :datasets:
+    - :label: Labels
+      :data:
+      - 1
+      - 2
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Repo
+        :yAxes:
+        - :ticks:
+            :beginAtZero: true
+          :scaleLabel:
+            :display: true
+            :labelString: Labels
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :maintainAspectRatio: false
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels:
+    - foo/bar2
+    - foo/bar1
+    :datasets:
+    - :label: Labels
+      :data:
+      - 2
+      - 1
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+          :scaleLabel:
+            :display: true
+            :labelString: Repo
+        :yAxes:
+        - :ticks:
+            :beginAtZero: true
+          :scaleLabel:
+            :display: true
+            :labelString: Labels
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :maintainAspectRatio: false
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels:
     - Dec 13, '09
     - Dec 20, '09
     - Dec 27, '09

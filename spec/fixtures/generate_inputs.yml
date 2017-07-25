@@ -108,6 +108,26 @@
     - opened_at
   order: dimension1 desc
 - measure:
+    key: label
+    dimensions:
+    - repo
+  order: 0
+- measure:
+    key: label
+    dimensions:
+    - repo
+  order: 0 desc
+- measure:
+    key: label
+    dimensions:
+    - repo
+  order: 1
+- measure:
+    key: label
+    dimensions:
+    - repo
+  order: 1 desc
+- measure:
     key: issue
     dimensions:
     - key: opened_at

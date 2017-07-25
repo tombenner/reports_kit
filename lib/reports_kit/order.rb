@@ -14,14 +14,16 @@ module ReportsKit
 
     def self.parse(string)
       string ||= ''
-      field_expression, direction = string.split(/\s+/)
+      field_expression, direction = string.to_s.split(/\s+/)
       relation, field = (field_expression || '').split('.')
 
       relation = relation.presence
       field = field.presence
       direction = direction.presence || 'asc'
 
-      raise ArgumentError.new("Invalid relation: #{relation}") unless VALID_RELATIONS.include?(relation)
+      relation = relation.to_i if relation =~ /^\d+$/
+
+      raise ArgumentError.new("Invalid relation: #{relation}") unless VALID_RELATIONS.include?(relation) || relation.is_a?(Fixnum)
       raise ArgumentError.new("Invalid field: #{field}") unless VALID_FIELDS.include?(field)
       raise ArgumentError.new("Invalid direction: #{direction}") unless VALID_DIRECTIONS.include?(direction)
 

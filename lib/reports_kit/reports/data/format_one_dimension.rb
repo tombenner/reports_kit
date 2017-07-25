@@ -79,11 +79,21 @@ module ReportsKit
                 sorted_dimension_keys_values = sorted_dimension_keys_values.reverse if order.direction == 'desc'
                 [measure, Hash[sorted_dimension_keys_values]]
               end
-            elsif order.relation == 'dimension1' && order.field.nil?
+            elsif (order.relation == 'dimension1' && order.field.nil?) || (order.relation == 0)
               sorted_measures_results = measures_results.map do |measure, dimension_keys_values|
                 sorted_dimension_keys_values = dimension_keys_values.sort_by(&:first)
                 sorted_dimension_keys_values = sorted_dimension_keys_values.reverse if order.direction == 'desc'
                 [measure, Hash[sorted_dimension_keys_values]]
+              end
+            elsif order.relation.is_a?(Fixnum)
+              measure_index = order.relation - 1
+              raise ArgumentError.new("Invalid order column: #{order.relation}") unless measure_index.in?((0..(measures_results.length - 1)))
+              dimension_keys_values = measures_results.values.to_a[measure_index]
+              sorted_dimension_keys = dimension_keys_values.sort_by(&:last).map(&:first)
+              sorted_dimension_keys = sorted_dimension_keys.reverse if order.direction == 'desc'
+              sorted_measures_results = measures_results.map do |measure, dimension_keys_values|
+                dimension_keys_values = dimension_keys_values.sort_by { |dimension_key, _| sorted_dimension_keys.index(dimension_key) }
+                [measure, Hash[dimension_keys_values]]
               end
             elsif order.relation == 'count'
               dimension_keys_sums = Hash.new(0)
