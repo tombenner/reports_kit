@@ -4,10 +4,12 @@ module ReportsKit
       attr_accessor :properties, :dimensions, :filters, :context_record
 
       def initialize(properties, context_record: nil)
-        properties = properties.dup
-        properties = { key: properties } if properties.is_a?(String)
+        properties = { measure: properties } if properties.is_a?(String)
+        properties = properties.deep_symbolize_keys.dup
+        measure_properties = properties[:measure]
+        properties[:measure] = measure_properties
+        properties[:measure] = { key: properties[:measure] } if properties[:measure].is_a?(String)
         raise ArgumentError.new("Measure properties must be a String or Hash, not a #{properties.class.name}: #{properties.inspect}") unless properties.is_a?(Hash)
-        properties = properties.deep_symbolize_keys
 
         dimension_hashes = properties[:dimensions] || []
         dimension_hashes = dimension_hashes.values if dimension_hashes.is_a?(Hash) && dimension_hashes.key?(:'0')
@@ -21,11 +23,11 @@ module ReportsKit
       end
 
       def key
-        properties[:key].underscore
+        properties[:measure][:key].underscore
       end
 
       def label
-        properties[:name].presence || key.pluralize.titleize
+        properties[:measure][:name].presence || key.pluralize.titleize
       end
 
       def relation_name
@@ -47,7 +49,7 @@ module ReportsKit
       end
 
       def aggregation_key
-        properties[:aggregation]
+        properties[:measure][:aggregation]
       end
 
       def aggregation_config
@@ -82,7 +84,8 @@ module ReportsKit
       end
 
       def self.new_from_properties!(properties, context_record:)
-        measure_hashes = [properties[:measure]].compact + Array(properties[:measures])
+        measure_hashes = properties[:series].presence || properties.slice(:measure, :dimensions, :filters)
+        measure_hashes = [measure_hashes] if measure_hashes.is_a?(Hash)
         raise ArgumentError.new('At least one measure must be configured') if measure_hashes.blank?
 
         measure_hashes.map do |measure_hash|

@@ -162,14 +162,16 @@ module ReportsKit
         end
 
         def self.normalize_properties(properties, ui_filters: nil)
+          can_have_nesting = properties[:composite_operator].present? || properties[:series].is_a?(Array)
           ui_filters ||= properties[:ui_filters]
           properties = properties.dup
-          properties[:measures] = [properties.delete(:measure)] if properties[:measure]
-          return properties if ui_filters.blank? || properties[:measures].blank?
-          properties[:measures] = properties[:measures].map do |measure_properties|
-            measure_properties = normalize_properties(measure_properties, ui_filters: ui_filters)
-            next(measure_properties) if measure_properties[:filters].blank?
-            normalize_filters(measure_properties, ui_filters)
+          properties[:series] ||= properties.slice(:measure, :dimensions, :filters).presence
+          properties[:series] = [properties[:series]] if properties[:series].is_a?(Hash) && properties[:series].present?
+          return properties if ui_filters.blank? || properties[:series].blank?
+          properties[:series] = properties[:series].map do |series_properties|
+            series_properties = normalize_properties(series_properties, ui_filters: ui_filters) if can_have_nesting
+            next(series_properties) if series_properties[:filters].blank?
+            normalize_filters(series_properties, ui_filters)
           end
           properties
         end

@@ -24,10 +24,8 @@ describe ReportsKit::Reports::Data::Generate do
     context 'with default granularity' do
       let(:properties) do
         {
-          measure: {
-            key: 'issue',
-            dimensions: %w(opened_at)
-          }
+          measure: 'issue',
+          dimensions: %w(opened_at)
         }
       end
       let!(:issues) do
@@ -61,19 +59,17 @@ describe ReportsKit::Reports::Data::Generate do
       context 'with a datetime filter' do
         let(:properties) do
           {
-            measure: {
-              key: 'issue',
-              filters: [
-                {
-                  key: 'opened_at',
-                  criteria: {
-                    operator: 'between',
-                    value: "#{format_criteria_time(now - 1.week)} - #{format_criteria_time(now)}"
-                  }
+            measure: 'issue',
+            filters: [
+              {
+                key: 'opened_at',
+                criteria: {
+                  operator: 'between',
+                  value: "#{format_criteria_time(now - 1.week)} - #{format_criteria_time(now)}"
                 }
-              ],
-              dimensions: %w(opened_at)
-            }
+              }
+            ],
+            dimensions: %w(opened_at)
           }
         end
 
@@ -92,19 +88,17 @@ describe ReportsKit::Reports::Data::Generate do
         context 'with zero results' do
           let(:properties) do
             {
-              measure: {
-                key: 'tag',
-                filters: [
-                  {
-                    key: 'created_at',
-                    criteria: {
-                      operator: 'between',
-                      value: "#{format_criteria_time(now - 1.week)} - #{format_criteria_time(now)}"
-                    }
+              measure: 'tag',
+              filters: [
+                {
+                  key: 'created_at',
+                  criteria: {
+                    operator: 'between',
+                    value: "#{format_criteria_time(now - 1.week)} - #{format_criteria_time(now)}"
                   }
-                ],
-                dimensions: %w(created_at)
-              }
+                }
+              ],
+              dimensions: %w(created_at)
             }
           end
 
@@ -133,14 +127,14 @@ describe ReportsKit::Reports::Data::Generate do
           end
           let(:properties) do
             {
-              measures: [
+              series: [
                 {
-                  key: 'issue',
+                  measure: 'issue',
                   filters: %w(opened_at),
                   dimensions: %w(opened_at)
                 },
                 {
-                  key: 'tag',
+                  measure: 'tag',
                   filters: %w(created_at),
                   dimensions: %w(created_at)
                 }
@@ -173,10 +167,8 @@ describe ReportsKit::Reports::Data::Generate do
     context 'with day granularity' do
       let(:properties) do
         {
-          measure: {
-            key: 'issue',
-            dimensions: [{ key: 'opened_at', granularity: 'day' }]
-          }
+          measure: 'issue',
+          dimensions: [{ key: 'opened_at', granularity: 'day' }]
         }
       end
       let!(:issues) do
@@ -207,10 +199,8 @@ describe ReportsKit::Reports::Data::Generate do
   context 'with an association dimension' do
     let(:properties) do
       {
-        measure: {
-          key: 'issue',
-          dimensions: %w(repo)
-        }
+        measure: 'issue',
+        dimensions: %w(repo)
       }
     end
     let!(:issues) do
@@ -242,10 +232,8 @@ describe ReportsKit::Reports::Data::Generate do
     context 'with a dimension limit' do
       let(:properties) do
         {
-          measure: {
-            key: 'issue',
-            dimensions: [{ key: 'repo', limit: 1 }]
-          }
+          measure: 'issue',
+          dimensions: [{ key: 'repo', limit: 1 }]
         }
       end
 
@@ -263,9 +251,9 @@ describe ReportsKit::Reports::Data::Generate do
           measure: {
             key: 'issue',
             name: 'Average Durations',
-            aggregation: 'average_duration',
-            dimensions: %w(repo)
-          }
+            aggregation: 'average_duration'
+          },
+          dimensions: %w(repo)
         }
       end
       let!(:issues) do
@@ -287,19 +275,17 @@ describe ReportsKit::Reports::Data::Generate do
     context 'with a belongs_to association filter' do
       let(:properties) do
         {
-          measure: {
-            key: 'issue',
-            filters: [
-              {
-                key: 'repo',
-                criteria: {
-                  operator: 'include',
-                  value: [repo.id]
-                }
+          measure: 'issue',
+          filters: [
+            {
+              key: 'repo',
+              criteria: {
+                operator: 'include',
+                value: [repo.id]
               }
-            ],
-            dimensions: %w(repo)
-          }
+            }
+          ],
+          dimensions: %w(repo)
         }
       end
 
@@ -314,19 +300,17 @@ describe ReportsKit::Reports::Data::Generate do
     context 'with a has_many association filter' do
       let(:properties) do
         {
-          measure: {
-            key: 'issue',
-            filters: [
-              {
-                key: 'tags',
-                criteria: {
-                  operator: 'include',
-                  value: [tag.id]
-                }
+          measure: 'issue',
+          filters: [
+            {
+              key: 'tags',
+              criteria: {
+                operator: 'include',
+                value: [tag.id]
               }
-            ],
-            dimensions: %w(repo)
-          }
+            }
+          ],
+          dimensions: %w(repo)
         }
       end
       let(:tag) { create(:tag) }
@@ -346,19 +330,17 @@ describe ReportsKit::Reports::Data::Generate do
     context 'with a has_many :through association filter' do
       let(:properties) do
         {
-          measure: {
-            key: 'issue',
-            filters: [
-              {
-                key: 'labels',
-                criteria: {
-                  operator: 'include',
-                  value: [label.id]
-                }
+          measure: 'issue',
+          filters: [
+            {
+              key: 'labels',
+              criteria: {
+                operator: 'include',
+                value: [label.id]
               }
-            ],
-            dimensions: %w(repo)
-          }
+            }
+          ],
+          dimensions: %w(repo)
         }
       end
       let(:label) { create(:label) }
@@ -378,10 +360,8 @@ describe ReportsKit::Reports::Data::Generate do
   context 'with a boolean dimension' do
     let(:properties) do
       {
-        measure: {
-          key: 'issue',
-          dimensions: %w(locked)
-        }
+        measure: 'issue',
+        dimensions: %w(locked)
       }
     end
     let!(:issues) do
@@ -403,13 +383,11 @@ describe ReportsKit::Reports::Data::Generate do
   context 'with datetime and association dimensions' do
     let(:properties) do
       {
-        measure: {
-          key: 'issue',
-          dimensions: [
-            { key: 'opened_at', label: nil },
-            { key: 'repo' }
-          ]
-        }
+        measure: 'issue',
+        dimensions: [
+          { key: 'opened_at', label: nil },
+          { key: 'repo' }
+        ]
       }
     end
     let!(:issues) do
@@ -473,15 +451,15 @@ describe ReportsKit::Reports::Data::Generate do
   context 'with two measures' do
     let(:properties) do
       {
-        measures: [
+        series: [
           {
-            key: 'issue',
+            measure: 'issue',
             dimensions: [{ key: 'created_at', label: nil }]
           },
           {
-            key: 'tag',
+            measure: 'tag',
             dimensions: %w(created_at)
-          },
+          }
         ]
       }
     end
@@ -535,9 +513,9 @@ describe ReportsKit::Reports::Data::Generate do
         {
           measure: {
             key: 'issue',
-            aggregation: 'average_duration',
-            dimensions: %w(repo created_at)
-          }
+            aggregation: 'average_duration'
+          },
+          dimensions: %w(repo created_at)
         }
       end
       let!(:issues) do
@@ -563,13 +541,13 @@ describe ReportsKit::Reports::Data::Generate do
         {
           name: name,
           composite_operator: composite_operator,
-          measures: [
+          series: [
             {
-              key: 'issue',
+              measure: 'issue',
               dimensions: %w(created_at)
             },
             {
-              key: 'tag',
+              measure: 'tag',
               dimensions: %w(created_at)
             }
           ]
@@ -630,13 +608,13 @@ describe ReportsKit::Reports::Data::Generate do
             name: name,
             composite_operator: composite_operator,
             value_format_method: 'format_percentage',
-            measures: [
+            series: [
               {
-                key: 'issue',
+                measure: 'issue',
                 dimensions: %w(created_at)
               },
               {
-                key: 'tag',
+                measure: 'tag',
                 dimensions: %w(created_at)
               }
             ]
@@ -669,13 +647,13 @@ describe ReportsKit::Reports::Data::Generate do
           {
             name: name,
             composite_operator: composite_operator,
-            measures: [
+            series: [
               {
-                key: 'issue',
+                measure: 'issue',
                 dimensions: %w(locked)
               },
               {
-                key: 'issue',
+                measure: 'issue',
                 dimensions: %w(locked)
               }
             ]
@@ -698,27 +676,27 @@ describe ReportsKit::Reports::Data::Generate do
       context 'with a nested composite aggregation' do
         let(:properties) do
           {
-            measures: [
+            series: [
               {
                 name: name,
                 composite_operator: '+',
-                measures: [
+                series: [
                   {
-                    key: 'issue',
+                    measure: 'issue',
                     dimensions: %w(created_at)
                   },
                   {
-                    key: 'tag',
+                    measure: 'tag',
                     dimensions: %w(created_at)
                   }
                 ]
               },
               {
-                key: 'issue',
+                measure: 'issue',
                 dimensions: %w(created_at)
               },
               {
-                key: 'tag',
+                measure: 'tag',
                 dimensions: %w(created_at)
               }
             ]
@@ -748,30 +726,30 @@ describe ReportsKit::Reports::Data::Generate do
         context 'with ui_filters' do
           let(:properties) do
             {
-              measures: [
+              series: [
                 {
                   name: name,
                   composite_operator: '+',
-                  measures: [
+                  series: [
                     {
-                      key: 'issue',
+                      measure: 'issue',
                       filters: %w(created_at),
                       dimensions: %w(created_at)
                     },
                     {
-                      key: 'tag',
+                      measure: 'tag',
                       filters: %w(created_at),
                       dimensions: %w(created_at)
                     }
                   ]
                 },
                 {
-                  key: 'issue',
+                  measure: 'issue',
                   filters: %w(created_at),
                   dimensions: %w(created_at)
                 },
                 {
-                  key: 'tag',
+                  measure: 'tag',
                   filters: %w(created_at),
                   dimensions: %w(created_at)
                 }
@@ -806,17 +784,17 @@ describe ReportsKit::Reports::Data::Generate do
         context 'with two dimensions' do
           let(:properties) do
             {
-              measures: [
+              series: [
                 {
                   name: name,
                   composite_operator: '+',
-                  measures: [
+                  series: [
                     {
-                      key: 'issue',
+                      measure: 'issue',
                       dimensions: %w(created_at repo)
                     },
                     {
-                      key: 'tag',
+                      measure: 'tag',
                       dimensions: %w(created_at repo)
                     }
                   ]

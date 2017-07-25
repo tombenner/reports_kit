@@ -6,18 +6,16 @@ describe ReportsKit::ReportBuilder do
   context 'with a datetime dimension' do
     let(:properties) do
       {
-        measure: {
-          key: 'issue',
-          filters: [
-            {
-              key: 'opened_at',
-              criteria: {
-                operator: 'between',
-                value: '-1w - now'
-              }
+        measure: 'issue',
+        filters: [
+          {
+            key: 'opened_at',
+            criteria: {
+              operator: 'between',
+              value: '-1w - now'
             }
-          ]
-        }
+          }
+        ]
       }
     end
 

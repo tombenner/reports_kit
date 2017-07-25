@@ -1,164 +1,166 @@
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - repo
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - repo
   chart:
     options:
       foo: bar
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - repo
   chart:
     foo: bar
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - repo
   chart:
     type: pie
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - key: repo
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - key: opened_at
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - key: opened_at
     - key: repo
-- measure:
-    key: issue
+- series:
+    measure: issue
     filters:
     - key: locked
     - key: title
     - key: opened_at
     dimensions:
     - key: repo
-- measures:
-  - key: issue
+- series:
+  - measure: issue
     dimensions:
     - repo
-  - key: label
+  - measure: label
     dimensions:
     - repo
-- measures:
-  - key: issue
+- series:
+  - measure: issue
     dimensions:
     - repo
-  - key: label
+  - measure: label
     dimensions:
     - repo
-  - key: tag
+  - measure: tag
     dimensions:
     - repo
-- measures:
-  - key: issue
-    name: Repo Issues
+- series:
+  - measure:
+      key: issue
+      name: Repo Issues
     dimensions:
     - repo
-  - key: label
+  - measure: label
     dimensions:
     - repo
-- measures:
-  - key: issue
-    name: Repo Issues
+- series:
+  - measure:
+      key: issue
+      name: Repo Issues
     dimensions:
     - key: repo
       label:
-  - key: label
+  - measure: label
     dimensions:
     - repo
   format: table
-- measure:
-    key: label
+- series:
+    measure: label
     dimensions:
     - repo
   order: dimension1.label
-- measure:
-    key: label
+- series:
+    measure: label
     dimensions:
     - repo
   order: dimension1.label desc
-- measure:
-    key: label
+- series:
+    measure: label
     dimensions:
     - repo
   order: count
-- measure:
-    key: label
+- series:
+    measure: label
     dimensions:
     - repo
   order: count desc
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - opened_at
   order: dimension1
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - opened_at
   order: dimension1 desc
-- measure:
-    key: label
+- series:
+    measure: label
     dimensions:
     - repo
   order: 0
-- measure:
-    key: label
+- series:
+    measure: label
     dimensions:
     - repo
   order: 0 desc
-- measure:
-    key: label
+- series:
+    measure: label
     dimensions:
     - repo
   order: 1
-- measure:
-    key: label
+- series:
+    measure: label
     dimensions:
     - repo
   order: 1 desc
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - key: opened_at
     - key: repo
   order: dimension1
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - key: opened_at
     - key: repo
   order: dimension1 desc
-- measure:
-    key: label
+- series:
+    measure: label
     dimensions:
     - key: repo
     - key: created_at
   order: dimension1.label
-- measure:
-    key: label
+- series:
+    measure: label
     dimensions:
     - key: repo
     - key: created_at
   order: dimension1.label desc
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - key: opened_at
     - key: repo
   order: count
-- measure:
-    key: issue
+- series:
+    measure: issue
     dimensions:
     - key: opened_at
     - key: repo
