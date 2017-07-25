@@ -71,7 +71,8 @@
   - key: issue
     name: Repo Issues
     dimensions:
-    - repo
+    - key: repo
+      label:
   - key: label
     dimensions:
     - repo

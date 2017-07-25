@@ -405,7 +405,10 @@ describe ReportsKit::Reports::Data::Generate do
       {
         measure: {
           key: 'issue',
-          dimensions: %w(opened_at repo)
+          dimensions: [
+            { key: 'opened_at', label: nil },
+            { key: 'repo' }
+          ]
         }
       }
     end
@@ -473,7 +476,7 @@ describe ReportsKit::Reports::Data::Generate do
         measures: [
           {
             key: 'issue',
-            dimensions: %w(created_at)
+            dimensions: [{ key: 'created_at', label: nil }]
           },
           {
             key: 'tag',

@@ -16,7 +16,7 @@ module ReportsKit
       end
 
       def label
-        key.titleize
+        properties.key?(:label) ? properties[:label] : key.titleize
       end
     end
   end
