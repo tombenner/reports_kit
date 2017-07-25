@@ -82,7 +82,7 @@ module ReportsKit
         end
 
         def format_table(data)
-          column_names = [nil]
+          column_names = [primary_dimension.label]
           column_values = []
           data[:datasets].each do |dataset|
             column_names << dataset[:label]

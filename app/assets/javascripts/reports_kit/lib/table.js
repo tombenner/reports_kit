@@ -23,7 +23,14 @@ ReportsKit.Table = (function(options) {
 
       var html = '';
       for(var i = 0; i < tableData.length; i++) {
-        html += '<tr>';
+        if (i == 0) {
+          html += '<thead><tr>';
+        } else if (i == 1) {
+          html += '<tbody><tr>';
+        } else {
+          html += '<tr>';
+        }
+
         for(var j = 0; j < tableData[i].length; j++) {
           if (i == 0 || j == 0) {
             html += '<th>' + (tableData[i][j] || '') + '</th>';
@@ -31,9 +38,17 @@ ReportsKit.Table = (function(options) {
             html += '<td>' + tableData[i][j] + '</td>';
           }
         }
-        html += '</tr>';
+
+        if (i == 0) {
+          html += '</tr></thead>';
+        } else if (i == tableData.length) {
+          html += '</tr></tbody>';
+        } else {
+          html += '</tr>';
+        }
       }
       self.table.html(html);
+      self.table.tablesorter();
     });
   };
 
