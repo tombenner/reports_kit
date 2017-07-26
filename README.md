@@ -108,7 +108,7 @@ Many other form controls are available; see [Filters](docs/filters.md) for more.
 
 ### How It Works
 
-In the Quick Start chart, `key: 'user'` tells ReportsKit to count the number of `User` records, and `dimensions: ['created_at']` tells it to group by the week of the `created_at` column. Since `created_at` is a `datetime` column, ReportsKit knows that it should sort the results chronologically.
+In the Quick Start chart, `measure: 'user'` tells ReportsKit to count the number of `User` records, and `dimensions: ['created_at']` tells it to group by the week of the `created_at` column. Since `created_at` is a `datetime` column, ReportsKit knows that it should sort the results chronologically.
 
 To learn how to use more of ReportsKit's features, check out the following resources:
 
