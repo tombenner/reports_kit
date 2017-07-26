@@ -2,6 +2,8 @@ module ReportsKit
   module Reports
     module FilterTypes
       class Number < Base
+        DEFAULT_CRITERIA = {}
+
         def apply_conditions(records)
           case criteria[:operator]
           when '>'
