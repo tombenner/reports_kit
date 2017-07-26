@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe ReportsKit::Reports::FilterWithMeasure do
-  subject { described_class.new(filter: filter, measure: measure) }
+describe ReportsKit::Reports::FilterWithSeries do
+  subject { described_class.new(filter: filter, series: series) }
   let(:filter) { ReportsKit::Reports::Filter.new(properties) }
-  let(:measure) { ReportsKit::Reports::Measure.new(measure: 'issue', dimensions: %w(repo)) }
+  let(:series) { ReportsKit::Reports::Series.new(measure: 'issue', dimensions: %w(repo)) }
 
   context 'with a datetime filter' do
     let(:properties) { 'opened_at' }

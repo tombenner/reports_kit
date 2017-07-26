@@ -13,23 +13,23 @@ module ReportsKit
 
         def perform
           if composite_operator
-            raise ArgumentError.new('Aggregations require at least one measure') if all_measures.length == 0
+            raise ArgumentError.new('Aggregations require at least one series') if all_serieses.length == 0
             dimension_keys_values = Data::CompositeAggregation.new(properties, context_record: context_record).perform
-            measures_dimension_keys_values = { CompositeMeasure.new(properties) => dimension_keys_values }
-          elsif all_measures.length == 1 && composite_measures.length == 1
-            dimension_keys_values = Data::CompositeAggregation.new(composite_measures.first.properties, context_record: context_record).perform
-            measures_dimension_keys_values = { all_measures.first => dimension_keys_values }
-          elsif all_measures.length == 1 && all_measures.first.dimensions.length == 2
-            dimension_keys_values = Data::TwoDimensions.new(all_measures.first).perform
-            measures_dimension_keys_values = { all_measures.first => dimension_keys_values }
-            measures_dimension_keys_values = Data::PopulateTwoDimensions.new(measures_dimension_keys_values).perform
-          elsif all_measures.length > 0
-            measures_dimension_keys_values = measures_dimension_keys_values_for_one_dimension
+            serieses_dimension_keys_values = { CompositeSeries.new(properties) => dimension_keys_values }
+          elsif all_serieses.length == 1 && composite_serieses.length == 1
+            dimension_keys_values = Data::CompositeAggregation.new(composite_serieses.first.properties, context_record: context_record).perform
+            serieses_dimension_keys_values = { all_serieses.first => dimension_keys_values }
+          elsif all_serieses.length == 1 && all_serieses.first.dimensions.length == 2
+            dimension_keys_values = Data::TwoDimensions.new(all_serieses.first).perform
+            serieses_dimension_keys_values = { all_serieses.first => dimension_keys_values }
+            serieses_dimension_keys_values = Data::PopulateTwoDimensions.new(serieses_dimension_keys_values).perform
+          elsif all_serieses.length > 0
+            serieses_dimension_keys_values = serieses_dimension_keys_values_for_one_dimension
           else
             raise ArgumentError.new('The configuration of measurse and dimensions is invalid')
           end
 
-          measures_dimension_keys_values
+          serieses_dimension_keys_values
         end
 
         private
@@ -42,32 +42,32 @@ module ReportsKit
           properties[:name]
         end
 
-        def measures_dimension_keys_values_for_one_dimension
-          multi_dimension_measures_exist = all_measures.any? { |measure| measure.dimensions.length > 1 }
-          raise ArgumentError.new('When more than one measures are configured, only one dimension may be used per measure') if multi_dimension_measures_exist
+        def serieses_dimension_keys_values_for_one_dimension
+          multi_dimension_serieses_exist = all_serieses.any? { |series| series.dimensions.length > 1 }
+          raise ArgumentError.new('When more than one series are configured, only one dimension may be used per series') if multi_dimension_serieses_exist
 
-          measures_dimension_keys_values = all_measures.map do |measure|
-            if measure.is_a?(CompositeMeasure)
-              dimension_keys_values = Data::CompositeAggregation.new(measure.properties, context_record: context_record).perform
+          serieses_dimension_keys_values = all_serieses.map do |series|
+            if series.is_a?(CompositeSeries)
+              dimension_keys_values = Data::CompositeAggregation.new(series.properties, context_record: context_record).perform
             else
-              dimension_keys_values = Data::OneDimension.new(measure).perform
+              dimension_keys_values = Data::OneDimension.new(series).perform
             end
-            [measure, dimension_keys_values]
+            [series, dimension_keys_values]
           end
-          measures_dimension_keys_values = Hash[measures_dimension_keys_values]
-          Data::PopulateOneDimension.new(measures_dimension_keys_values).perform
+          serieses_dimension_keys_values = Hash[serieses_dimension_keys_values]
+          Data::PopulateOneDimension.new(serieses_dimension_keys_values).perform
         end
 
-        def all_measures
-          @all_measures ||= Measure.new_from_properties!(properties, context_record: context_record)
+        def all_serieses
+          @all_serieses ||= Series.new_from_properties!(properties, context_record: context_record)
         end
 
-        def composite_measures
-          @composite_measures ||= all_measures.grep(CompositeMeasure)
+        def composite_serieses
+          @composite_serieses ||= all_serieses.grep(CompositeSeries)
         end
 
-        def measures
-          @measures ||= all_measures.grep(Measure)
+        def serieses
+          @serieses ||= all_serieses.grep(Series)
         end
       end
     end

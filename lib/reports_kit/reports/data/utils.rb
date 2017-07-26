@@ -32,7 +32,7 @@ module ReportsKit
 
         def self.populate_sparse_hash(hash, dimension:)
           keys = hash.keys
-          is_nested = dimension.measure.has_two_dimensions?
+          is_nested = dimension.series.has_two_dimensions?
           if is_nested
             keys_values = arrays_values_to_nested_hash(hash)
             keys = keys_values.keys
@@ -145,8 +145,8 @@ module ReportsKit
           Value.new(raw_value, formatted_value)
         end
 
-        def self.normalize_filters(measure_properties, ui_filters)
-          measure_properties[:filters] = measure_properties[:filters].map do |filter_properties|
+        def self.normalize_filters(series_properties, ui_filters)
+          series_properties[:filters] = series_properties[:filters].map do |filter_properties|
             filter_properties = { key: filter_properties } if filter_properties.is_a?(String)
             key = filter_properties[:key]
             ui_key = filter_properties[:ui_key]
@@ -158,7 +158,7 @@ module ReportsKit
             end
             filter_properties
           end
-          measure_properties
+          series_properties
         end
 
         def self.normalize_properties(properties, ui_filters: nil)

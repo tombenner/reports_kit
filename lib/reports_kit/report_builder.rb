@@ -28,9 +28,9 @@ module ReportsKit
 
     def multi_autocomplete(filter_key, options={})
       validate_filter!(filter_key)
-      filter = measure_filters.find { |f| f.key == filter_key.to_s }
+      filter = series_filters.find { |f| f.key == filter_key.to_s }
       reports_kit_path = Rails.application.routes.url_helpers.reports_kit_path
-      path = "#{reports_kit_path}reports_kit/resources/measures/#{filter.measure.key}/filters/#{filter_key}/autocomplete?"
+      path = "#{reports_kit_path}reports_kit/resources/measures/#{filter.series.key}/filters/#{filter_key}/autocomplete?"
       path += additional_params.to_query if additional_params.present?
       scope = options.delete(:scope)
       params = {}
@@ -66,11 +66,11 @@ module ReportsKit
     end
 
     def filters
-      ui_filters + measure_filters
+      ui_filters + series_filters
     end
 
-    def measure_filters
-      measures.map(&:filters).flatten
+    def series_filters
+      serieses.map(&:filters).flatten
     end
 
     def ui_filters
@@ -80,8 +80,8 @@ module ReportsKit
       end
     end
 
-    def measures
-      Reports::Measure.new_from_properties!(properties, context_record: nil)
+    def serieses
+      Reports::Series.new_from_properties!(properties, context_record: nil)
     end
 
     def default_date_range_value

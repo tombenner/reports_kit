@@ -2,12 +2,12 @@ module ReportsKit
   module Reports
     module Data
       class TwoDimensions
-        attr_accessor :measure, :dimension, :second_dimension
+        attr_accessor :series, :dimension, :second_dimension
 
-        def initialize(measure)
-          self.measure = measure
-          self.dimension = measure.dimensions[0]
-          self.second_dimension = measure.dimensions[1]
+        def initialize(series)
+          self.series = series
+          self.dimension = series.dimensions[0]
+          self.second_dimension = series.dimensions[1]
         end
 
         def perform
@@ -17,12 +17,12 @@ module ReportsKit
         private
 
         def dimension_keys_values
-          relation = measure.filtered_relation
+          relation = series.filtered_relation
           relation = relation.group(dimension.group_expression, second_dimension.group_expression)
           relation = relation.joins(dimension.joins) if dimension.joins
           relation = relation.joins(second_dimension.joins) if second_dimension.joins
           relation = relation.order(order)
-          dimension_keys_values = relation.distinct.public_send(*measure.aggregate_function)
+          dimension_keys_values = relation.distinct.public_send(*series.aggregate_function)
           dimension_keys_values = Utils.populate_sparse_hash(dimension_keys_values, dimension: dimension)
           dimension_keys_values.delete(nil)
           dimension_keys_values.delete('')

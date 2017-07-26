@@ -38,15 +38,15 @@ require 'reports_kit/reports/filter_types/number'
 require 'reports_kit/reports/filter_types/records'
 require 'reports_kit/reports/filter_types/string'
 
-require 'reports_kit/reports/abstract_measure'
-require 'reports_kit/reports/composite_measure'
+require 'reports_kit/reports/abstract_series'
+require 'reports_kit/reports/composite_series'
 require 'reports_kit/reports/dimension'
-require 'reports_kit/reports/dimension_with_measure'
+require 'reports_kit/reports/dimension_with_series'
 require 'reports_kit/reports/filter'
-require 'reports_kit/reports/filter_with_measure'
+require 'reports_kit/reports/filter_with_series'
 require 'reports_kit/reports/generate_autocomplete_results'
 require 'reports_kit/reports/inferrable_configuration'
-require 'reports_kit/reports/measure'
+require 'reports_kit/reports/series'
 
 module ReportsKit
   def self.configure

@@ -17,9 +17,9 @@ module ReportsKit
           return data if data
 
           if two_dimensions?
-            raw_data = Data::FormatTwoDimensions.new(measures.first, measures_results.first.last, order: order).perform
+            raw_data = Data::FormatTwoDimensions.new(serieses.first, serieses_results.first.last, order: order).perform
           else
-            raw_data = Data::FormatOneDimension.new(measures_results, order: order).perform
+            raw_data = Data::FormatOneDimension.new(serieses_results, order: order).perform
           end
           raw_data = data_format_method.call(raw_data) if data_format_method
           chart_data = format_chart_data(raw_data)
@@ -48,12 +48,12 @@ module ReportsKit
           chart_data
         end
 
-        def measures_results
-          @measures_results ||= GenerateForProperties.new(properties, context_record: context_record).perform
+        def serieses_results
+          @serieses_results ||= GenerateForProperties.new(properties, context_record: context_record).perform
         end
 
         def two_dimensions?
-          dimension_keys = measures_results.first.last.keys
+          dimension_keys = serieses_results.first.last.keys
           dimension_keys.first.is_a?(Array)
         end
 
@@ -69,8 +69,8 @@ module ReportsKit
           Order.new('count', nil, 'desc')
         end
 
-        def measures
-          @measures ||= Measure.new_from_properties!(properties, context_record: context_record)
+        def serieses
+          @serieses ||= Series.new_from_properties!(properties, context_record: context_record)
         end
 
         def data_format_method
@@ -97,13 +97,13 @@ module ReportsKit
         end
 
         def primary_dimension
-          measures.first.dimensions.first
+          serieses.first.dimensions.first
         end
 
         def inferred_options
           {
             x_axis_label: primary_dimension.label,
-            y_axis_label: measures.length == 1 ? measures.first.label : nil
+            y_axis_label: serieses.length == 1 ? serieses.first.label : nil
           }
         end
       end

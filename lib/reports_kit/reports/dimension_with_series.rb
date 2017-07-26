@@ -1,6 +1,6 @@
 module ReportsKit
   module Reports
-    class DimensionWithMeasure
+    class DimensionWithSeries
       DEFAULT_DIMENSION_INSTANCES_LIMIT = 30
       DEFAULT_GRANULARITY = 'week'
       VALID_GRANULARITIES = %w(day week).freeze
@@ -9,16 +9,16 @@ module ReportsKit
         'postgresql' => Adapters::Postgresql
       }.freeze
 
-      attr_accessor :dimension, :measure, :configuration
+      attr_accessor :dimension, :series, :configuration
 
       delegate :key, :properties, :label, to: :dimension
       delegate :configured_by_association?, :configured_by_column?, :configured_by_model?, :configured_by_time?,
         :settings_from_model, :reflection, :instance_class, :model_class, :column_type,
         to: :configuration
 
-      def initialize(dimension:, measure:)
+      def initialize(dimension:, series:)
         self.dimension = dimension
-        self.measure = measure
+        self.series = series
         self.configuration = InferrableConfiguration.new(self, :dimensions)
         missing_group_setting = settings && !settings.key?(:group)
         raise ArgumentError.new("Dimension settings for dimension '#{key}' of #{model_class} must include :group") if missing_group_setting
@@ -104,8 +104,8 @@ module ReportsKit
       end
 
       def datetime_filters
-        return [] unless measure.filters.present?
-        measure.filters.map(&:filter_type).select { |filter_type| filter_type.is_a?(FilterTypes::Datetime) }
+        return [] unless series.filters.present?
+        series.filters.map(&:filter_type).select { |filter_type| filter_type.is_a?(FilterTypes::Datetime) }
       end
 
       def should_be_sorted_by_count?

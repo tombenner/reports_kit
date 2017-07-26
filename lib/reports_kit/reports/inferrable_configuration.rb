@@ -11,7 +11,7 @@ module ReportsKit
 
       attr_accessor :inferrable, :inferrable_type
 
-      delegate :key, :measure, to: :inferrable
+      delegate :key, :series, to: :inferrable
 
       def initialize(inferrable, inferrable_type)
         self.inferrable = inferrable
@@ -125,8 +125,8 @@ module ReportsKit
       end
 
       def model_class
-        return unless measure
-        measure.model_class
+        return unless series
+        series.model_class
       end
     end
   end

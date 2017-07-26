@@ -1,6 +1,6 @@
 module ReportsKit
   module Reports
-    class Measure < AbstractMeasure
+    class Series < AbstractSeries
       attr_accessor :properties, :dimensions, :filters, :context_record
 
       def initialize(properties, context_record: nil)
@@ -17,8 +17,8 @@ module ReportsKit
         filter_hashes = filter_hashes.values if filter_hashes.is_a?(Hash) && filter_hashes.key?(:'0')
 
         self.properties = properties
-        self.dimensions = dimension_hashes.map { |dimension_hash| DimensionWithMeasure.new(dimension: Dimension.new(dimension_hash), measure: self) }
-        self.filters = filter_hashes.map { |filter_hash| FilterWithMeasure.new(filter: Filter.new(filter_hash), measure: self) }
+        self.dimensions = dimension_hashes.map { |dimension_hash| DimensionWithSeries.new(dimension: Dimension.new(dimension_hash), series: self) }
+        self.filters = filter_hashes.map { |filter_hash| FilterWithSeries.new(filter: Filter.new(filter_hash), series: self) }
         self.context_record = context_record
       end
 
@@ -84,15 +84,15 @@ module ReportsKit
       end
 
       def self.new_from_properties!(properties, context_record:)
-        measure_hashes = properties[:series].presence || properties.slice(:measure, :dimensions, :filters)
-        measure_hashes = [measure_hashes] if measure_hashes.is_a?(Hash)
-        raise ArgumentError.new('At least one measure must be configured') if measure_hashes.blank?
+        series_hashes = properties[:series].presence || properties.slice(:measure, :dimensions, :filters)
+        series_hashes = [series_hashes] if series_hashes.is_a?(Hash)
+        raise ArgumentError.new('At least one series must be configured') if series_hashes.blank?
 
-        measure_hashes.map do |measure_hash|
-          if measure_hash[:composite_operator].present?
-            CompositeMeasure.new(measure_hash)
+        series_hashes.map do |series_hash|
+          if series_hash[:composite_operator].present?
+            CompositeSeries.new(series_hash)
           else
-            new(measure_hash, context_record: context_record)
+            new(series_hash, context_record: context_record)
           end
         end
       end

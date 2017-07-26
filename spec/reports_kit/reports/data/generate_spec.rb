@@ -118,7 +118,7 @@ describe ReportsKit::Reports::Data::Generate do
           end
         end
 
-        context 'with multiple measures and datetime filters with different keys' do
+        context 'with multiple series and datetime filters with different keys' do
           let!(:tags) do
             [
               create(:tag, repo: repo, created_at: now - 1.weeks),
@@ -448,7 +448,7 @@ describe ReportsKit::Reports::Data::Generate do
     end
   end
 
-  context 'with two measures' do
+  context 'with two series' do
     let(:properties) do
       {
         series: [
@@ -536,7 +536,7 @@ describe ReportsKit::Reports::Data::Generate do
   end
 
   describe 'composite aggregations' do
-    context 'with two measures' do
+    context 'with two series' do
       let(:properties) do
         {
           name: name,

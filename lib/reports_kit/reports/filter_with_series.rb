@@ -1,6 +1,6 @@
 module ReportsKit
   module Reports
-    class FilterWithMeasure
+    class FilterWithSeries
       CONFIGURATION_STRATEGIES_FILTER_TYPE_CLASSES = {
         association: FilterTypes::Records,
         boolean: FilterTypes::Boolean,
@@ -15,16 +15,16 @@ module ReportsKit
         string: FilterTypes::String
       }
 
-      attr_accessor :filter, :measure, :configuration
+      attr_accessor :filter, :series, :configuration
 
       delegate :key, :properties, :label, to: :filter
       delegate :configured_by_association?, :configured_by_column?, :configured_by_model?, :configured_by_time?,
         :settings_from_model, :configuration_strategy, :instance_class, :column_type, :column,
         to: :configuration
 
-      def initialize(filter:, measure:)
+      def initialize(filter:, series:)
         self.filter = filter
-        self.measure = measure
+        self.series = series
         self.configuration = InferrableConfiguration.new(self, :filters)
 
         self.properties[:criteria] = filter_type.default_criteria unless self.properties[:criteria]

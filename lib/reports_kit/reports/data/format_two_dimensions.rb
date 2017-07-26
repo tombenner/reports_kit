@@ -2,12 +2,12 @@ module ReportsKit
   module Reports
     module Data
       class FormatTwoDimensions
-        attr_accessor :measure, :dimension, :second_dimension, :dimension_keys_values, :order
+        attr_accessor :series, :dimension, :second_dimension, :dimension_keys_values, :order
 
-        def initialize(measure, dimension_keys_values, order:)
-          self.measure = measure
-          self.dimension = measure.dimensions[0]
-          self.second_dimension = measure.dimensions[1]
+        def initialize(series, dimension_keys_values, order:)
+          self.series = series
+          self.dimension = series.dimensions[0]
+          self.second_dimension = series.dimensions[1]
           self.dimension_keys_values = dimension_keys_values
           self.order = order
         end
@@ -33,7 +33,7 @@ module ReportsKit
               primary_keys_secondary_keys_values[primary_key][secondary_key]
             end
             values = raw_values.map do |raw_value|
-              Utils.raw_value_to_value(raw_value, measure.value_format_method)
+              Utils.raw_value_to_value(raw_value, series.value_format_method)
             end
             [secondary_key, values]
           end
