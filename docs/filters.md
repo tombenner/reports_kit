@@ -73,11 +73,13 @@ filters:
 - key: flight_at
   criteria:
     operator: between
-    value: Oct 1, 2016 - Jan 1, 2017
+    value: -3M - now
 dimensions:
 - carrier
 ```
 [<img src="images/flights_with_configured_datetime.png?raw=true" width="500" />](images/flights_with_configured_datetime.png?raw=true)
+
+The `value` in the example above is shorthand for relative time; it represents the time range of `(3.months.ago..Time.zone.now)`. To see the other supported time durations (e.g. `w` for week, `d` for day), see [RelativeTime](https://github.com/tombenner/reports_kit/blob/master/lib/reports_kit/relative_time.rb).
 
 ##### Number
 
