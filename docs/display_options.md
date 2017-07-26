@@ -11,10 +11,9 @@ You can use any `type` value supported by Chart.js, including `bar`, `line`, `ho
 Here's an example of a horizontal bar chart:
 
 ```yaml
-measure:
-  key: flight
-  dimensions:
-  - carrier
+measure: flight
+dimensions:
+- carrier
 chart:
   type: horizontalBar
   options:
@@ -37,11 +36,10 @@ You can use any `options` that are supported by Chart.js.
 Here's an example of a chart with Chart.js options:
 
 ```yaml
-measure:
-  key: flight
-  dimensions:
-  - origin_market
-  - carrier
+measure: flight
+dimensions:
+- origin_market
+- carrier
 chart:
   type: horizontalBar
   options:
@@ -66,12 +64,11 @@ You can use any `datasets` options that are supported by Chart.js.
 Here's an example of a chart with `datasets` options:
 
 ```yaml
-measure:
-  key: flight
-  dimensions:
-  - flight_at
-  - key: carrier
-    limit: 3
+measure: flight
+dimensions:
+- flight_at
+- key: carrier
+  limit: 3
 chart:
   type: line
   datasets:

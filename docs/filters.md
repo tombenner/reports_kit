@@ -7,13 +7,12 @@ A filter is like a SQL `WHERE`: it filters the results to only include results t
 For example, if the `Flight` model has a `delay` column that's an integer, the chart below will show only flights that have a delay of greater than 15 minutes:
 
 ```yaml
-measure:
-  key: flight
-  filters:
-  - key: delay
-    criteria:
-      operator: '>'
-      value: 15
+measure: flight
+filters:
+- key: delay
+  criteria:
+    operator: '>'
+    value: 15
 dimensions:
 - carrier
 ```
@@ -22,13 +21,12 @@ dimensions:
 You can also create form controls that the user can use to filter the chart:
 
 ```yaml
-measure:
-  key: flight
-  filters:
-  - carrier
-  - carrier_name
-  - is_on_time
-  - flight_at
+measure: flight
+filters:
+- carrier
+- carrier_name
+- is_on_time
+- flight_at
 dimensions:
 - flight_at
 - carrier
@@ -55,12 +53,11 @@ In `app/views/my_view.html.haml`, you can use ReportsKit's form helpers to creat
 Boolean filters can be used on any `boolean` columns, or you can define your own boolean filter (see [Custom Filters](#custom-filters)).
 
 ```yaml
-measure:
-  key: flight
-  filters:
-  - key: is_on_time
-    criteria:
-      value: true
+measure: flight
+filters:
+- key: is_on_time
+  criteria:
+    value: true
 dimensions:
 - carrier
 ```
@@ -71,13 +68,12 @@ dimensions:
 Datetime filters can be used on any `datetime` or `timestamp` columns, or you can define your own datetime filter (see [Custom Filters](#custom-filters)).
 
 ```yaml
-measure:
-  key: flight
-  filters:
-  - key: flight_at
-    criteria:
-      operator: between
-      value: Oct 1, 2016 - Jan 1, 2017
+measure: flight
+filters:
+- key: flight_at
+  criteria:
+    operator: between
+    value: Oct 1, 2016 - Jan 1, 2017
 dimensions:
 - carrier
 ```
@@ -88,13 +84,12 @@ dimensions:
 Number filters can be used on any `integer`, `float`, or `decimal` columns, or you can define your own number filter (see [Custom Filters](#custom-filters)).
 
 ```yaml
-measure:
-  key: flight
-  filters:
-  - key: delay
-    criteria:
-      operator: '>'
-      value: 15
+measure: flight
+filters:
+- key: delay
+  criteria:
+    operator: '>'
+    value: 15
 dimensions:
 - carrier
 ```
@@ -105,13 +100,12 @@ dimensions:
 String filters can be used on any `string` or `text` columns, or you can define your own number filter (see [Custom Filters](#custom-filters)).
 
 ```yaml
-measure:
-  key: flight
-  filters:
-  - key: carrier_name
-    criteria:
-      operator: contains
-      value: airlines
+measure: flight
+filters:
+- key: carrier_name
+  criteria:
+    operator: contains
+    value: airlines
 dimensions:
 - carrier
 ```
@@ -134,12 +128,11 @@ end
 We can then use the `was_delayed` filter:
 
 ```yaml
-measure:
-  key: flight
-  filters:
-  - key: was_delayed
-    criteria:
-      value: true
+measure: flight
+filters:
+- key: was_delayed
+  criteria:
+    value: true
 dimensions:
 - carrier
 ```
@@ -154,10 +147,9 @@ Most charting libraries don't provide interactive form controls, but ReportsKit 
 Check boxes can be used with filters that have a `boolean` type.
 
 ```yaml
-measure:
-  key: flight
-  filters:
-  - is_on_time
+measure: flight
+filters:
+- is_on_time
 dimensions:
 - flight_at
 - carrier
@@ -176,10 +168,9 @@ dimensions:
 Date ranges can be used with filters that have a `datetime` type.
 
 ```yaml
-measure:
-  key: flight
-  filters:
-  - flight_at
+measure: flight
+filters:
+- flight_at
 dimensions:
 - flight_at
 - carrier
@@ -193,10 +184,9 @@ dimensions:
 ##### Multi-Autocomplete
 
 ```yaml
-measure:
-  key: flight
-  filters:
-  - carrier
+measure: flight
+filters:
+- carrier
 dimensions:
 - flight_at
 - carrier
@@ -210,10 +200,9 @@ dimensions:
 ##### String Filter
 
 ```yaml
-measure:
-  key: flight
-  filters:
-  - carrier_name
+measure: flight
+filters:
+- carrier_name
 dimensions:
 - flight_at
 - carrier

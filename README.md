@@ -69,7 +69,7 @@ In any view, create a chart that shows the number of records of a model (e.g. `u
 
 `app/views/users/index.html.haml`
 ```haml
-= render_report measure: { key: 'user', dimensions: ['created_at'] }
+= render_report measure: 'user', dimensions: ['created_at']
 ```
 
 You're done! `render_report` will render the following chart:
@@ -80,10 +80,9 @@ Instead of passing a hash to `render_report`, you can alternatively configure yo
 
 `config/reports_kit/reports/my_users.yml`
 ```yaml
-measure:
-  key: user
-  dimensions:
-  - created_at
+measure: user
+dimensions:
+- created_at
 ```
 
 `app/views/users/index.html.haml`
