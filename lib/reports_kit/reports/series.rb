@@ -1,6 +1,8 @@
 module ReportsKit
   module Reports
     class Series < AbstractSeries
+      VALID_KEYS = [:measure, :dimensions, :filters, :limit]
+
       attr_accessor :properties, :dimensions, :filters, :context_record
 
       def initialize(properties, context_record: nil)
@@ -28,6 +30,10 @@ module ReportsKit
 
       def label
         properties[:measure][:name].presence || key.pluralize.titleize
+      end
+
+      def limit
+        properties[:limit]
       end
 
       def relation_name
@@ -84,7 +90,7 @@ module ReportsKit
       end
 
       def self.new_from_properties!(properties, context_record:)
-        series_hashes = properties[:series].presence || properties.slice(:measure, :dimensions, :filters)
+        series_hashes = properties[:series].presence || properties.slice(*Series::VALID_KEYS)
         series_hashes = [series_hashes] if series_hashes.is_a?(Hash)
         raise ArgumentError.new('At least one series must be configured') if series_hashes.blank?
 

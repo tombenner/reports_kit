@@ -2,7 +2,9 @@ module ReportsKit
   module Reports
     module Data
       class CompositeAggregation
-        attr_accessor :composite_operator, :properties, :context_record
+        attr_accessor :composite_series, :context_record
+
+        delegate :composite_operator, :properties, :limit, to: :composite_series
 
         OPERATORS_METHODS = {
           '+' => :+,
@@ -18,8 +20,7 @@ module ReportsKit
         }
 
         def initialize(properties, context_record:)
-          self.properties = properties
-          self.composite_operator = properties[:composite_operator]
+          self.composite_series = CompositeSeries.new(properties)
           self.context_record = context_record
         end
 
@@ -38,8 +39,9 @@ module ReportsKit
           value_lists = sorted_dimension_keys_values.map(&:values)
           composited_values = value_lists.transpose.map { |data| reduce(data) }
           dimension_keys = sorted_dimension_keys_values.first.keys
-          composited_keys_values = Hash[dimension_keys.zip(composited_values)]
-          composited_keys_values
+          composited_keys_values = dimension_keys.zip(composited_values)
+          composited_keys_values = composited_keys_values.take(limit) if limit
+          Hash[composited_keys_values]
         end
 
         def serieses_results_for_two_dimensions
@@ -48,8 +50,9 @@ module ReportsKit
           value_lists = serieses_results.values.map(&:values)
           composited_values = value_lists.transpose.map { |data| reduce(data) }
           dimension_keys = serieses_results.values.first.keys
-          composited_keys_values = Hash[dimension_keys.zip(composited_values)]
-          composited_keys_values
+          composited_keys_values = dimension_keys.zip(composited_values)
+          composited_keys_values = composited_keys_values.take(limit) if limit
+          Hash[composited_keys_values]
         end
 
         # Before performing a composition of values, we need to make sure that the values are sorted by the same dimension key.

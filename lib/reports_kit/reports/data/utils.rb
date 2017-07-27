@@ -165,7 +165,7 @@ module ReportsKit
           can_have_nesting = properties[:composite_operator].present? || properties[:series].is_a?(Array)
           ui_filters ||= properties[:ui_filters]
           properties = properties.dup
-          properties[:series] ||= properties.slice(:measure, :dimensions, :filters).presence
+          properties[:series] ||= properties.slice(*Series::VALID_KEYS).presence
           properties[:series] = [properties[:series]] if properties[:series].is_a?(Hash) && properties[:series].present?
           return properties if ui_filters.blank? || properties[:series].blank?
           properties[:series] = properties[:series].map do |series_properties|

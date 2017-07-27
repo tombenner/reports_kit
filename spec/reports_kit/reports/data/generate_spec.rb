@@ -229,6 +229,23 @@ describe ReportsKit::Reports::Data::Generate do
       end
     end
 
+    context 'with a limit' do
+      let(:properties) do
+        {
+          measure: 'issue',
+          dimensions: %w(repo),
+          limit: 1
+        }
+      end
+
+      it 'returns the chart_data' do
+        expect(chart_data).to eq({
+          labels: [repo.to_s],
+          datasets: [{ label: "Issues", data: [2] }]
+        })
+      end
+    end
+
     context 'with a dimension limit' do
       let(:properties) do
         {
@@ -645,6 +662,38 @@ describe ReportsKit::Reports::Data::Generate do
               {
                 label: name,
                 data: ['0%', '0%', '200%']
+              }
+            ]
+          })
+        end
+      end
+
+      context 'with a limit' do
+        let(:properties) do
+          {
+            name: name,
+            composite_operator: '+',
+            limit: 1,
+            series: [
+              {
+                measure: 'issue',
+                dimensions: %w(repo)
+              },
+              {
+                measure: 'tag',
+                dimensions: %w(repo)
+              }
+            ]
+          }
+        end
+
+        it 'returns the chart_data' do
+          expect(chart_data).to eq({
+            labels: [repo.to_s],
+            datasets: [
+              {
+                label: name,
+                data: [5]
               }
             ]
           })

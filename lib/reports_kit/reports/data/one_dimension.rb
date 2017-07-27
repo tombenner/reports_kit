@@ -25,6 +25,7 @@ module ReportsKit
           dimension_keys_values = Utils.populate_sparse_hash(dimension_keys_values, dimension: dimension)
           dimension_keys_values.delete(nil)
           dimension_keys_values.delete('')
+          dimension_keys_values = dimension_keys_values.take(series.limit) if series.limit
           Hash[dimension_keys_values]
         end
 

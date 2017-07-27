@@ -19,6 +19,10 @@ module ReportsKit
         properties[:composite_operator]
       end
 
+      def limit
+        properties[:limit]
+      end
+
       def serieses
         @serieses ||= Reports::Series.new_from_properties!(properties, context_record: nil)
       end
