@@ -21,7 +21,7 @@ module ReportsKit
           else
             raw_data = Data::FormatOneDimension.new(serieses_results, order: order).perform
           end
-          raw_data = data_format_method.call(raw_data) if data_format_method
+          raw_data = data_format_method.call(raw_data, context_record) if data_format_method
           chart_data = format_chart_data(raw_data)
 
           data = { chart_data: chart_data }

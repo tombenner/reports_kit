@@ -445,6 +445,23 @@ describe ReportsKit::Reports::Data::Generate do
           ]
         })
       end
+
+      context 'with dependence on the context_record' do
+        subject { described_class.new(properties.merge(data_format_method: 'add_context_record_suffix'), context_record: context_record).perform }
+        let(:context_record) { repo }
+
+        it 'returns the chart_data' do
+          expect(chart_data).to eq({
+            labels: ["#{format_week_offset(2)} #{context_record}", "#{format_week_offset(1)} #{context_record}", "#{format_week_offset(0)} #{context_record}"],
+            datasets: [
+              {
+                label: repo.to_s,
+                data: [1, 0, 1]
+              }
+            ]
+          })
+        end
+      end
     end
   end
 
