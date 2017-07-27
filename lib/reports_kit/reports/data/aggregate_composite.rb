@@ -1,7 +1,7 @@
 module ReportsKit
   module Reports
     module Data
-      class CompositeAggregation
+      class AggregateComposite
         attr_accessor :composite_series, :context_record
 
         delegate :composite_operator, :properties, :limit, to: :composite_series
@@ -33,7 +33,7 @@ module ReportsKit
         private
 
         def serieses_results_for_one_dimension
-          serieses_results = Hash[serieses.map { |series| [series, OneDimension.new(series).perform] }]
+          serieses_results = Hash[serieses.map { |series| [series, AggregateOneDimension.new(series).perform] }]
           serieses_results = Data::PopulateOneDimension.new(serieses_results).perform
           sorted_dimension_keys_values = sort_dimension_keys_values(serieses_results)
           value_lists = sorted_dimension_keys_values.map(&:values)
@@ -45,7 +45,7 @@ module ReportsKit
         end
 
         def serieses_results_for_two_dimensions
-          serieses_results = Hash[serieses.map { |series| [series, TwoDimensions.new(series).perform] }]
+          serieses_results = Hash[serieses.map { |series| [series, AggregateTwoDimensions.new(series).perform] }]
           serieses_results = Data::PopulateTwoDimensions.new(serieses_results).perform
           value_lists = serieses_results.values.map(&:values)
           composited_values = value_lists.transpose.map { |data| reduce(data) }

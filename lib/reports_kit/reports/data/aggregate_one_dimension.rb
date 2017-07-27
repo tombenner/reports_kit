@@ -1,7 +1,7 @@
 module ReportsKit
   module Reports
     module Data
-      class OneDimension
+      class AggregateOneDimension
         attr_accessor :series, :dimension
 
         def initialize(series)

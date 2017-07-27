@@ -14,13 +14,13 @@ module ReportsKit
         def perform
           if composite_operator
             raise ArgumentError.new('Aggregations require at least one series') if all_serieses.length == 0
-            dimension_keys_values = Data::CompositeAggregation.new(properties, context_record: context_record).perform
+            dimension_keys_values = Data::AggregateComposite.new(properties, context_record: context_record).perform
             serieses_dimension_keys_values = { CompositeSeries.new(properties) => dimension_keys_values }
           elsif all_serieses.length == 1 && composite_serieses.length == 1
-            dimension_keys_values = Data::CompositeAggregation.new(composite_serieses.first.properties, context_record: context_record).perform
+            dimension_keys_values = Data::AggregateComposite.new(composite_serieses.first.properties, context_record: context_record).perform
             serieses_dimension_keys_values = { all_serieses.first => dimension_keys_values }
           elsif all_serieses.length == 1 && all_serieses.first.dimensions.length == 2
-            dimension_keys_values = Data::TwoDimensions.new(all_serieses.first).perform
+            dimension_keys_values = Data::AggregateTwoDimensions.new(all_serieses.first).perform
             serieses_dimension_keys_values = { all_serieses.first => dimension_keys_values }
             serieses_dimension_keys_values = Data::PopulateTwoDimensions.new(serieses_dimension_keys_values).perform
           elsif all_serieses.length > 0
@@ -48,9 +48,9 @@ module ReportsKit
 
           serieses_dimension_keys_values = all_serieses.map do |series|
             if series.is_a?(CompositeSeries)
-              dimension_keys_values = Data::CompositeAggregation.new(series.properties, context_record: context_record).perform
+              dimension_keys_values = Data::AggregateComposite.new(series.properties, context_record: context_record).perform
             else
-              dimension_keys_values = Data::OneDimension.new(series).perform
+              dimension_keys_values = Data::AggregateOneDimension.new(series).perform
             end
             [series, dimension_keys_values]
           end
