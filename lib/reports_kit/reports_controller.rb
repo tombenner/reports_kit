@@ -9,7 +9,7 @@ module ReportsKit
           render json: { data: report_data }
         end
         format.csv do
-          properties[:format] = 'table'
+          properties[:format] = 'csv'
           csv = CSV.generate do |csv|
             report_data[:table_data].each do |row|
               csv << row
@@ -18,7 +18,7 @@ module ReportsKit
           send_data csv, filename: "Report.csv"
         end
         format.xls do
-          properties[:format] = 'table'
+          properties[:format] = 'csv'
           send_data xls_string, filename: 'Report.xls', type:  'application/vnd.ms-excel'
         end
       end

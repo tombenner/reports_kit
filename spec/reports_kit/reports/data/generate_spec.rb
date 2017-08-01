@@ -431,6 +431,32 @@ describe ReportsKit::Reports::Data::Generate do
       })
     end
 
+    context "with format: 'csv'" do
+      subject { described_class.new(properties.merge(format: 'csv'), context_record: context_record).perform }
+
+      it 'returns the table_data' do
+        expect(table_data).to eq([
+          [nil, repo.to_s, repo2.to_s],
+          [format_week_offset(2), 1, 0],
+          [format_week_offset(1), 0, 0],
+          [format_week_offset(0), 1, 1]
+        ])
+      end
+
+      context 'with a data_format_method that adds HTML tags' do
+        subject { described_class.new(properties.merge(format: 'csv', data_format_method: 'add_label_link'), context_record: context_record).perform }
+
+        it 'returns the table_data without the HTML tags' do
+          expect(table_data).to eq([
+            [nil, repo.to_s, repo2.to_s],
+            ["#{format_week_offset(2)} Bar", 1, 0],
+            ["#{format_week_offset(1)} Bar", 0, 0],
+            ["#{format_week_offset(0)} Bar", 1, 1]
+          ])
+        end
+      end
+    end
+
     context "with format: 'table'" do
       subject { described_class.new(properties.merge(format: 'table'), context_record: context_record).perform }
 
@@ -441,6 +467,19 @@ describe ReportsKit::Reports::Data::Generate do
           [format_week_offset(1), 0, 0],
           [format_week_offset(0), 1, 1]
         ])
+      end
+
+      context 'with a data_format_method that adds HTML tags' do
+        subject { described_class.new(properties.merge(format: 'table', data_format_method: 'add_label_link'), context_record: context_record).perform }
+
+        it 'returns the table_data with the HTML tags' do
+          expect(table_data).to eq([
+            [nil, repo.to_s, repo2.to_s],
+            ["<a href='#'>#{format_week_offset(2)}</a> Bar", 1, 0],
+            ["<a href='#'>#{format_week_offset(1)}</a> Bar", 0, 0],
+            ["<a href='#'>#{format_week_offset(0)}</a> Bar", 1, 1]
+          ])
+        end
       end
     end
 

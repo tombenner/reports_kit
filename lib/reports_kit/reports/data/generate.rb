@@ -26,7 +26,7 @@ module ReportsKit
 
           data = { chart_data: chart_data }
           data = ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
-          if format == 'table'
+          if table?
             data[:table_data] = format_table(data.delete(:chart_data))
             data[:type] = format
           end
@@ -82,15 +82,15 @@ module ReportsKit
         end
 
         def format_table(data)
-          column_names = [primary_dimension.label]
+          column_names = [format_string(primary_dimension.label)]
           column_values = []
           data[:datasets].each do |dataset|
-            column_names << dataset[:label]
+            column_names << format_string(dataset[:label])
             column_values << dataset[:data]
           end
           rows = column_values.transpose
           rows = rows.map.with_index do |row, index|
-            label = data[:labels][index]
+            label = format_string(data[:labels][index])
             row.unshift(label)
           end
           [column_names] + rows
@@ -98,6 +98,19 @@ module ReportsKit
 
         def primary_dimension
           serieses.first.dimensions.first
+        end
+
+        def table?
+          format.in?(%w(table csv))
+        end
+
+        def strip_html_tags?
+          format == 'csv'
+        end
+
+        def format_string(string)
+          return string unless string && strip_html_tags?
+          ActionView::Base.full_sanitizer.sanitize(string)
         end
 
         def inferred_options
