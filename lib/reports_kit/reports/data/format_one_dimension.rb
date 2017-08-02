@@ -2,12 +2,13 @@ module ReportsKit
   module Reports
     module Data
       class FormatOneDimension
-        attr_accessor :serieses_results, :serieses, :order
+        attr_accessor :serieses_results, :serieses, :order, :limit
 
-        def initialize(serieses_results, order:)
+        def initialize(serieses_results, order:, limit:)
           self.serieses_results = serieses_results
           self.serieses = serieses_results.keys
           self.order = order
+          self.limit = limit
         end
 
         def perform
@@ -110,6 +111,11 @@ module ReportsKit
               end
             else
               sorted_serieses_results = serieses_results
+            end
+            if limit
+              sorted_serieses_results = sorted_serieses_results.map do |series, results|
+                [series, Hash[results.to_a.take(limit)]]
+              end
             end
             Hash[sorted_serieses_results]
           end

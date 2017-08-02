@@ -4,7 +4,7 @@ module ReportsKit
       class AggregateComposite
         attr_accessor :composite_series, :context_record
 
-        delegate :composite_operator, :properties, :limit, to: :composite_series
+        delegate :composite_operator, :properties, to: :composite_series
 
         OPERATORS_METHODS = {
           '+' => :+,
@@ -40,7 +40,6 @@ module ReportsKit
           composited_values = value_lists.transpose.map { |data| reduce(data) }
           dimension_keys = sorted_dimension_keys_values.first.keys
           composited_keys_values = dimension_keys.zip(composited_values)
-          composited_keys_values = composited_keys_values.take(limit) if limit
           Hash[composited_keys_values]
         end
 
@@ -51,7 +50,6 @@ module ReportsKit
           composited_values = value_lists.transpose.map { |data| reduce(data) }
           dimension_keys = serieses_results.values.first.keys
           composited_keys_values = dimension_keys.zip(composited_values)
-          composited_keys_values = composited_keys_values.take(limit) if limit
           Hash[composited_keys_values]
         end
 

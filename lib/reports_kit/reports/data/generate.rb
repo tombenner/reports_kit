@@ -17,9 +17,9 @@ module ReportsKit
           return data if data
 
           if two_dimensions?
-            raw_data = Data::FormatTwoDimensions.new(serieses.first, serieses_results.first.last, order: order).perform
+            raw_data = Data::FormatTwoDimensions.new(serieses.first, serieses_results.first.last, order: order, limit: limit).perform
           else
-            raw_data = Data::FormatOneDimension.new(serieses_results, order: order).perform
+            raw_data = Data::FormatOneDimension.new(serieses_results, order: order, limit: limit).perform
           end
           raw_data = data_format_method.call(raw_data, context_record) if data_format_method
           chart_data = format_chart_data(raw_data)
@@ -62,6 +62,10 @@ module ReportsKit
             return Order.parse(properties[:order]) if properties[:order].present?
             inferred_order
           end
+        end
+
+        def limit
+          properties[:limit]
         end
 
         def inferred_order

@@ -739,6 +739,74 @@ describe ReportsKit::Reports::Data::Generate do
         end
       end
 
+      context 'with a limit and an order' do
+        context 'with an ascending order' do
+          let(:properties) do
+            {
+              name: name,
+              composite_operator: '%',
+              limit: 1,
+              order: '1',
+              series: [
+                {
+                  measure: 'issue',
+                  dimensions: %w(repo)
+                },
+                {
+                  measure: 'tag',
+                  dimensions: %w(repo)
+                }
+              ]
+            }
+          end
+
+          it 'returns the chart_data' do
+            expect(chart_data).to eq({
+              labels: [repo2.to_s],
+              datasets: [
+                {
+                  label: name,
+                  data: [0]
+                }
+              ]
+            })
+          end
+        end
+
+        context 'with a descending order' do
+          let(:properties) do
+            {
+              name: name,
+              composite_operator: '%',
+              limit: 1,
+              order: '1 desc',
+              series: [
+                {
+                  measure: 'issue',
+                  dimensions: %w(repo)
+                },
+                {
+                  measure: 'tag',
+                  dimensions: %w(repo)
+                }
+              ]
+            }
+          end
+
+          it 'returns the chart_data' do
+            expect(chart_data).to eq({
+              labels: [repo.to_s],
+              datasets: [
+                {
+                  label: name,
+                  data: [66.7]
+                }
+              ]
+            })
+          end
+        end
+      end
+
       context 'with a boolean dimension' do
         let!(:issues) do
           [

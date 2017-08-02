@@ -2,14 +2,15 @@ module ReportsKit
   module Reports
     module Data
       class FormatTwoDimensions
-        attr_accessor :series, :dimension, :second_dimension, :dimension_keys_values, :order
+        attr_accessor :series, :dimension, :second_dimension, :dimension_keys_values, :order, :limit
 
-        def initialize(series, dimension_keys_values, order:)
+        def initialize(series, dimension_keys_values, order:, limit:)
           self.series = series
           self.dimension = series.dimensions[0]
           self.second_dimension = series.dimensions[1]
           self.dimension_keys_values = dimension_keys_values
           self.order = order
+          self.limit = limit
         end
 
         def perform
