@@ -39,7 +39,7 @@ module ReportsKit
         end
 
         def dimension_summaries
-          @dimension_summaries ||= dimension_keys.map do |dimension_key|
+          @dimension_summaries ||= raw_dimension_keys.map do |dimension_key|
             label = Utils.dimension_key_to_label(dimension_key, primary_dimension_with_series, dimension_ids_dimension_instances)
             next if label.blank?
             [dimension_key, label]
@@ -51,16 +51,20 @@ module ReportsKit
         end
 
         def dimension_keys_sorted_by_label
-          @dimension_keys_sorted_by_label ||= dimension_summaries.sort_by(&:last).map(&:first)
+          dimension_summaries.sort_by(&:last).map(&:first)
         end
 
         def dimension_keys
+          dimension_summaries.map(&:first)
+        end
+
+        def raw_dimension_keys
           serieses_results.first.last.keys
         end
 
         def dimension_ids_dimension_instances
           @dimension_ids_dimension_instances ||= begin
-            dimension_ids = dimension_keys
+            dimension_ids = raw_dimension_keys
             Utils.dimension_to_dimension_ids_dimension_instances(primary_dimension_with_series, dimension_ids)
           end
         end
@@ -77,12 +81,14 @@ module ReportsKit
           @sorted_serieses_results ||= begin
             if order.relation == 'dimension1' && order.field == 'label'
               sorted_serieses_results = serieses_results.map do |series, dimension_keys_values|
+                dimension_keys_values = filter_dimension_keys_values(dimension_keys_values)
                 sorted_dimension_keys_values = dimension_keys_values.sort_by { |key, _| dimension_keys_sorted_by_label.index(key) }
                 sorted_dimension_keys_values = sorted_dimension_keys_values.reverse if order.direction == 'desc'
                 [series, Hash[sorted_dimension_keys_values]]
               end
             elsif (order.relation == 'dimension1' && order.field.nil?) || (order.relation == 0)
               sorted_serieses_results = serieses_results.map do |series, dimension_keys_values|
+                dimension_keys_values = filter_dimension_keys_values(dimension_keys_values)
                 sorted_dimension_keys_values = dimension_keys_values.sort_by(&:first)
                 sorted_dimension_keys_values = sorted_dimension_keys_values.reverse if order.direction == 'desc'
                 [series, Hash[sorted_dimension_keys_values]]
@@ -94,12 +100,14 @@ module ReportsKit
               sorted_dimension_keys = dimension_keys_values.sort_by(&:last).map(&:first)
               sorted_dimension_keys = sorted_dimension_keys.reverse if order.direction == 'desc'
               sorted_serieses_results = serieses_results.map do |series, dimension_keys_values|
+                dimension_keys_values = filter_dimension_keys_values(dimension_keys_values)
                 dimension_keys_values = dimension_keys_values.sort_by { |dimension_key, _| sorted_dimension_keys.index(dimension_key) }
                 [series, Hash[dimension_keys_values]]
               end
             elsif order.relation == 'count'
               dimension_keys_sums = Hash.new(0)
               serieses_results.values.each do |dimension_keys_values|
+                dimension_keys_values = filter_dimension_keys_values(dimension_keys_values)
                 dimension_keys_values.each do |dimension_key, value|
                   dimension_keys_sums[dimension_key] += value
                 end
@@ -120,6 +128,10 @@ module ReportsKit
             end
             Hash[sorted_serieses_results]
           end
+        end
+
+        def filter_dimension_keys_values(dimension_keys_values)
+          dimension_keys_values.select { |key, values| dimension_keys.include?(key) }
         end
       end
     end
