@@ -41,8 +41,9 @@ module ReportsKit
         def dimension_summaries
           @dimension_summaries ||= dimension_keys.map do |dimension_key|
             label = Utils.dimension_key_to_label(dimension_key, primary_dimension_with_series, dimension_ids_dimension_instances)
+            next if label.blank?
             [dimension_key, label]
-          end
+          end.compact
         end
 
         def sorted_dimension_keys

@@ -521,6 +521,31 @@ describe ReportsKit::Reports::Data::Generate do
     end
   end
 
+  context 'with a dimension with a blank label' do
+    let(:properties) do
+      {
+        measure: 'issue',
+        dimensions: %w(repo)
+      }
+    end
+
+    before do
+      allow_any_instance_of(Repo).to receive(:to_s).and_return(nil)
+    end
+
+    it 'hides the dimension' do
+      expect(chart_data).to eq({
+        labels: [],
+        datasets: [
+          {
+            label: 'Issues',
+            data: []
+          }
+        ]
+      })
+    end
+  end
+
   context 'with two series' do
     let(:properties) do
       {

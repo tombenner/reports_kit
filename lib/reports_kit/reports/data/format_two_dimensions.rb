@@ -121,8 +121,9 @@ module ReportsKit
         def primary_summaries
           primary_keys.map do |key|
             label = Utils.dimension_key_to_label(key, dimension, dimension_ids_dimension_instances)
+            next if label.blank?
             [key, label]
-          end
+          end.compact
         end
 
         def primary_dimension_keys_sorted_by_label
