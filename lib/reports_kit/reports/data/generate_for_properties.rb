@@ -46,16 +46,38 @@ module ReportsKit
           multi_dimension_serieses_exist = all_serieses.any? { |series| series.dimensions.length > 1 }
           raise ArgumentError.new('When more than one series are configured, only one dimension may be used per series') if multi_dimension_serieses_exist
 
-          serieses_dimension_keys_values = all_serieses.map do |series|
-            if series.is_a?(CompositeSeries)
-              dimension_keys_values = Data::AggregateComposite.new(series.properties, context_record: context_record).perform
-            else
-              dimension_keys_values = Data::AggregateOneDimension.new(series).perform
+          if all_serieses.length > 1 && ReportsKit.configuration.use_concurrent_queries
+            serieses_dimension_keys_values = multithreaded_serieses_dimension_keys_values
+          else
+            serieses_dimension_keys_values = all_serieses.map do |series|
+              [series, dimension_keys_values_for_series(series)]
             end
-            [series, dimension_keys_values]
           end
           serieses_dimension_keys_values = Hash[serieses_dimension_keys_values]
           Data::PopulateOneDimension.new(serieses_dimension_keys_values).perform
+        end
+
+        def multithreaded_serieses_dimension_keys_values
+          threads = all_serieses.map do |series|
+            Thread.new do
+              ActiveRecord::Base.connection_pool.with_connection do
+                begin
+                  [series, dimension_keys_values_for_series(series)]
+                ensure
+                  ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
+                end
+              end
+            end
+          end
+          threads.map(&:join).map(&:value)
+        end
+
+        def dimension_keys_values_for_series(series)
+          if series.is_a?(CompositeSeries)
+            Data::AggregateComposite.new(series.properties, context_record: context_record).perform
+          else
+            Data::AggregateOneDimension.new(series).perform
+          end
         end
 
         def all_serieses

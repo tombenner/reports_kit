@@ -591,6 +591,30 @@ describe ReportsKit::Reports::Data::Generate do
       })
     end
 
+    context 'with concurrent queries enabled' do
+      around :each do |example|
+        ReportsKit.configuration.use_concurrent_queries = true
+        example.run
+        ReportsKit.configuration.use_concurrent_queries = false
+      end
+
+      it 'returns the chart_data' do
+        expect(chart_data).to eq({
+          labels: [format_week_offset(2), format_week_offset(1), format_week_offset(0)],
+          datasets: [
+            {
+              label: 'Issues',
+              data: [1, 0, 2]
+            },
+            {
+              label: 'Tags',
+              data: [1, 1, 0]
+            }
+          ]
+        })
+      end
+    end
+
     context "with format: 'table'" do
       subject { described_class.new(properties.merge(format: 'table'), context_record: context_record).perform }
 

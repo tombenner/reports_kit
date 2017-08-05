@@ -18,7 +18,7 @@ if Gem.loaded_specs.has_key?('mysql2')
   REPORTS_KIT_DATABASE_TYPE = :mysql
   ActiveRecord::Base.establish_connection(
     adapter: 'mysql2',
-    host: 'localhost',
+    host: ENV['MYSQL_HOST'] || 'localhost',
     database: 'reports_kit_test',
     username: 'root'
   )
@@ -27,7 +27,7 @@ else
   REPORTS_KIT_DATABASE_TYPE = :postgresql
   ActiveRecord::Base.establish_connection(
     adapter: 'postgresql',
-    host: 'localhost',
+    host: ENV['POSTGRESQL_HOST'] || 'localhost',
     database: 'reports_kit_test',
     username: 'postgres'
   )
@@ -60,8 +60,8 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
+    # To support multi-threaded ActiveRecord queries, we need to use :truncation instead of :transaction.
+    DatabaseCleaner.strategy = [:truncation, pre_count: true]
   end
 
   config.around(:each) do |example|
