@@ -78,7 +78,7 @@ describe ReportsKit::Reports::Data::Generate do
             labels: [format_week_offset(1), format_week_offset(0)],
             datasets: [
               {
-                label: "Issues",
+                label: 'Issues',
                 data: [0, 1]
               }
             ]
@@ -150,11 +150,11 @@ describe ReportsKit::Reports::Data::Generate do
               labels: [format_week_offset(2), format_week_offset(1), format_week_offset(0)],
               datasets: [
                 {
-                  label: "Issues",
+                  label: 'Issues',
                   data: [2, 0, 1]
                 },
                 {
-                  label: "Tags",
+                  label: 'Tags',
                   data: [0, 1, 1]
                 }
               ]
@@ -185,7 +185,7 @@ describe ReportsKit::Reports::Data::Generate do
             labels: [format_week_offset(1), format_week_offset(0)],
             datasets: [
               {
-                label: "Issues",
+                label: 'Issues',
                 data: [0, 1]
               }
             ]
@@ -204,7 +204,7 @@ describe ReportsKit::Reports::Data::Generate do
               labels: [format_week_offset(1), format_week_offset(0)],
               datasets: [
                 {
-                  label: "Issues",
+                  label: 'Issues',
                   data: [1, 0]
                 }
               ]
@@ -274,7 +274,7 @@ describe ReportsKit::Reports::Data::Generate do
       it 'returns the chart_data' do
         expect(chart_data).to eq({
           labels: [repo.to_s],
-          datasets: [{ label: "Issues", data: [2.0] }]
+          datasets: [{ label: 'Issues', data: [2.0] }]
         })
       end
     end
@@ -291,7 +291,7 @@ describe ReportsKit::Reports::Data::Generate do
       it 'returns the chart_data' do
         expect(chart_data).to eq({
           labels: [repo.to_s],
-          datasets: [{ label: "Issues", data: [2] }]
+          datasets: [{ label: 'Issues', data: [2] }]
         })
       end
     end
@@ -359,7 +359,7 @@ describe ReportsKit::Reports::Data::Generate do
       it 'returns the chart_data' do
         expect(chart_data).to eq({
           labels: [repo.to_s],
-          datasets: [{ label: "Issues", data: [2.0] }]
+          datasets: [{ label: 'Issues', data: [2.0] }]
         })
       end
     end
@@ -389,7 +389,7 @@ describe ReportsKit::Reports::Data::Generate do
         chart_data
         expect(chart_data).to eq({
           labels: [repo.to_s],
-          datasets: [{ label: "Issues", data: [1.0] }]
+          datasets: [{ label: 'Issues', data: [1.0] }]
         })
       end
     end
@@ -418,7 +418,7 @@ describe ReportsKit::Reports::Data::Generate do
       it 'returns the chart_data' do
         expect(chart_data).to eq({
           labels: [repo.to_s],
-          datasets: [{ label: "Issues", data: [1.0] }]
+          datasets: [{ label: 'Issues', data: [1.0] }]
         })
       end
     end
@@ -533,7 +533,7 @@ describe ReportsKit::Reports::Data::Generate do
       end
     end
 
-    context "with a data_format_method" do
+    context 'with a data_format_method' do
       subject { described_class.new(properties.merge(data_format_method: 'add_label_suffix'), context_record: context_record).perform }
 
       it 'returns the chart_data' do

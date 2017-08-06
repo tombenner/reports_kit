@@ -12,7 +12,7 @@ module ReportsKit
           '*' => :*,
           '/' => :/,
           '%' => -> (values) {
-            raise ArgumentError.new("Percentage composite aggregations must have exactly two series") if values.length != 2
+            raise ArgumentError.new('Percentage composite aggregations must have exactly two series') if values.length != 2
             numerator, denominator = values
             return 0 if denominator == 0
             ((numerator.to_f / denominator) * 100).round(1)

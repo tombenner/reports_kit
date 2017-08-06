@@ -75,6 +75,8 @@ Style/CaseIndentation:
     - case
     - end
   IndentOneStep: false
+Style/IndentHash:
+  EnforcedStyle: consistent
 Style/RaiseArgs:
   Enabled: false
 Style/SignalException:
