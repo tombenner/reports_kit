@@ -83,7 +83,7 @@ module ReportsKit
         end
 
         def set_record_scoped_colors
-          self.data[:chart_data][:datasets] = self.data[:chart_data][:datasets].map do |dataset|
+          data[:chart_data][:datasets] = data[:chart_data][:datasets].map do |dataset|
             length = dataset[:data].length
             dataset[:backgroundColor] = DEFAULT_COLORS * (length.to_f / DEFAULT_COLORS.length).ceil
             dataset
@@ -91,7 +91,7 @@ module ReportsKit
         end
 
         def set_dataset_scoped_colors
-          self.data[:chart_data][:datasets] = data[:chart_data][:datasets].map.with_index do |dataset, index|
+          data[:chart_data][:datasets] = data[:chart_data][:datasets].map.with_index do |dataset, index|
             color = DEFAULT_COLORS[index % DEFAULT_COLORS.length]
             dataset[:backgroundColor] = color
             dataset[:borderColor] = color
@@ -132,23 +132,23 @@ module ReportsKit
         def set_chart_options
           merged_options = default_options
           merged_options = merged_options.deep_merge(chart_options) if chart_options
-          self.data[:chart_data][:options] = merged_options
+          data[:chart_data][:options] = merged_options
         end
 
         def set_dataset_options
-          return if self.data[:chart_data][:datasets].blank? || dataset_options.blank?
-          self.data[:chart_data][:datasets] = self.data[:chart_data][:datasets].map do |dataset|
+          return if data[:chart_data][:datasets].blank? || dataset_options.blank?
+          data[:chart_data][:datasets] = data[:chart_data][:datasets].map do |dataset|
             dataset.merge(dataset_options)
           end
         end
 
         def set_standard_options
-          self.data[:chart_data][:standard_options] = options[:standard_options] if options[:standard_options].present?
+          data[:chart_data][:standard_options] = options[:standard_options] if options[:standard_options].present?
         end
 
         def set_type
           return if type.blank?
-          self.data[:type] = type
+          data[:type] = type
         end
 
         def donut_or_pie_chart?

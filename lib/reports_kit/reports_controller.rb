@@ -15,7 +15,7 @@ module ReportsKit
               csv << row
             end
           end
-          send_data csv, filename: "Report.csv"
+          send_data csv, filename: 'Report.csv'
         end
         format.xls do
           properties[:format] = 'csv'

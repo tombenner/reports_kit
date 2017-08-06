@@ -27,7 +27,7 @@ module ReportsKit
         self.series = series
         self.configuration = InferrableConfiguration.new(self, :filters)
 
-        self.properties[:criteria] = filter_type.default_criteria unless self.properties[:criteria]
+        properties[:criteria] = filter_type.default_criteria unless properties[:criteria]
       end
 
       def normalized_properties

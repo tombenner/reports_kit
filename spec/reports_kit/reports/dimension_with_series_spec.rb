@@ -18,7 +18,7 @@ describe ReportsKit::Reports::DimensionWithSeries do
       let(:properties) { 'title' }
 
       it 'returns the settings' do
-        expect(subject.settings).to eq({ column: 'issues.title', group: "issues.title" })
+        expect(subject.settings).to eq({ column: 'issues.title', group: 'issues.title' })
       end
     end
 
@@ -26,7 +26,7 @@ describe ReportsKit::Reports::DimensionWithSeries do
       let(:properties) { 'description' }
 
       it 'returns the settings' do
-        expect(subject.settings).to eq({ column: 'issues.description', group: "issues.description" })
+        expect(subject.settings).to eq({ column: 'issues.description', group: 'issues.description' })
       end
     end
 
@@ -63,7 +63,5 @@ describe ReportsKit::Reports::DimensionWithSeries do
         end
       end
     end
-
   end
-
 end

@@ -11,13 +11,13 @@ module ReportsKit
       self.additional_params = additional_params
     end
 
-    def check_box(filter_key, options={})
+    def check_box(filter_key, options = {})
       filter = validate_filter!(filter_key)
       checked = filter.normalized_properties[:criteria][:value] == 'true'
       check_box_tag(filter_key, '1', checked, options)
     end
 
-    def date_range(filter_key, options={})
+    def date_range(filter_key, options = {})
       filter = validate_filter!(filter_key)
       defaults = { class: 'form-control input-sm date_range_picker' }
       options = defaults.deep_merge(options)
@@ -26,7 +26,7 @@ module ReportsKit
       text_field_tag(filter_key, value, options)
     end
 
-    def multi_autocomplete(filter_key, options={})
+    def multi_autocomplete(filter_key, options = {})
       validate_filter!(filter_key)
       filter = series_filters.find { |f| f.key == filter_key.to_s }
       reports_kit_path = Rails.application.routes.url_helpers.reports_kit_path
@@ -49,7 +49,7 @@ module ReportsKit
       select_tag(filter_key, nil, options)
     end
 
-    def string_filter(filter_key, options={})
+    def string_filter(filter_key, options = {})
       filter = validate_filter!(filter_key)
       defaults = { class: 'form-control input-sm' }
       options = defaults.deep_merge(options)

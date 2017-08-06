@@ -9,7 +9,7 @@ module ReportsKit
       self.autocomplete_scopes = []
     end
 
-    def aggregation(key, expression, properties={})
+    def aggregation(key, expression, properties = {})
       aggregations << { key: key.to_s, expression: expression }.merge(properties).symbolize_keys
     end
 

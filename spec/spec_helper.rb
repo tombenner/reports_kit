@@ -13,7 +13,7 @@ Dir.glob("#{directory}/factories/*.rb") { |file| require file }
 Time.zone = ActiveSupport::TimeZone.new('UTC')
 ActiveRecord::Base.default_timezone = :utc
 
-if Gem.loaded_specs.has_key?('mysql2')
+if Gem.loaded_specs.key?('mysql2')
   REPORTS_KIT_DATABASE_ADAPTER = ReportsKit::Reports::Adapters::Mysql
   REPORTS_KIT_DATABASE_TYPE = :mysql
   ActiveRecord::Base.establish_connection(

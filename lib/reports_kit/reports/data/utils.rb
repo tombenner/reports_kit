@@ -23,11 +23,9 @@ module ReportsKit
         end
 
         def self.parse_date_string(string)
-          begin
-            Date.parse(string)
-          rescue ArgumentError
-            RelativeTime.parse(string)
-          end
+          Date.parse(string)
+        rescue ArgumentError
+          RelativeTime.parse(string)
         end
 
         def self.populate_sparse_hash(hash, dimension:)
