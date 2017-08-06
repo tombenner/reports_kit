@@ -2,11 +2,12 @@ module ReportsKit
   module Reports
     module FilterTypes
       class Base
-        attr_accessor :settings, :properties
+        attr_accessor :settings, :properties, :primary_dimension
 
-        def initialize(settings, properties)
+        def initialize(settings, properties, primary_dimension:)
           self.settings = settings || {}
           self.properties = properties
+          self.primary_dimension = primary_dimension
         end
 
         def apply_filter(records)

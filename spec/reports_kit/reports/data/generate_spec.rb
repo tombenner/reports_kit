@@ -56,7 +56,7 @@ describe ReportsKit::Reports::Data::Generate do
         })
       end
 
-      context 'with a datetime filter' do
+      context 'with an absolute datetime filter' do
         let(:properties) do
           {
             measure: 'issue',
@@ -156,6 +156,56 @@ describe ReportsKit::Reports::Data::Generate do
                 {
                   label: "Tags",
                   data: [0, 1, 1]
+                }
+              ]
+            })
+          end
+        end
+      end
+
+      context 'with a relative datetime filter' do
+        let(:properties) do
+          {
+            measure: 'issue',
+            filters: [
+              {
+                key: 'opened_at',
+                criteria: {
+                  operator: 'between',
+                  value: '-1w - now'
+                }
+              }
+            ],
+            dimensions: %w(opened_at)
+          }
+        end
+
+        it 'returns the chart_data' do
+          expect(chart_data).to eq({
+            labels: [format_week_offset(1), format_week_offset(0)],
+            datasets: [
+              {
+                label: "Issues",
+                data: [0, 1]
+              }
+            ]
+          })
+        end
+
+        context 'when a record\'s timestamp is closer to the beginning of the week than the current date' do
+          let!(:issues) do
+            [
+              create(:issue, repo: repo, opened_at: Date.parse('2009-12-22'))
+            ]
+          end
+
+          it 'includes record' do
+            expect(chart_data).to eq({
+              labels: [format_week_offset(1), format_week_offset(0)],
+              datasets: [
+                {
+                  label: "Issues",
+                  data: [1, 0]
                 }
               ]
             })

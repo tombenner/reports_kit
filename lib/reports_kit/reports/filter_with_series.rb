@@ -64,7 +64,7 @@ module ReportsKit
       end
 
       def filter_type
-        type_klass.new(settings, properties)
+        type_klass.new(settings, properties, primary_dimension: series.dimensions.first)
       end
 
       def filter_type_class_from_model
