@@ -1,7 +1,7 @@
 module ReportsKit
   class Configuration
-    attr_accessor :cache_duration, :cache_store,
-      :context_params_method, :context_record_method, :custom_methods, :first_day_of_week, :use_concurrent_queries
+    attr_accessor :cache_duration, :cache_store, :context_params_method, :context_record_method, :custom_methods, :default_dimension_limit,
+      :first_day_of_week, :use_concurrent_queries
 
     def initialize
       self.cache_duration = 5.minutes
@@ -9,6 +9,7 @@ module ReportsKit
       self.context_params_method = nil
       self.context_record_method = nil
       self.custom_methods = {}
+      self.default_dimension_limit = 30
       self.first_day_of_week = :sunday
       self.use_concurrent_queries = false
     end

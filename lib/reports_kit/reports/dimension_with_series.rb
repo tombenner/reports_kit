@@ -1,7 +1,6 @@
 module ReportsKit
   module Reports
     class DimensionWithSeries
-      DEFAULT_DIMENSION_INSTANCES_LIMIT = 30
       DEFAULT_GRANULARITY = 'week'
       VALID_GRANULARITIES = %w(day week).freeze
       ADAPTER_NAMES_CLASSES = {
@@ -84,7 +83,7 @@ module ReportsKit
         if configured_by_time?
           properties[:limit]
         else
-          properties[:limit] || DEFAULT_DIMENSION_INSTANCES_LIMIT
+          properties[:limit] || ReportsKit.configuration.default_dimension_limit
         end
       end
 
