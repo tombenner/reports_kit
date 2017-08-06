@@ -1,5 +1,7 @@
 ReportsKit
 =====
+[![Build Status](https://travis-ci.org/tombenner/reports_kit.svg?branch=master)](https://travis-ci.org/tombenner/reports_kit)
+
 ReportsKit lets you easily create beautiful charts with customizable, interactive filters.
 
 For interactive examples, see [reportskit.co](https://www.reportskit.co/).

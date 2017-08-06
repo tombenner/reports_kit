@@ -1,0 +1,20 @@
+cache: bundler
+
+language: ruby
+
+services:
+  - mysql
+  - postgresql
+
+rvm:
+  - '2.2.7'
+  - '2.3.4'
+  - '2.4.1'
+
+before_install: gem update bundler
+before_script:
+  - psql -c 'CREATE DATABASE reports_kit_test;' -U postgres
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS reports_kit_test;'
+  - bundle exec appraisal install
+
+script: bundle exec appraisal rspec
