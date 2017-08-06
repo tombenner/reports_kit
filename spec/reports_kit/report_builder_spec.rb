@@ -20,7 +20,7 @@ describe ReportsKit::ReportBuilder do
     end
 
     it 'transforms the filter criteria' do
-      expect(subject.date_range('opened_at')).to include("#{format_criteria_time(1.week.ago)} - #{format_criteria_time(Time.zone.now)}")
+      expect(subject.date_range('opened_at')).to include("#{format_configuration_time(1.week.ago)} - #{format_configuration_time(Time.zone.now)}")
     end
   end
 end

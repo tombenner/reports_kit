@@ -2,12 +2,16 @@ module ReportsKit
   module Reports
     module Data
       class Utils
-        def self.format_display_time(time)
-          time.strftime('%b %-d, \'%y')
-        end
-
         def self.format_configuration_time(time)
           time.strftime('%b %-d, %Y')
+        end
+
+        def self.format_csv_time(time)
+          time.strftime('%Y-%m-%d')
+        end
+
+        def self.format_display_time(time)
+          time.strftime('%b %-d, \'%y')
         end
 
         def self.format_time_value(value)

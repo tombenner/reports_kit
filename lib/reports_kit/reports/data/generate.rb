@@ -21,12 +21,13 @@ module ReportsKit
           else
             raw_data = Data::FormatOneDimension.new(serieses_results, order: order, limit: limit).perform
           end
+          raw_data = format_csv_times(raw_data) if format == 'csv'
           raw_data = data_format_method.call(raw_data, context_record) if data_format_method
           chart_data = format_chart_data(raw_data)
 
           data = { chart_data: chart_data }
           data = ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
-          if table?
+          if table_or_csv?
             data[:table_data] = format_table(data.delete(:chart_data))
             data[:type] = format
           end
@@ -85,6 +86,15 @@ module ReportsKit
           properties[:format]
         end
 
+        def format_csv_times(raw_data)
+          return unless primary_dimension.configured_by_time?
+          raw_data[:entities] = raw_data[:entities].map do |entity|
+            entity.label = Utils.format_csv_time(entity.instance)
+            entity
+          end
+          raw_data
+        end
+
         def format_table(data)
           column_names = [format_string(primary_dimension.label)]
           column_values = []
@@ -104,7 +114,7 @@ module ReportsKit
           serieses.first.dimensions.first
         end
 
-        def table?
+        def table_or_csv?
           format.in?(%w(table csv))
         end
 

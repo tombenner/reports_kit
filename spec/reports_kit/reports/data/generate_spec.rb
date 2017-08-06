@@ -65,7 +65,7 @@ describe ReportsKit::Reports::Data::Generate do
                 key: 'opened_at',
                 criteria: {
                   operator: 'between',
-                  value: "#{format_criteria_time(now - 1.week)} - #{format_criteria_time(now)}"
+                  value: "#{format_configuration_time(now - 1.week)} - #{format_configuration_time(now)}"
                 }
               }
             ],
@@ -94,7 +94,7 @@ describe ReportsKit::Reports::Data::Generate do
                   key: 'created_at',
                   criteria: {
                     operator: 'between',
-                    value: "#{format_criteria_time(now - 1.week)} - #{format_criteria_time(now)}"
+                    value: "#{format_configuration_time(now - 1.week)} - #{format_configuration_time(now)}"
                   }
                 }
               ],
@@ -140,7 +140,7 @@ describe ReportsKit::Reports::Data::Generate do
                 }
               ],
               ui_filters: {
-                created_at: "#{format_criteria_time(now - 1.week)} - #{format_criteria_time(now)}"
+                created_at: "#{format_configuration_time(now - 1.week)} - #{format_configuration_time(now)}"
               }
             }
           end
@@ -487,9 +487,9 @@ describe ReportsKit::Reports::Data::Generate do
       it 'returns the table_data' do
         expect(table_data).to eq([
           [nil, repo.to_s, repo2.to_s],
-          [format_week_offset(2), 1, 0],
-          [format_week_offset(1), 0, 0],
-          [format_week_offset(0), 1, 1]
+          [format_csv_week_offset(2), 1, 0],
+          [format_csv_week_offset(1), 0, 0],
+          [format_csv_week_offset(0), 1, 1]
         ])
       end
 
@@ -499,9 +499,9 @@ describe ReportsKit::Reports::Data::Generate do
         it 'returns the table_data without the HTML tags' do
           expect(table_data).to eq([
             [nil, repo.to_s, repo2.to_s],
-            ["#{format_week_offset(2)} Bar", 1, 0],
-            ["#{format_week_offset(1)} Bar", 0, 0],
-            ["#{format_week_offset(0)} Bar", 1, 1]
+            ["#{format_csv_week_offset(2)} Bar", 1, 0],
+            ["#{format_csv_week_offset(1)} Bar", 0, 0],
+            ["#{format_csv_week_offset(0)} Bar", 1, 1]
           ])
         end
       end
@@ -1027,7 +1027,7 @@ describe ReportsKit::Reports::Data::Generate do
                 }
               ],
               ui_filters: {
-                created_at: "#{format_criteria_time(now - 1.week)} - #{format_criteria_time(now)}"
+                created_at: "#{format_configuration_time(now - 1.week)} - #{format_configuration_time(now)}"
               }
             }
           end
