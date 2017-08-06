@@ -707,6 +707,40 @@ describe ReportsKit::Reports::Data::Generate do
     end
   end
 
+  describe 'configuration' do
+    let(:properties) do
+      {
+        measure: 'issue',
+        dimensions: %w(repo)
+      }
+    end
+    let!(:issues) do
+      [
+        create(:issue, repo: repo),
+        create(:issue, repo: repo),
+        create(:issue, repo: repo2)
+      ]
+    end
+
+    context 'with default_properties' do
+      around :each do |example|
+        ReportsKit.configuration.default_properties = {
+          chart: {
+            options: {
+              foo: 'bar'
+            }
+          }
+        }
+        example.run
+        ReportsKit.configuration.default_properties = nil
+      end
+
+      it 'returns the chart_data' do
+        expect(subject[:chart_data][:options][:foo]).to eq('bar')
+      end
+    end
+  end
+
   describe 'composite aggregations' do
     context 'with two series' do
       let(:properties) do

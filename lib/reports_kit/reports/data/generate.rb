@@ -8,6 +8,7 @@ module ReportsKit
 
         def initialize(properties, context_record: nil)
           self.properties = properties.deep_symbolize_keys
+          self.properties = ReportsKit.configuration.default_properties.deep_merge(self.properties) if ReportsKit.configuration.default_properties
           self.properties = Utils.normalize_properties(self.properties)
           self.context_record = context_record
         end

@@ -44,16 +44,9 @@ ReportsKit.Chart = (function(options) {
     var additionalOptions = {};
     var maxItems = standardOptions && standardOptions.legend && standardOptions.legend.max_items;
     if (maxItems) {
-      additionalOptions = {
-        legend: {
-          labels: {
-            filter: function(item) {
-              return item.index < maxItems;
-            }
-          }
-        }
-      };
-      options = $.extend(true, options, additionalOptions);
+      options.legend = options.legend || {};
+      options.legend.labels = options.legend.labels || {};
+      options.legend.labels.filter = options.legend.labels.filter || function(item) { return item.datasetIndex < maxItems; };
     }
     return options;
   };
