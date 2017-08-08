@@ -46,7 +46,7 @@ ReportsKit.Chart = (function(options) {
     if (maxItems) {
       options.legend = options.legend || {};
       options.legend.labels = options.legend.labels || {};
-      options.legend.labels.filter = options.legend.labels.filter || function(item) { return item.datasetIndex < maxItems; };
+      options.legend.labels.filter = options.legend.labels.filter || function(item) { return (item.datasetIndex || item.index) < maxItems; };
     }
     return options;
   };
