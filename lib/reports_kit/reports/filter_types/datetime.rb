@@ -35,7 +35,7 @@ module ReportsKit
         end
 
         def adjust_range_to_dimension(start_at, end_at)
-          return [start_at, end_at] unless primary_dimension.configured_by_time?
+          return [start_at.beginning_of_day, end_at.end_of_day] unless primary_dimension.configured_by_time?
           return [start_at.beginning_of_day, end_at.end_of_day] if primary_dimension.granularity == 'day'
           return [
             start_at.beginning_of_week(ReportsKit.configuration.first_day_of_week),
