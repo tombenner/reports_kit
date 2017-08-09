@@ -15,6 +15,10 @@ module ReportsKit
         properties[:key]
       end
 
+      def expression
+        properties[:expression] || key
+      end
+
       def label
         properties.key?(:label) ? properties[:label] : key.titleize
       end

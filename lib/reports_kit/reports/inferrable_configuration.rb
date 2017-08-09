@@ -11,7 +11,7 @@ module ReportsKit
 
       attr_accessor :inferrable, :inferrable_type
 
-      delegate :key, :series, to: :inferrable
+      delegate :key, :expression, :series, to: :inferrable
 
       def initialize(inferrable, inferrable_type)
         self.inferrable = inferrable
@@ -57,7 +57,7 @@ module ReportsKit
       end
 
       def reflection
-        model_class.reflect_on_association(key.to_sym)
+        model_class.reflect_on_association(expression.to_sym)
       end
 
       def instance_class
@@ -71,7 +71,7 @@ module ReportsKit
       end
 
       def inferred_settings
-        return { column: "#{model_class.table_name}.#{key}" } if configured_by_column?
+        return { column: "#{model_class.table_name}.#{expression}" } if configured_by_column?
         if configured_by_association?
           return inferred_settings_from_belongs_to_or_has_one if inferred_settings_from_belongs_to_or_has_one
           return inferred_settings_from_has_many if inferred_settings_from_has_many
@@ -115,7 +115,7 @@ module ReportsKit
       end
 
       def column_type
-        column_type = model_class.columns_hash[key.to_s].try(:type)
+        column_type = model_class.columns_hash[expression.to_s].try(:type)
         return column_type if SUPPORTED_COLUMN_TYPES.include?(column_type)
       end
 

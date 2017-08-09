@@ -17,7 +17,7 @@ module ReportsKit
 
       attr_accessor :filter, :series, :configuration
 
-      delegate :key, :properties, :label, to: :filter
+      delegate :key, :expression, :properties, :label, to: :filter
       delegate :configured_by_association?, :configured_by_column?, :configured_by_model?, :configured_by_time?,
         :settings_from_model, :configuration_strategy, :instance_class, :column_type, :column,
         to: :configuration

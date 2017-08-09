@@ -10,7 +10,7 @@ module ReportsKit
 
       attr_accessor :dimension, :series, :configuration
 
-      delegate :key, :properties, :label, to: :dimension
+      delegate :key, :expression, :properties, :label, to: :dimension
       delegate :configured_by_association?, :configured_by_column?, :configured_by_model?, :configured_by_time?,
         :settings_from_model, :reflection, :instance_class, :model_class, :column_type,
         to: :configuration

@@ -13,6 +13,10 @@ module ReportsKit
         properties[:key]
       end
 
+      def expression
+        properties[:expression] || key
+      end
+
       def label
         key.titleize
       end
