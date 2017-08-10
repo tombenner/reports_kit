@@ -115,6 +115,7 @@ module ReportsKit
               sorted_dimension_keys = dimension_keys_sums.sort_by(&:last).map(&:first)
               sorted_dimension_keys = sorted_dimension_keys.reverse if order.direction == 'desc'
               sorted_serieses_results = serieses_results.map do |series, dimension_keys_values|
+                dimension_keys_values = filter_dimension_keys_values(dimension_keys_values)
                 dimension_keys_values = dimension_keys_values.sort_by { |dimension_key, _| sorted_dimension_keys.index(dimension_key) }
                 [series, Hash[dimension_keys_values]]
               end
