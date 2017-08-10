@@ -6,7 +6,8 @@ ReportsKit.Table = (function(options) {
     self.report = options.report;
     self.el = self.report.el;
 
-    self.noResultsEl = $('<div>No data was found</div>').appendTo(self.report.visualizationEl).hide();
+    self.defaultEmptyStateText = 'No data was found';
+    self.emptyStateEl = $('<div>' + self.defaultEmptyStateText + '</div>').appendTo(self.report.visualizationEl).hide();
     self.loadingIndicatorEl = $('<div class="loading_indicator"></div>').appendTo(self.report.visualizationEl).hide();
     self.table = $('<table />', { 'class': 'table table-striped table-hover' }).appendTo(self.report.visualizationEl);
   };
@@ -19,11 +20,14 @@ ReportsKit.Table = (function(options) {
     $.getJSON(path, function(response) {
       var data = response.data;
       var tableData = data.table_data;
-      var hasNoResults = tableData.length <= 1;
+      // If the data only includes column headers, then it we have an empty state.
+      var isEmptyState = tableData.length <= 1;
+      var emptyStateText = (data.report_options && data.report_options.empty_state_text) || self.defaultEmptyStateText;
+      self.emptyStateEl.html(emptyStateText);
 
       self.loadingIndicatorEl.stop(true, true).hide();
-      self.noResultsEl.toggle(hasNoResults);
-      if (hasNoResults) {
+      self.emptyStateEl.toggle(isEmptyState);
+      if (isEmptyState) {
         self.table.hide();
         return;
       }

@@ -6,7 +6,8 @@ ReportsKit.Chart = (function(options) {
     self.report = options.report;
     self.el = self.report.el;
 
-    self.noResultsEl = $('<div>No data was found</div>').appendTo(self.report.visualizationEl).hide();
+    self.defaultEmptyStateText = 'No data was found';
+    self.emptyStateEl = $('<div>' + self.defaultEmptyStateText + '</div>').appendTo(self.report.visualizationEl).hide();
     self.loadingIndicatorEl = $('<div class="loading_indicator"></div>').appendTo(self.report.visualizationEl).hide();
     self.canvas = $('<canvas />').appendTo(self.report.visualizationEl);
   };
@@ -19,8 +20,13 @@ ReportsKit.Chart = (function(options) {
     $.getJSON(path, function(response) {
       var data = response.data;
       var chartData = data.chart_data;
+      var isEmptyState = chartData.datasets.length === 0;
+      var emptyStateText = (data.report_options && data.report_options.empty_state_text) || self.defaultEmptyStateText;
       var options = chartData.options;
-      options = self.addAdditionalOptions(options, chartData.standard_options)
+      options = self.addAdditionalOptions(options, data.report_options);
+
+      self.emptyStateEl.html(emptyStateText).toggle(isEmptyState);
+      self.canvas.toggle(!isEmptyState);
 
       var args = {
         type: data.type,
@@ -36,13 +42,12 @@ ReportsKit.Chart = (function(options) {
       } else {
         self.chart = new Chart(self.canvas, args);
       }
-      self.noResultsEl.toggle(self.chart.data.labels.length === 0);
     });
   };
 
-  self.addAdditionalOptions = function(options, standardOptions) {
+  self.addAdditionalOptions = function(options, reportOptions) {
     var additionalOptions = {};
-    var maxItems = standardOptions && standardOptions.legend && standardOptions.legend.max_items;
+    var maxItems = reportOptions && reportOptions.legend && reportOptions.legend.max_items;
     if (maxItems) {
       options.legend = options.legend || {};
       options.legend.labels = options.legend.labels || {};
