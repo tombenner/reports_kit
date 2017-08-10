@@ -1,7 +1,7 @@
 module ReportsKit
   module Reports
     class Series < AbstractSeries
-      VALID_KEYS = [:measure, :dimensions, :filters, :limit]
+      VALID_KEYS = [:measure, :dimensions, :filters, :limit, :report_options]
 
       attr_accessor :properties, :dimensions, :filters, :context_record
 
@@ -34,6 +34,10 @@ module ReportsKit
 
       def limit
         properties[:limit]
+      end
+
+      def edit_relation_method
+        ReportsKit.configuration.custom_method(properties[:report_options].try(:[], :edit_relation_method))
       end
 
       def relation_name

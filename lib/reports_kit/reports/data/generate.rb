@@ -32,7 +32,7 @@ module ReportsKit
             data[:table_data] = format_table(data.delete(:chart_data))
             data[:type] = format
           end
-          data[:report_options] = properties[:report_options]
+          data[:report_options] = properties[:report_options] if properties[:report_options]
           ReportsKit::Cache.set(properties, context_record, data)
           data
         end

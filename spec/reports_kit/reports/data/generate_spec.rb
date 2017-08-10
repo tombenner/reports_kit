@@ -569,6 +569,22 @@ describe ReportsKit::Reports::Data::Generate do
         end
       end
     end
+
+    context 'with an edit_relation_method' do
+      subject { described_class.new(properties.merge(report_options: { edit_relation_method: 'empty_result_set_for_relation' }), context_record: context_record).perform }
+
+      it 'returns the chart_data' do
+        expect(chart_data).to eq({
+          labels: [],
+          datasets: [
+            {
+              label: 'Issues',
+              data: []
+            }
+          ]
+        })
+      end
+    end
   end
 
   context 'with a dimension with a blank label' do

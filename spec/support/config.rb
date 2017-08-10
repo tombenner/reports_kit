@@ -18,6 +18,9 @@ ReportsKit.configure do |config|
         entity.label = "#{entity.label} #{context_record}" if entity.label
       end
       data
+    },
+    empty_result_set_for_relation: -> (relation) {
+      relation.where('0 = 1')
     }
   }
 end
