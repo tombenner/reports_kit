@@ -45,8 +45,8 @@ module ReportsKit
     end
 
     def action_elements_for_properties(properties)
-      return if properties['actions'].blank?
-      properties['actions'].map do |action|
+      return if properties[:actions].blank?
+      properties[:actions].map do |action|
         element_method = ACTION_KEYS_METHODS[action]
         raise ArgumentError.new("Invalid action: #{action}") unless element_method
         send(element_method)
