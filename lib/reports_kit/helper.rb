@@ -11,6 +11,7 @@ module ReportsKit
         path = Rails.root.join('config', 'reports_kit', 'reports', "#{properties}.yml")
         properties = YAML.load_file(path)
       end
+      properties = properties.deep_symbolize_keys
       builder = ReportsKit::ReportBuilder.new(properties, additional_params: additional_params)
       path = reports_kit.reports_kit_reports_path({ format: 'json' }.merge(additional_params))
       data = { properties: properties.slice(:format), report_params: report_params, path: path }
