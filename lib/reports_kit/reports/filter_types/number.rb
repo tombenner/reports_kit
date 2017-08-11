@@ -7,15 +7,15 @@ module ReportsKit
         def apply_conditions(records)
           case criteria[:operator]
           when '>'
-            records.where("#{column} > #{value.to_i}")
+            records.where(column => (value.to_i...Float::INFINITY))
           when '>='
-            records.where("#{column} >= #{value.to_i}")
+            records.where(column => (value.to_i..Float::INFINITY))
           when '<'
-            records.where("#{column} < #{value.to_i}")
+            records.where(column => (-Float::INFINITY...value.to_i))
           when '<='
-            records.where("#{column} <= #{value.to_i}")
+            records.where(column => (-Float::INFINITY..value.to_i))
           when '='
-            records.where("#{column} = #{value.to_i}")
+            records.where(column => value.to_i)
           else
             raise ArgumentError.new("Unsupported operator: '#{criteria[:operator]}'")
           end

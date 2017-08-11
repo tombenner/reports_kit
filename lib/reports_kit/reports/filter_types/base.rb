@@ -40,7 +40,7 @@ module ReportsKit
         end
 
         def column
-          settings[:column] || properties[:key]
+          settings[:column] || Data::Utils.quote_column_name(properties[:key])
         end
       end
     end

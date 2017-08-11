@@ -20,13 +20,13 @@ module ReportsKit
         end
 
         def boolean_value
-          case criteria[:value]
+          case value
           when true, 'true'
             true
           when false, 'false'
             false
           else
-            raise ArgumentError.new("Unsupported value: '#{criteria[:value]}'")
+            raise ArgumentError.new("Unsupported value: '#{value}'")
           end
         end
 
@@ -35,11 +35,11 @@ module ReportsKit
         end
 
         def valid?
-          criteria[:value].present?
+          value.present?
         end
 
         def conditions
-          settings[:conditions] || properties[:key]
+          settings[:conditions] || Data::Utils.quote_column_name(properties[:key])
         end
       end
     end

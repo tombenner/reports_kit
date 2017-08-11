@@ -26,6 +26,10 @@ module ReportsKit
           number.round(Generate::ROUND_PRECISION)
         end
 
+        def self.quote_column_name(string)
+          ActiveRecord::Base.connection.quote_column_name(string)
+        end
+
         def self.parse_date_string(string)
           Date.parse(string)
         rescue ArgumentError
