@@ -15,7 +15,7 @@ module ReportsKit
 
         def perform
           data = ReportsKit::Cache.get(properties, context_record)
-          return data if data
+          return data.deep_symbolize_keys if data
 
           if two_dimensions?
             raw_data = Data::FormatTwoDimensions.new(serieses.first, serieses_results.first.last, order: order, limit: limit).perform
