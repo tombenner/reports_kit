@@ -89,7 +89,7 @@ module ReportsKit
         end
 
         def format_csv_times(raw_data)
-          return unless primary_dimension.configured_by_time?
+          return raw_data unless primary_dimension.configured_by_time?
           raw_data[:entities] = raw_data[:entities].map do |entity|
             entity.label = Utils.format_csv_time(entity.instance)
             entity
