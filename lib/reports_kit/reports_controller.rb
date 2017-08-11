@@ -3,6 +3,8 @@ require 'spreadsheet'
 
 module ReportsKit
   class ReportsController < ReportsKit::BaseController
+    VALID_PARAMS_PROPERTIES_KEYS = [:ui_filters]
+
     def index
       respond_to do |format|
         format.json do
@@ -31,7 +33,15 @@ module ReportsKit
     end
 
     def properties
-      @properties ||= ActiveSupport::JSON.decode(params[:properties])
+      @properties ||= begin
+        properties_method = ReportsKit.configuration.properties_method
+        properties = instance_eval(&properties_method)
+        properties.merge(params_properties)
+      end
+    end
+
+    def params_properties
+      @params_properties ||= ActiveSupport::JSON.decode(params[:properties]).with_indifferent_access.slice(*VALID_PARAMS_PROPERTIES_KEYS)
     end
 
     def xls_string

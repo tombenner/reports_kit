@@ -5,7 +5,7 @@ module ReportsKit
       'export_xls' => :export_xls_element
     }
 
-    def render_report(properties, &block)
+    def render_report(properties, report_params:, &block)
       raise ArgumentError.new('`properties` must be a Hash or String') if properties.blank?
       if properties.is_a?(String)
         path = Rails.root.join('config', 'reports_kit', 'reports', "#{properties}.yml")
@@ -13,7 +13,8 @@ module ReportsKit
       end
       builder = ReportsKit::ReportBuilder.new(properties, additional_params: additional_params)
       path = reports_kit.reports_kit_reports_path({ format: 'json' }.merge(additional_params))
-      content_tag :div, nil, class: 'reports_kit_report form-inline', data: { properties: builder.properties, path: path } do
+      data = { properties: properties.slice(:format), report_params: report_params, path: path }
+      content_tag :div, nil, class: 'reports_kit_report form-inline', data: data do
         elements = []
         if block_given?
           elements << form_tag(path, method: 'get', class: 'reports_kit_report_form') do
