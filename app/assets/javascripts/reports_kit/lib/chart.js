@@ -52,7 +52,10 @@ ReportsKit.Chart = (function(options) {
     if (maxItems) {
       options.legend = options.legend || {};
       options.legend.labels = options.legend.labels || {};
-      options.legend.labels.filter = options.legend.labels.filter || function(item) { return (item.datasetIndex || item.index) < maxItems; };
+      options.legend.labels.filter = options.legend.labels.filter || function(item) {
+        var index = (typeof item.datasetIndex === 'undefined') ? item.index : item.datasetIndex;
+        return index < maxItems;
+      };
     }
     return options;
   };
