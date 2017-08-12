@@ -32,6 +32,7 @@ ReportsKit.Table = (function(options) {
         self.table.hide();
         return;
       }
+      self.table.show();
 
       var html = '';
       for(var i = 0; i < tableData.length; i++) {
