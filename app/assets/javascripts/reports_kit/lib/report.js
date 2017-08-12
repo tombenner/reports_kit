@@ -7,7 +7,6 @@ ReportsKit.Report = (function(options) {
     self.visualizationEl = self.el.find('.reports_kit_visualization');
 
     self.defaultProperties = self.el.data('properties');
-    self.reportParams = self.el.data('report-params');
     self.form = self.el.find('.reports_kit_report_form');
 
     self.initializeElements();
@@ -116,7 +115,6 @@ ReportsKit.Report = (function(options) {
     var path = el.data('path');
     var separator = path.indexOf('?') === -1 ? '?' : '&';
     path += separator + 'properties=' + encodeURIComponent(JSON.stringify(self.properties()));
-    path += '&report=' + encodeURIComponent(JSON.stringify(self.reportParams));
     window.open(path, '_blank');
     return false;
   };

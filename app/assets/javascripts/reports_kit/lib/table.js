@@ -16,7 +16,6 @@ ReportsKit.Table = (function(options) {
     var path = self.el.data('path');
     var separator = path.indexOf('?') === -1 ? '?' : '&';
     path += separator + 'properties=' + encodeURIComponent(JSON.stringify(self.report.properties()));
-    path += '&report=' + encodeURIComponent(JSON.stringify(self.report.reportParams));
     self.loadingIndicatorEl.fadeIn(100);
     $.getJSON(path, function(response) {
       var data = response.data;
