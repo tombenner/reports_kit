@@ -85,6 +85,36 @@ describe ReportsKit::Reports::Data::Generate do
           })
         end
 
+        context 'with a old end date' do
+          let(:properties) do
+            {
+              measure: 'issue',
+              filters: [
+                {
+                  key: 'opened_at',
+                  criteria: {
+                    operator: 'between',
+                    value: "#{format_configuration_time(now - 2.weeks)} - #{format_configuration_time(now - 1.week)}"
+                  }
+                }
+              ],
+              dimensions: %w(opened_at)
+            }
+          end
+
+          it 'returns the chart_data' do
+            expect(chart_data).to eq({
+              labels: [format_week_offset(2), format_week_offset(1)],
+              datasets: [
+                {
+                  label: 'Issues',
+                  data: [2, 0]
+                }
+              ]
+            })
+          end
+        end
+
         context 'with zero results' do
           let(:properties) do
             {

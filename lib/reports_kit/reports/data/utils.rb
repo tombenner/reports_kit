@@ -73,11 +73,7 @@ module ReportsKit
           keys = keys.sort
           last_key = (dimension.last_key || keys.last).to_date
           last_key = last_key.beginning_of_week(ReportsKit.configuration.first_day_of_week) if granularity == 'week'
-
-          if granularity == 'week'
-            beginning_of_current_week = Date.today.beginning_of_week(ReportsKit.configuration.first_day_of_week)
-            last_key = [beginning_of_current_week, last_key].compact.max
-          end
+          last_key ||= Date.today.beginning_of_week(ReportsKit.configuration.first_day_of_week) if granularity == 'week'
 
           date = first_key
           populated_keys = []
