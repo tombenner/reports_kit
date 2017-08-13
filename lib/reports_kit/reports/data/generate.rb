@@ -28,11 +28,8 @@ module ReportsKit
 
           data = { chart_data: chart_data }
           data = ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
-          if table_or_csv?
-            data[:table_data] = format_table(data.delete(:chart_data))
-            data[:type] = format
-          end
           data[:report_options] = properties[:report_options] if properties[:report_options]
+          data = format_table_data(data) if table_or_csv?
           ReportsKit::Cache.set(properties, context_record, data)
           data
         end
@@ -49,6 +46,17 @@ module ReportsKit
             }
           end
           chart_data
+        end
+
+        def format_table_data(data)
+          data[:table_data] = Data::FormatTable.new(
+            data.delete(:chart_data),
+            format: format,
+            first_column_label: primary_dimension.label,
+            report_options: properties[:report_options]
+          ).perform
+          data[:type] = format
+          data
         end
 
         def serieses_results
@@ -97,36 +105,12 @@ module ReportsKit
           raw_data
         end
 
-        def format_table(data)
-          column_names = [format_string(primary_dimension.label)]
-          column_values = []
-          data[:datasets].each do |dataset|
-            column_names << format_string(dataset[:label])
-            column_values << dataset[:data]
-          end
-          rows = column_values.transpose
-          rows = rows.map.with_index do |row, index|
-            label = format_string(data[:labels][index])
-            row.unshift(label)
-          end
-          [column_names] + rows
-        end
-
         def primary_dimension
           serieses.first.dimensions.first
         end
 
         def table_or_csv?
           format.in?(%w(table csv))
-        end
-
-        def strip_html_tags?
-          format == 'csv'
-        end
-
-        def format_string(string)
-          return string unless string && strip_html_tags?
-          ActionView::Base.full_sanitizer.sanitize(string)
         end
 
         def inferred_options

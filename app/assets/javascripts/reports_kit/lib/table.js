@@ -20,9 +20,10 @@ ReportsKit.Table = (function(options) {
     $.getJSON(path, function(response) {
       var data = response.data;
       var tableData = data.table_data;
+      var reportOptions = data.report_options || {};
       // If the data only includes column headers, then it we have an empty state.
       var isEmptyState = tableData.length <= 1;
-      var emptyStateText = (data.report_options && data.report_options.empty_state_text) || self.defaultEmptyStateText;
+      var emptyStateText = reportOptions.empty_state_text || self.defaultEmptyStateText;
       self.emptyStateEl.html(emptyStateText);
 
       self.loadingIndicatorEl.stop(true, true).hide();
@@ -33,12 +34,16 @@ ReportsKit.Table = (function(options) {
       }
       self.table.show();
 
+      var rowAggregationsCount = self.rowAggregationsCount(reportOptions);
+      var rowAggregationsStartIndex = rowAggregationsCount ? (tableData.length - rowAggregationsCount) : null;
       var html = '';
       for(var i = 0; i < tableData.length; i++) {
         if (i == 0) {
           html += '<thead><tr>';
         } else if (i == 1) {
           html += '<tbody><tr>';
+        } else if (rowAggregationsCount && i == rowAggregationsStartIndex) {
+          html += '<tfoot><tr>';
         } else {
           html += '<tr>';
         }
@@ -47,12 +52,14 @@ ReportsKit.Table = (function(options) {
           if (i == 0 || j == 0) {
             html += '<th>' + (tableData[i][j] || '') + '</th>';
           } else {
-            html += '<td>' + tableData[i][j] + '</td>';
+            html += '<td>' + ((tableData[i][j] === null) ? '' : tableData[i][j]) + '</td>';
           }
         }
 
         if (i == 0) {
           html += '</tr></thead>';
+        } else if (i == tableData.length && rowAggregationsCount) {
+          html += '</tfoot></tbody>';
         } else if (i == tableData.length) {
           html += '</tr></tbody>';
         } else {
@@ -62,6 +69,19 @@ ReportsKit.Table = (function(options) {
       self.table.html(html);
       self.table.tablesorter();
     });
+  };
+
+  self.rowAggregationsCount = function(reportOptions) {
+    if (!reportOptions.aggregations) {
+      return 0;
+    };
+    var rowAggregationsCount = 0;
+    for(var i = 0; i < reportOptions.aggregations.length; i++) {
+      if (reportOptions.aggregations[i].from === 'columns') {
+        rowAggregationsCount += 1;
+      }
+    }
+    return rowAggregationsCount;
   };
 
   self.initialize(options);

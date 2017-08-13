@@ -400,6 +400,70 @@
   - - foo/bar2
     - 0
     - 2
+- :type: table
+  :report_options:
+    :aggregations:
+    - :from: columns
+      :operator: sum
+      :label: Total
+  :table_data:
+  - - 
+    - Repo Issues
+    - Labels
+  - - foo/bar1
+    - 2
+    - 1
+  - - foo/bar2
+    - 0
+    - 2
+  - - Total
+    - 2
+    - 3
+- :type: table
+  :report_options:
+    :aggregations:
+    - :from: rows
+      :operator: sum
+      :label: Total
+  :table_data:
+  - - 
+    - Repo Issues
+    - Labels
+    - Total
+  - - foo/bar1
+    - 2
+    - 1
+    - 3
+  - - foo/bar2
+    - 0
+    - 2
+    - 2
+- :type: table
+  :report_options:
+    :aggregations:
+    - :from: columns
+      :operator: sum
+      :label: Total
+    - :from: rows
+      :operator: sum
+      :label: Total
+  :table_data:
+  - - 
+    - Repo Issues
+    - Labels
+    - Total
+  - - foo/bar1
+    - 2
+    - 1
+    - 3
+  - - foo/bar2
+    - 0
+    - 2
+    - 2
+  - - Total
+    - 2
+    - 3
+    - 5
 - :chart_data:
     :labels:
     - foo/bar1

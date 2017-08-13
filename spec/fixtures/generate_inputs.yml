@@ -80,6 +80,57 @@
     - repo
   format: table
 - series:
+  - measure:
+      key: issue
+      name: Repo Issues
+    dimensions:
+    - key: repo
+      label:
+  - measure: label
+    dimensions:
+    - repo
+  format: table
+  report_options:
+    aggregations:
+    - from: columns
+      operator: sum
+      label: Total
+- series:
+  - measure:
+      key: issue
+      name: Repo Issues
+    dimensions:
+    - key: repo
+      label:
+  - measure: label
+    dimensions:
+    - repo
+  format: table
+  report_options:
+    aggregations:
+    - from: rows
+      operator: sum
+      label: Total
+- series:
+  - measure:
+      key: issue
+      name: Repo Issues
+    dimensions:
+    - key: repo
+      label:
+  - measure: label
+    dimensions:
+    - repo
+  format: table
+  report_options:
+    aggregations:
+    - from: columns
+      operator: sum
+      label: Total
+    - from: rows
+      operator: sum
+      label: Total
+- series:
     measure: label
     dimensions:
     - repo
