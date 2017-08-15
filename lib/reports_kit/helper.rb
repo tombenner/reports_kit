@@ -5,7 +5,7 @@ module ReportsKit
       'export_xls' => :export_xls_element
     }
 
-    def render_report(report_params, context_params: {}, actions: %w(export_csv export_xls), &block)
+    def render_report(report_params, context_params: {}, actions: %w(export_csv export_xls), js_report_class: 'Report', &block)
       report_params = { key: report_params } if report_params.is_a?(String)
       additional_params = { context_params: context_params, report_params: report_params }
       params.merge!(additional_params)
@@ -13,7 +13,7 @@ module ReportsKit
       properties = properties.deep_symbolize_keys
       builder = ReportsKit::ReportBuilder.new(properties, additional_params: additional_params)
       path = reports_kit.reports_kit_reports_path({ format: 'json' }.merge(additional_params))
-      data = { properties: properties.slice(:format), path: path }
+      data = { properties: properties.slice(:format), path: path, report_class: js_report_class }
       content_tag :div, nil, class: 'reports_kit_report form-inline', data: data do
         elements = []
         if block_given?

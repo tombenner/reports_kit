@@ -1,8 +1,7 @@
-ReportsKit.Report = (function(options) {
+ReportsKit.Report = (function() {
   var self = this;
 
-  self.initialize = function(options) {
-    self.options = options;
+  self.render = function(options) {
     self.el = options.el;
     self.visualizationEl = self.el.find('.reports_kit_visualization');
 
@@ -11,42 +10,25 @@ ReportsKit.Report = (function(options) {
 
     self.initializeElements();
     self.initializeEvents();
+    self.initializeVisualization();
+    self.renderVisualization();
+  };
 
+  self.initializeVisualization = function() {
     if (self.defaultProperties.format == 'table') {
       self.visualization = new ReportsKit.Table({ report: self });
     } else {
       self.visualization = new ReportsKit.Chart({ report: self });
     }
-    self.render();
   };
 
   self.initializeElements = function() {
     self.exportButtons = self.el.find('[data-role=reports_kit_export_button]');
-    self.form.find('.date_range_picker').daterangepicker({
-      opens: 'left',
-      drops: 'down',
-      showDropdowns: false,
-      showWeekNumbers: false,
-      timePicker: false,
-      buttonClasses: ['btn', 'btn-sm'],
-      applyClass: 'btn-primary btn-daterange-submit',
-      cancelClass: 'btn-default',
-      maxDate: moment(),
-      locale: {
-        format: 'MMM D, YYYY'
-      },
-      ranges: {
-        'Today': [moment(), moment()],
-        'Last 7 Days': [moment().subtract(7, 'days'), moment()],
-        'Last 30 Days': [moment().subtract(30, 'days'), moment()],
-        'Last 2 Months': [moment().subtract(2, 'months'), moment()],
-        'Last 3 Months': [moment().subtract(3, 'months'), moment()],
-        'Last 4 Months': [moment().subtract(4, 'months'), moment()],
-        'Last 6 Months': [moment().subtract(6, 'months'), moment()],
-        'Last 12 Months': [moment().subtract(12, 'months'), moment()],
-        'Year To Date': [moment().startOf('year'), moment()]
-      }
-    });
+    self.initializeAutocompletes();
+    self.initializeDateRangePickers();
+  };
+
+  self.initializeAutocompletes = function() {
     self.form.find('.select2').each(function(index, el) {
       el = $(el);
       var path = el.data('path');
@@ -76,12 +58,40 @@ ReportsKit.Report = (function(options) {
     });
   };
 
+  self.initializeDateRangePickers = function() {
+    self.form.find('.date_range_picker').daterangepicker({
+      opens: 'left',
+      drops: 'down',
+      showDropdowns: false,
+      showWeekNumbers: false,
+      timePicker: false,
+      buttonClasses: ['btn', 'btn-sm'],
+      applyClass: 'btn-primary btn-daterange-submit',
+      cancelClass: 'btn-default',
+      maxDate: moment(),
+      locale: {
+        format: 'MMM D, YYYY'
+      },
+      ranges: {
+        'Today': [moment(), moment()],
+        'Last 7 Days': [moment().subtract(7, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(30, 'days'), moment()],
+        'Last 2 Months': [moment().subtract(2, 'months'), moment()],
+        'Last 3 Months': [moment().subtract(3, 'months'), moment()],
+        'Last 4 Months': [moment().subtract(4, 'months'), moment()],
+        'Last 6 Months': [moment().subtract(6, 'months'), moment()],
+        'Last 12 Months': [moment().subtract(12, 'months'), moment()],
+        'Year To Date': [moment().startOf('year'), moment()]
+      }
+    });
+  };
+
   self.initializeEvents = function() {
     self.form.find('select,input').on('change', function() {
-      self.render();
+      self.renderVisualization();
     })
     self.form.on('submit', function() {
-      self.render();
+      self.renderVisualization();
       return false;
     })
     self.exportButtons.on('click', self.onClickExportButton);
@@ -119,11 +129,9 @@ ReportsKit.Report = (function(options) {
     return false;
   };
 
-  self.render = function() {
+  self.renderVisualization = function() {
     self.visualization.render();
   };
-
-  self.initialize(options);
 
   return self;
 });
