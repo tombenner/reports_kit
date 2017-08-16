@@ -127,7 +127,7 @@ module ReportsKit
         end
 
         def primary_dimension_keys_sorted_by_label
-          @primary_dimension_keys_sorted_by_label ||= primary_summaries.sort_by(&:last).map(&:first)
+          @primary_dimension_keys_sorted_by_label ||= primary_summaries.sort_by { |key, label| label.is_a?(String) ? label.downcase : label }.map(&:first)
         end
 
         def primary_keys

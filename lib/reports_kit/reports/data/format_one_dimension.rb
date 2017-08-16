@@ -51,7 +51,7 @@ module ReportsKit
         end
 
         def dimension_keys_sorted_by_label
-          dimension_summaries.sort_by(&:last).map(&:first)
+          dimension_summaries.sort_by { |key, label| label.is_a?(String) ? label.downcase : label }.map(&:first)
         end
 
         def dimension_keys
