@@ -54,7 +54,7 @@ module ReportsKit
             end
           end
           serieses_dimension_keys_values = Hash[serieses_dimension_keys_values]
-          Data::PopulateOneDimension.new(serieses_dimension_keys_values).perform
+          Data::PopulateOneDimension.new(serieses_dimension_keys_values, context_record: context_record, properties: properties).perform
         end
 
         def multithreaded_serieses_dimension_keys_values

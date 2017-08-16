@@ -687,6 +687,43 @@ describe ReportsKit::Reports::Data::Generate do
       })
     end
 
+    context 'with edit_dimension_keys_method and a dimension without data' do
+      let(:properties) do
+        {
+          series: [
+            {
+              measure: 'issue',
+              dimensions: %w(repo)
+            },
+            {
+              measure: 'tag',
+              dimensions: %w(repo)
+            }
+          ],
+          report_options: {
+            edit_dimension_keys_method: 'all_repo_ids'
+          }
+        }
+      end
+      let!(:repo3) { create(:repo) }
+
+      it 'returns the chart_data' do
+        expect(chart_data).to eq({
+          labels: [repo, repo2, repo3].map(&:to_s),
+          datasets: [
+            {
+              label: 'Issues',
+              data: [2, 1, 0]
+            },
+            {
+              label: 'Tags',
+              data: [2, 0, 0]
+            }
+          ]
+        })
+      end
+    end
+
     context 'with concurrent queries enabled' do
       around :each do |example|
         ReportsKit.configuration.use_concurrent_queries = true

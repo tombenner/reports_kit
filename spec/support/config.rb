@@ -21,6 +21,9 @@ ReportsKit.configure do |config|
     },
     empty_result_set_for_relation: -> (relation) {
       relation.where('0 = 1')
+    },
+    all_repo_ids: -> (dimension_keys, properties, context_record) {
+      Repo.pluck(:id)
     }
   }
 end

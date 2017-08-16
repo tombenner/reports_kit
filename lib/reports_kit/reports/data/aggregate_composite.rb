@@ -34,7 +34,7 @@ module ReportsKit
 
         def serieses_results_for_one_dimension
           serieses_results = Hash[serieses.map { |series| [series, AggregateOneDimension.new(series).perform] }]
-          serieses_results = Data::PopulateOneDimension.new(serieses_results).perform
+          serieses_results = Data::PopulateOneDimension.new(serieses_results, context_record: context_record, properties: properties).perform
           sorted_dimension_keys_values = sort_dimension_keys_values(serieses_results)
           value_lists = sorted_dimension_keys_values.map(&:values)
           composited_values = value_lists.transpose.map { |data| reduce(data) }

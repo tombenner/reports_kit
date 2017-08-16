@@ -17,9 +17,15 @@ module ReportsKit
 
     def custom_method(method_name)
       return if method_name.blank?
-      method = custom_methods[method_name.to_sym]
+      method = evaluated_custom_methods[method_name.to_sym]
       raise ArgumentError.new("A method named '#{method_name}' is not defined") unless method
       method
+    end
+
+    def evaluated_custom_methods
+      return custom_methods if custom_methods.is_a?(Hash)
+      return custom_methods.call if custom_methods.is_a?(Proc)
+      raise ArgumentError.new("Invalid type for custom_methods configuration: #{custom_methods.class}")
     end
   end
 end
