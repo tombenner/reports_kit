@@ -22,6 +22,18 @@ ReportsKit.configure do |config|
     empty_result_set_for_relation: -> (relation) {
       relation.where('0 = 1')
     },
+    prepend_column: -> (data, context_record) {
+      values = data[:entities].map do |entity|
+        value = entity.instance.mday
+        ReportsKit::Value.new(value, value)
+      end
+      new_dataset = {
+        entity: ReportsKit::Entity.new('day_of_month', 'Day of Month', 'day_of_month'),
+        values: values
+      }
+      data[:datasets] = [new_dataset] + data[:datasets]
+      data
+    },
     all_repo_ids: -> (dimension_keys, properties, context_record) {
       Repo.pluck(:id)
     }

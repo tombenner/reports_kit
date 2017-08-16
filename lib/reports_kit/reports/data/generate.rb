@@ -24,11 +24,12 @@ module ReportsKit
           end
           raw_data = format_csv_times(raw_data) if format == 'csv'
           raw_data = data_format_method.call(raw_data, context_record) if data_format_method
+          raw_data = csv_data_format_method.call(raw_data, context_record) if csv_data_format_method && format == 'csv'
           chart_data = format_chart_data(raw_data)
 
           data = { chart_data: chart_data }
           data = ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
-          data[:report_options] = properties[:report_options] if properties[:report_options]
+          data[:report_options] = report_options if report_options
           data = format_table_data(data) if table_or_csv?
           ReportsKit::Cache.set(properties, context_record, data)
           data
@@ -53,7 +54,7 @@ module ReportsKit
             data.delete(:chart_data),
             format: format,
             first_column_label: primary_dimension.label,
-            report_options: properties[:report_options]
+            report_options: report_options
           ).perform
           data[:type] = format
           data
@@ -88,8 +89,16 @@ module ReportsKit
           @serieses ||= Series.new_from_properties!(properties, context_record: context_record)
         end
 
+        def report_options
+          properties[:report_options]
+        end
+
         def data_format_method
-          ReportsKit.configuration.custom_method(properties[:data_format_method])
+          ReportsKit.configuration.custom_method(report_options.try(:[], :data_format_method))
+        end
+
+        def csv_data_format_method
+          ReportsKit.configuration.custom_method(report_options.try(:[], :csv_data_format_method))
         end
 
         def format
