@@ -24,7 +24,7 @@ ReportsKit.configure do |config|
     },
     prepend_column: -> (data, context_record) {
       values = data[:entities].map do |entity|
-        value = entity.instance.mday
+        value = entity.instance.is_a?(Date) ? entity.instance.mday : nil
         ReportsKit::Value.new(value, value)
       end
       new_dataset = {

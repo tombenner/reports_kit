@@ -539,7 +539,7 @@ describe ReportsKit::Reports::Data::Generate do
       context 'with a csv_data_format_method' do
         subject { described_class.new(properties.merge(format: 'csv', report_options: { csv_data_format_method: 'prepend_column' }), context_record: context_record).perform }
 
-        it 'returns the table_data without the HTML tags' do
+        it 'returns the table_data' do
           expect(table_data).to eq([
             [nil, 'Day of Month', repo.to_s, repo2.to_s],
             [format_csv_week_offset(2), 13, 1, 0],
@@ -552,12 +552,38 @@ describe ReportsKit::Reports::Data::Generate do
       context 'with both a data_format_method and a csv_data_format_method' do
         subject { described_class.new(properties.merge(format: 'csv', report_options: { data_format_method: 'add_label_link', csv_data_format_method: 'prepend_column' }), context_record: context_record).perform }
 
-        it 'returns the table_data without the HTML tags' do
+        it 'returns the table_data' do
           expect(table_data).to eq([
             [nil, 'Day of Month', repo.to_s, repo2.to_s],
             ["#{format_csv_week_offset(2)} Bar", 13, 1, 0],
             ["#{format_csv_week_offset(1)} Bar", 20, 0, 0],
             ["#{format_csv_week_offset(0)} Bar", 27, 1, 1]
+          ])
+        end
+      end
+
+      context 'with a csv_data_format_method and aggregations' do
+        subject { described_class.new(properties.merge(format: 'csv', report_options: report_options), context_record: context_record).perform }
+        let(:report_options) do
+          {
+            csv_data_format_method: 'prepend_column',
+            aggregations: [
+              {
+                from: 'columns',
+                operator: 'sum',
+                label: 'Total'
+              }
+            ]
+          }
+        end
+
+        it 'returns the table_data' do
+          expect(table_data).to eq([
+            [nil, 'Day of Month', repo.to_s, repo2.to_s],
+            [format_csv_week_offset(2), 13, 1, 0],
+            [format_csv_week_offset(1), 20, 0, 0],
+            [format_csv_week_offset(0), 27, 1, 1],
+            ['Total', nil, 2, 1]
           ])
         end
       end
