@@ -17,16 +17,22 @@ module ReportsKit
               csv << row
             end
           end
-          send_data csv, filename: 'Report.csv'
+          send_data csv, filename: "#{report_filename}.csv"
         end
         format.xls do
           properties[:format] = 'csv'
-          send_data xls_string, filename: 'Report.xls', type:  'application/vnd.ms-excel'
+          send_data xls_string, filename: "#{report_filename}.xls", type:  'application/vnd.ms-excel'
         end
       end
     end
 
     private
+
+    def report_filename
+      report_filename_method = ReportsKit.configuration.report_filename_method
+      return 'Report' unless report_filename_method
+      instance_eval(&report_filename_method)
+    end
 
     def report_data
       Reports::Data::Generate.new(properties, context_record: context_record).perform
