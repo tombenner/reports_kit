@@ -20,7 +20,8 @@ ReportsKit.Chart = (function(options) {
     $.getJSON(path, function(response) {
       var data = response.data;
       var chartData = data.chart_data;
-      var isEmptyState = chartData.datasets.length === 0;
+      var isEmptyState = chartData.datasets.length === 0 ||
+        (chartData.datasets.length === 1 && chartData.datasets[0].data.length === 0);
       var emptyStateText = (data.report_options && data.report_options.empty_state_text) || self.defaultEmptyStateText;
       var options = chartData.options;
       options = self.addAdditionalOptions(options, data.report_options);
