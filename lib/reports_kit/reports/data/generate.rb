@@ -24,8 +24,8 @@ module ReportsKit
           end
           raw_data = format_csv_times(raw_data) if format == 'csv'
           raw_data = Data::AddTableAggregations.new(raw_data, report_options: report_options).perform if table_or_csv?
-          raw_data = data_format_method.call(raw_data, context_record) if data_format_method
-          raw_data = csv_data_format_method.call(raw_data, context_record) if csv_data_format_method && format == 'csv'
+          raw_data = data_format_method.call(data: raw_data, properties: properties, context_record: context_record) if data_format_method
+          raw_data = csv_data_format_method.call(data: raw_data, properties: properties, context_record: context_record) if csv_data_format_method && format == 'csv'
           chart_data = format_chart_data(raw_data)
 
           data = { chart_data: chart_data }

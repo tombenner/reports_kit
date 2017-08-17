@@ -33,7 +33,7 @@ module ReportsKit
 
         def dimension_keys_from_edit_dimension_keys_method
           return unless edit_dimension_keys_method
-          edit_dimension_keys_method.call(dimension_keys_from_results, properties, context_record)
+          edit_dimension_keys_method.call(dimension_keys: dimension_keys_from_results, properties: properties, context_record: context_record)
         end
 
         def dimension_keys_from_results
