@@ -42,7 +42,7 @@ module ReportsKit
       @properties ||= begin
         properties_method = ReportsKit.configuration.properties_method
         properties = instance_eval(&properties_method)
-        properties.merge(params_properties)
+        properties.merge(params_properties).deep_symbolize_keys
       end
     end
 
