@@ -16,7 +16,10 @@ ReportsKit.Chart = (function(options) {
     var path = self.el.data('path');
     var separator = path.indexOf('?') === -1 ? '?' : '&';
     path += separator + 'properties=' + encodeURIComponent(JSON.stringify(self.report.properties()));
-    self.loadingIndicatorEl.fadeIn(5000);
+    self.loadingIndicatorEl.fadeIn(1000);
+    if (self.canvas.is(':visible')) {
+      self.canvas.fadeTo(300, 0.1);
+    }
     $.getJSON(path, function(response) {
       var data = response.data;
       var chartData = data.chart_data;
@@ -26,15 +29,19 @@ ReportsKit.Chart = (function(options) {
       var options = chartData.options;
       options = self.addAdditionalOptions(options, data.report_options);
 
+      self.loadingIndicatorEl.stop(true, true).hide();
       self.emptyStateEl.html(emptyStateText).toggle(isEmptyState);
-      self.canvas.toggle(!isEmptyState);
+      if (isEmptyState) {
+        self.canvas.hide();
+        return;
+      }
+      self.canvas.show().fadeTo(300, 1);
 
       var args = {
         type: data.type,
         data: chartData,
         options: options
       };
-      self.loadingIndicatorEl.stop(true, true).hide();
 
       if (self.chart) {
         self.chart.data.datasets = chartData.datasets;

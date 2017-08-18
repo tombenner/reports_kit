@@ -16,7 +16,10 @@ ReportsKit.Table = (function(options) {
     var path = self.el.data('path');
     var separator = path.indexOf('?') === -1 ? '?' : '&';
     path += separator + 'properties=' + encodeURIComponent(JSON.stringify(self.report.properties()));
-    self.loadingIndicatorEl.fadeIn(100);
+    self.loadingIndicatorEl.fadeIn(1000);
+    if (self.table.is(':visible')) {
+      self.table.fadeTo(300, 0.1);
+    }
     $.getJSON(path, function(response) {
       var data = response.data;
       var tableData = data.table_data;
@@ -32,7 +35,7 @@ ReportsKit.Table = (function(options) {
         self.table.hide();
         return;
       }
-      self.table.show();
+      self.table.show().fadeTo(300, 1);
 
       var rowAggregationsCount = self.rowAggregationsCount(reportOptions);
       var rowAggregationsStartIndex = rowAggregationsCount ? (tableData.length - rowAggregationsCount) : null;
