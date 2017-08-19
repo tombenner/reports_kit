@@ -34,6 +34,10 @@ module ReportsKit
 
     private
 
+    def report_key
+      params[:report_params][:key]
+    end
+
     def generate_action_elements(actions, additional_params)
       return if actions.blank?
       actions.map do |action|

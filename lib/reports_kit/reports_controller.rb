@@ -38,6 +38,10 @@ module ReportsKit
       Reports::Data::Generate.new(properties, context_record: context_record).perform
     end
 
+    def report_key
+      params[:report_params][:key]
+    end
+
     def properties
       @properties ||= begin
         properties_method = ReportsKit.configuration.properties_method
