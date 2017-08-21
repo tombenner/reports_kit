@@ -425,6 +425,7 @@
     - :from: rows
       :operator: sum
       :label: Total
+    :foot_rows_count: 1
   :table_data:
   - - 
     - Repo Issues
@@ -447,6 +448,7 @@
     - :from: rows
       :operator: sum
       :label: Total
+    :foot_rows_count: 1
   :table_data:
   - - 
     - Repo Issues
@@ -464,6 +466,32 @@
     - 2
     - 3
     - 5
+- :type: table
+  :report_options:
+    :head_rows_count: 2
+  :table_data:
+  - - 
+    - Repo Issues
+    - Labels
+  - - foo/bar1
+    - 2
+    - 1
+  - - foo/bar2
+    - 0
+    - 2
+- :type: table
+  :report_options:
+    :foot_rows_count: 3
+  :table_data:
+  - - 
+    - Repo Issues
+    - Labels
+  - - foo/bar1
+    - 2
+    - 1
+  - - foo/bar2
+    - 0
+    - 2
 - :chart_data:
     :labels:
     - foo/bar1

@@ -91,7 +91,14 @@ module ReportsKit
         end
 
         def report_options
-          properties[:report_options]
+          report_options = properties[:report_options] || {}
+          head_rows_count = report_options[:head_rows_count]
+          foot_rows_count = report_options[:foot_rows_count]
+          foot_rows_count ||= report_options[:aggregations].count { |config| config[:from] == 'rows' } if report_options[:aggregations]
+
+          report_options[:head_rows_count] = head_rows_count if head_rows_count && head_rows_count > 0
+          report_options[:foot_rows_count] = foot_rows_count if foot_rows_count && foot_rows_count > 0
+          report_options.presence
         end
 
         def data_format_method

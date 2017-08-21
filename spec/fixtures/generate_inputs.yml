@@ -131,6 +131,32 @@
       operator: sum
       label: Total
 - series:
+  - measure:
+      key: issue
+      name: Repo Issues
+    dimensions:
+    - key: repo
+      label:
+  - measure: label
+    dimensions:
+    - repo
+  format: table
+  report_options:
+    head_rows_count: 2
+- series:
+  - measure:
+      key: issue
+      name: Repo Issues
+    dimensions:
+    - key: repo
+      label:
+  - measure: label
+    dimensions:
+    - repo
+  format: table
+  report_options:
+    foot_rows_count: 3
+- series:
     measure: label
     dimensions:
     - repo

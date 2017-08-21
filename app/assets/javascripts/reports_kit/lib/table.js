@@ -37,15 +37,22 @@ ReportsKit.Table = (function(options) {
       }
       self.table.show().fadeTo(300, 1);
 
-      var rowAggregationsCount = self.rowAggregationsCount(reportOptions);
-      var rowAggregationsStartIndex = rowAggregationsCount ? (tableData.length - rowAggregationsCount) : null;
+      var rowsCount = tableData.length;
+
+      var hasHead = typeof reportOptions.head_rows_count !== 'undefined';
+      var hasFoot = typeof reportOptions.foot_rows_count !== 'undefined';
+      var headRowStartIndex = hasHead ? 0 : 0;
+      var headRowEndIndex = hasHead ? reportOptions.head_rows_count - 1 : 0;
+      var footRowStartIndex = hasFoot ? rowsCount - reportOptions.foot_rows_count : null;
+      var footRowEndIndex = hasFoot ? rowsCount - 1 : null;
+
       var html = '';
-      for(var i = 0; i < tableData.length; i++) {
-        if (i == 0) {
+      for(var i = 0; i < rowsCount; i++) {
+        if (i === headRowStartIndex) {
           html += '<thead><tr>';
-        } else if (i == 1) {
+        } else if (i === (headRowEndIndex + 1)) {
           html += '<tbody><tr>';
-        } else if (rowAggregationsCount && i == rowAggregationsStartIndex) {
+        } else if (i === footRowStartIndex) {
           html += '<tfoot><tr>';
         } else {
           html += '<tr>';
@@ -59,12 +66,12 @@ ReportsKit.Table = (function(options) {
           }
         }
 
-        if (i == 0) {
+        if (i === headRowEndIndex) {
           html += '</tr></thead>';
-        } else if (i == tableData.length && rowAggregationsCount) {
-          html += '</tfoot></tbody>';
-        } else if (i == tableData.length) {
+        } else if (i === (footRowStartIndex - 1)) {
           html += '</tr></tbody>';
+        } else if (i === footRowEndIndex) {
+          html += '</tfoot></tbody>';
         } else {
           html += '</tr>';
         }
@@ -72,19 +79,6 @@ ReportsKit.Table = (function(options) {
       self.table.html(html);
       self.table.tablesorter();
     });
-  };
-
-  self.rowAggregationsCount = function(reportOptions) {
-    if (!reportOptions.aggregations) {
-      return 0;
-    };
-    var rowAggregationsCount = 0;
-    for(var i = 0; i < reportOptions.aggregations.length; i++) {
-      if (reportOptions.aggregations[i].from === 'columns') {
-        rowAggregationsCount += 1;
-      }
-    }
-    return rowAggregationsCount;
   };
 
   self.initialize(options);
