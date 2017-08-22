@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ReportsKit::ReportBuilder do
+describe ReportsKit::FormBuilder do
   subject { described_class.new(properties) }
 
   context 'with a datetime dimension' do

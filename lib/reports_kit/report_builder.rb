@@ -2,93 +2,85 @@ module ReportsKit
   class ReportBuilder
     include ActionView::Helpers
 
-    DEFAULT_DATE_RANGE_VALUE = ['-2M', 'now']
+    attr_accessor :report_params, :context_params, :additional_params, :actions, :js_report_class, :properties, :view_context, :block, :form_builder
 
-    attr_accessor :properties, :additional_params
+    ACTION_KEYS_METHODS = {
+      'export_csv' => :export_csv_button,
+      'export_xls' => :export_xls_button
+    }
 
-    def initialize(properties, additional_params: nil)
-      self.properties = properties.deep_symbolize_keys
-      self.additional_params = additional_params
+    def initialize(report_params:, context_params: {}, actions: %w(export_csv export_xls), js_report_class: 'Report', properties:, view_context:, block: nil)
+      self.report_params = report_params.is_a?(String) ? { key: report_params } : report_params
+      self.context_params = context_params
+      self.additional_params = { context_params: context_params, report_params: self.report_params }
+      self.actions = actions
+      self.js_report_class = js_report_class
+      self.view_context = view_context
+      self.block = block
+      self.properties = properties#view_context.instance_eval(&ReportsKit.configuration.properties_method).deep_symbolize_keys
+      self.form_builder = ReportsKit::FormBuilder.new(properties, additional_params: additional_params)
     end
 
-    def check_box(filter_key, options = {})
-      filter = validate_filter!(filter_key)
-      checked = filter.normalized_properties[:criteria][:value] == 'true'
-      check_box_tag(filter_key, '1', checked, options)
+    def render
+      data = { properties: properties.slice(:format), path: reports_data_path, report_class: js_report_class }
+      view_context.content_tag :div, nil, class: 'reports_kit_report form-inline', data: data do
+        elements = []
+        elements << view_context.capture(self, &block) if block
+        elements << view_context.content_tag(:div, nil, class: 'reports_kit_visualization')
+        elements << action_elements_container
+        elements.compact.join.html_safe
+      end
     end
 
-    def date_range(filter_key, options = {})
-      filter = validate_filter!(filter_key)
-      defaults = { class: 'form-control input-sm date_range_picker' }
-      options = defaults.deep_merge(options)
-      value = filter.normalized_properties[:criteria][:value].presence
-      value ||= default_date_range_value
-      text_field_tag(filter_key, value, options)
+    def form(&block)
+      raise ArgumentError.new('No block given for ReportBuilder#form') unless block
+      view_context.form_tag(reports_data_path, method: 'get', class: 'reports_kit_report_form') do
+        view_context.capture(form_builder, &block)
+      end
     end
 
-    def multi_autocomplete(filter_key, options = {})
-      validate_filter!(filter_key)
-      filter = series_filters.find { |f| f.key == filter_key.to_s }
-      reports_kit_path = Rails.application.routes.url_helpers.reports_kit_path
-      path = "#{reports_kit_path}reports_kit/resources/measures/#{filter.series.key}/filters/#{filter_key}/autocomplete?"
-      path += additional_params.to_query if additional_params.present?
-      scope = options.delete(:scope)
-      params = {}
-      params[:scope] = scope if scope.present?
+    def export_csv_button(text='Download CSV', options = {}, &block)
+      export_button(text, 'csv', options, &block)
+    end
 
-      defaults = {
-        class: 'form-control input-sm select2',
-        multiple: 'multiple',
-        data: {
-          placeholder: options[:placeholder],
-          path: path,
-          params: params
-        }
+    def export_xls_button(text='Download Excel', options = {}, &block)
+      export_button(text, 'xls', options, &block)
+    end
+
+    def export_button(text, format, options, &block)
+      data = {
+        role: 'reports_kit_export_button',
+        path: view_context.reports_kit.reports_kit_reports_path({ format: format }.merge(additional_params))
       }
-      options = defaults.deep_merge(options)
-      select_tag(filter_key, nil, options)
-    end
-
-    def string_filter(filter_key, options = {})
-      filter = validate_filter!(filter_key)
-      defaults = { class: 'form-control input-sm' }
-      options = defaults.deep_merge(options)
-      text_field_tag(filter_key, filter.normalized_properties[:criteria][:value], options)
+      options = { class: 'btn btn-primary', data: data }.merge(options)
+      if block_given?
+        view_context.link_to('#', options, &block)
+      else
+        view_context.link_to(text, '#', options)
+      end
     end
 
     private
 
-    def validate_filter!(filter_key)
-      filter_key = filter_key.to_s
-      filter = filters.find { |f| f.key == filter_key }
-      raise ArgumentError.new("A filter with key '#{filter_key}' is not configured in this report") unless filter
-      filter
+    def reports_data_path
+      @reports_data_path ||= view_context.reports_kit.reports_kit_reports_path({ format: 'json' }.merge(additional_params))
     end
 
-    def filters
-      ui_filters + series_filters
-    end
-
-    def series_filters
-      serieses.map(&:filters).flatten
-    end
-
-    def ui_filters
-      return [] if properties[:ui_filters].blank?
-      properties[:ui_filters].map do |ui_filter_properties|
-        Reports::Filter.new(ui_filter_properties)
+    def action_elements_container
+      return if action_elements.blank?
+      view_context.content_tag(:div, nil, class: 'reports_kit_actions') do
+        action_elements.map { |element| view_context.concat(element) }
       end
     end
 
-    def serieses
-      Reports::Series.new_from_properties!(properties, context_record: nil)
-    end
-
-    def default_date_range_value
-      @default_date_range_value ||= begin
-        start_date = Reports::Data::Utils.format_time_value(DEFAULT_DATE_RANGE_VALUE[0])
-        end_date = Reports::Data::Utils.format_time_value(DEFAULT_DATE_RANGE_VALUE[1])
-        [start_date, Reports::FilterTypes::Datetime::SEPARATOR, end_date].join(' ')
+    def action_elements
+      @action_elements ||= begin
+        return if actions.blank?
+        actions.map do |action|
+          element_method = ACTION_KEYS_METHODS[action]
+          raise ArgumentError.new("Invalid action: #{action}") unless element_method
+          send(element_method)
+        end.compact
       end
     end
   end

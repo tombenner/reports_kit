@@ -26,6 +26,19 @@ module ReportsKit
       end
     end
 
+    def report_params
+      params[:report_params]
+    end
+
+    def context_params
+      params[:context_params]
+    end
+
+    def report_key
+      raise ArgumentError.new('Blank report_params') if report_params.blank?
+      report_params[:key]
+    end
+
     private
 
     def report_filename
@@ -36,10 +49,6 @@ module ReportsKit
 
     def report_data
       Reports::Data::Generate.new(properties, context_record: context_record).perform
-    end
-
-    def report_key
-      params[:report_params][:key]
     end
 
     def properties
