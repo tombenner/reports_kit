@@ -1,7 +1,8 @@
 module ReportsKit
   class Configuration
-    attr_accessor :cache_duration, :cache_store, :context_record_method, :custom_methods, :default_dimension_limit,
-      :default_properties, :first_day_of_week, :properties_method, :report_filename_method, :use_concurrent_queries
+    attr_accessor :autocomplete_results_method, :cache_duration, :cache_store, :context_record_method, :custom_methods,
+      :default_dimension_limit, :default_properties, :first_day_of_week, :properties_method, :report_filename_method,
+      :use_concurrent_queries
 
     DEFAULT_PROPERTIES_METHOD = lambda do |env|
       path = Rails.root.join('config', 'reports_kit', 'reports', "#{report_key}.yml")
@@ -9,6 +10,7 @@ module ReportsKit
     end
 
     def initialize
+      self.autocomplete_results_method = nil
       self.cache_duration = 5.minutes
       self.cache_store = nil
       self.context_record_method = nil

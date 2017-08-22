@@ -12,6 +12,7 @@ module ReportsKit
 
       def perform
         raise ArgumentError.new("Could not find a model for filter_key: '#{filter_key}'") unless model
+        return autocomplete_results_method.call(params: params, context_record: context_record, relation: relation) if autocomplete_results_method
         results = relation
         results = results.public_send(scope) if scope
         results = results.limit(10_000)
@@ -22,6 +23,10 @@ module ReportsKit
       end
 
       private
+
+      def autocomplete_results_method
+        ReportsKit.configuration.autocomplete_results_method
+      end
 
       def relation
         if context_record
