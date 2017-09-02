@@ -876,7 +876,7 @@ describe ReportsKit::Reports::Data::Generate do
     end
   end
 
-  describe 'composite aggregations' do
+  describe 'composite series' do
     context 'with two series' do
       let(:properties) do
         {
@@ -1114,7 +1114,7 @@ describe ReportsKit::Reports::Data::Generate do
         end
       end
 
-      context 'with a nested composite aggregation' do
+      context 'with a nested composite series' do
         let(:properties) do
           {
             series: [
