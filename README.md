@@ -6,23 +6,7 @@ ReportsKit lets you easily create beautiful, interactive charts and tables.
 
 For examples and documentation, see [reportskit.co](https://www.reportskit.co/).
 
----
-
 [<img src="docs/images/demo.gif?raw=true" width="700" />](docs/images/demo.gif?raw=true)
-
-[<img src="docs/images/demo_area.png?raw=true" width="425" />](docs/images/demo_area.png?raw=true)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[<img src="docs/images/demo_dashed_line.png?raw=true" width="425" />](docs/images/demo_dashed_line.png?raw=true)
-
-[<img src="docs/images/demo_horizontal_stacked.png?raw=true" width="425" />](docs/images/demo_horizontal_stacked.png?raw=true)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[<img src="docs/images/demo_legend.png?raw=true" width="425" />](docs/images/demo_legend.png?raw=true)
-
-[<img src="docs/images/demo_multiautocomplete.png?raw=true" width="425" />](docs/images/demo_multiautocomplete.png?raw=true)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[<img src="docs/images/demo_radar.png?raw=true" width="230" />](docs/images/demo_radar.png?raw=true)
-
----
 
 Resources
 ---------
