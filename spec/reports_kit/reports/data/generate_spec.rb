@@ -307,6 +307,33 @@ describe ReportsKit::Reports::Data::Generate do
           datasets: [{ label: 'Issues', data: [2.0] }]
         })
       end
+
+      context 'with a namespaced context_record class' do
+        let(:pro_repo) { create(:pro_repo) }
+        let(:context_record) { pro_repo }
+        let(:properties) do
+          {
+            measure: 'special_issue',
+            dimensions: %w(repo)
+          }
+        end
+
+        let!(:issues) do
+          [
+            create(:issue, repo: pro_repo),
+            create(:issue, repo: pro_repo),
+            create(:issue, repo: pro_repo),
+            create(:issue, repo: repo2)
+          ]
+        end
+
+        it 'returns the chart_data' do
+          expect(chart_data).to eq({
+            labels: [pro_repo.to_s],
+            datasets: [{ label: 'Special Issues', data: [3.0] }]
+          })
+        end
+      end
     end
 
     context 'with a limit' do

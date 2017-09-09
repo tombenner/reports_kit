@@ -19,9 +19,9 @@ module ReportsKit
         filter_hashes = filter_hashes.values if filter_hashes.is_a?(Hash) && filter_hashes.key?(:'0')
 
         self.properties = properties
+        self.context_record = context_record
         self.dimensions = dimension_hashes.map { |dimension_hash| DimensionWithSeries.new(dimension: Dimension.new(dimension_hash), series: self) }
         self.filters = filter_hashes.map { |filter_hash| FilterWithSeries.new(filter: Filter.new(filter_hash), series: self) }
-        self.context_record = context_record
       end
 
       def key
@@ -78,6 +78,11 @@ module ReportsKit
       end
 
       def model_class
+        if context_record
+          reflection = context_record.class.reflect_on_association(key.to_sym) ||
+            context_record.class.reflect_on_association(key.pluralize.to_sym)
+          return reflection.klass if reflection
+        end
         key.camelize.constantize
       end
 

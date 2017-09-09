@@ -7,9 +7,6 @@ require 'timecop'
 require 'support/factory_girl'
 require 'support/helpers'
 
-directory = File.dirname(File.absolute_path(__FILE__))
-Dir.glob("#{directory}/factories/*.rb") { |file| require file }
-
 Time.zone = ActiveSupport::TimeZone.new('UTC')
 ActiveRecord::Base.default_timezone = :utc
 
@@ -32,7 +29,11 @@ else
     username: 'postgres'
   )
 end
+directory = File.dirname(File.absolute_path(__FILE__))
 Dir.glob("#{directory}/support/models/*.rb") { |file| require file }
+Dir.glob("#{directory}/support/models/**/*.rb") { |file| require file }
+Dir.glob("#{directory}/factories/*.rb") { |file| require file }
+
 require 'support/config'
 require 'support/schema'
 
