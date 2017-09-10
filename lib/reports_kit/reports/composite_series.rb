@@ -1,10 +1,11 @@
 module ReportsKit
   module Reports
     class CompositeSeries < AbstractSeries
-      attr_accessor :properties
+      attr_accessor :properties, :context_record
 
-      def initialize(properties)
+      def initialize(properties, context_record:)
         self.properties = properties.dup
+        self.context_record = context_record
       end
 
       def label
@@ -24,7 +25,7 @@ module ReportsKit
       end
 
       def serieses
-        @serieses ||= Reports::Series.new_from_properties!(properties, context_record: nil)
+        @serieses ||= Reports::Series.new_from_properties!(properties, context_record: context_record)
       end
 
       def filters

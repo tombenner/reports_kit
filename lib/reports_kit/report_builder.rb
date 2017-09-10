@@ -17,8 +17,9 @@ module ReportsKit
       self.js_report_class = js_report_class
       self.view_context = view_context
       self.block = block
-      self.properties = properties#view_context.instance_eval(&ReportsKit.configuration.properties_method).deep_symbolize_keys
-      self.form_builder = ReportsKit::FormBuilder.new(properties, additional_params: additional_params)
+      self.properties = properties
+      context_record = ReportsKit.configuration.context_record(view_context)
+      self.form_builder = ReportsKit::FormBuilder.new(properties, additional_params: additional_params, context_record: context_record)
     end
 
     def render

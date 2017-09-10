@@ -35,5 +35,10 @@ module ReportsKit
       return custom_methods.call if custom_methods.is_a?(Proc)
       raise ArgumentError.new("Invalid type for custom_methods configuration: #{custom_methods.class}")
     end
+
+    def context_record(context)
+      return unless context_record_method
+      context.instance_eval(&context_record_method)
+    end
   end
 end

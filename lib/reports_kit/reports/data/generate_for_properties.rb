@@ -15,7 +15,7 @@ module ReportsKit
           if composite_operator
             raise ArgumentError.new('Aggregations require at least one series') if all_serieses.length == 0
             dimension_keys_values = Data::AggregateComposite.new(properties, context_record: context_record).perform
-            serieses_dimension_keys_values = { CompositeSeries.new(properties) => dimension_keys_values }
+            serieses_dimension_keys_values = { CompositeSeries.new(properties, context_record: context_record) => dimension_keys_values }
           elsif all_serieses.length == 1 && composite_serieses.length == 1
             dimension_keys_values = Data::AggregateComposite.new(composite_serieses.first.properties, context_record: context_record).perform
             serieses_dimension_keys_values = { all_serieses.first => dimension_keys_values }

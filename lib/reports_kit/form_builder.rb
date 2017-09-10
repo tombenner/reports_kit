@@ -4,11 +4,12 @@ module ReportsKit
 
     DEFAULT_DATE_RANGE_VALUE = ['-2M', 'now']
 
-    attr_accessor :properties, :additional_params
+    attr_accessor :properties, :additional_params, :context_record
 
-    def initialize(properties, additional_params: nil)
+    def initialize(properties, additional_params: nil, context_record: nil)
       self.properties = properties.deep_symbolize_keys
       self.additional_params = additional_params
+      self.context_record = context_record
     end
 
     def check_box(filter_key, options = {})
@@ -81,7 +82,7 @@ module ReportsKit
     end
 
     def serieses
-      Reports::Series.new_from_properties!(properties, context_record: nil)
+      Reports::Series.new_from_properties!(properties, context_record: context_record)
     end
 
     def default_date_range_value

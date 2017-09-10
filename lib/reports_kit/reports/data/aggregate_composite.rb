@@ -20,7 +20,7 @@ module ReportsKit
         }
 
         def initialize(properties, context_record:)
-          self.composite_series = CompositeSeries.new(properties)
+          self.composite_series = CompositeSeries.new(properties, context_record: context_record)
           self.context_record = context_record
         end
 

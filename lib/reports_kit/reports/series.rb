@@ -105,7 +105,7 @@ module ReportsKit
 
         series_hashes.map do |series_hash|
           if series_hash[:composite_operator].present?
-            CompositeSeries.new(series_hash)
+            CompositeSeries.new(series_hash, context_record: context_record)
           else
             new(series_hash, context_record: context_record)
           end
