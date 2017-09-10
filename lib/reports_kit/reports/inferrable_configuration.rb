@@ -61,7 +61,7 @@ module ReportsKit
       end
 
       def instance_class
-        return reflection.class_name.constantize if reflection
+        return reflection.klass if reflection
         nil
       end
 
