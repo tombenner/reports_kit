@@ -1,9 +1,9 @@
 ReportsKit::Engine.routes.draw do
   namespace :reports_kit do
     resources :reports, only: [:index]
-    resources :resources, only: [] do
-      collection do
-        get 'measures/:measure_key/filters/:filter_key/autocomplete' => :autocomplete
+    resources :filters, only: [], param: :key do
+      member do
+        get :autocomplete
       end
     end
   end

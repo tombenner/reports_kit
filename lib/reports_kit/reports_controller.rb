@@ -26,19 +26,6 @@ module ReportsKit
       end
     end
 
-    def report_params
-      params[:report_params]
-    end
-
-    def context_params
-      params[:context_params]
-    end
-
-    def report_key
-      raise ArgumentError.new('Blank report_params') if report_params.blank?
-      report_params[:key]
-    end
-
     private
 
     def report_filename
@@ -53,8 +40,7 @@ module ReportsKit
 
     def properties
       @properties ||= begin
-        properties_method = ReportsKit.configuration.properties_method
-        properties = instance_eval(&properties_method)
+        properties = Reports::Properties.generate(self)
         properties.merge(params_properties).deep_symbolize_keys
       end
     end

@@ -1,12 +1,12 @@
 module ReportsKit
   module Reports
     class GenerateAutocompleteResults
-      attr_accessor :params, :measure_key, :filter_key, :context_record
+      attr_accessor :params, :filter_key, :filter, :context_record
 
-      def initialize(params, context_record: nil)
+      def initialize(params, properties, context_record: nil)
         self.params = params
-        self.measure_key = params[:measure_key]
-        self.filter_key = params[:filter_key]
+        self.filter_key = params[:key]
+        self.filter = Reports::PropertiesToFilter.new(properties, context_record: context_record).perform(filter_key)
         self.context_record = context_record
       end
 
@@ -30,7 +30,7 @@ module ReportsKit
 
       def relation
         if context_record
-          context_record.public_send(model.name.tableize)
+          context_record.public_send(filter.context_record_association)
         else
           model
         end
@@ -46,8 +46,6 @@ module ReportsKit
 
       def model
         @model ||= begin
-          series = Series.new(measure_key, context_record: context_record)
-          filter = FilterWithSeries.new(filter: Filter.new(filter_key), series: series)
           filter.instance_class
         end
       end

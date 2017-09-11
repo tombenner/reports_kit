@@ -54,6 +54,10 @@ module ReportsKit
         }
       end
 
+      def context_record_association
+        properties[:context_record_association] || instance_class.name.tableize
+      end
+
       def type_klass
         type_klass_for_configuration_strategy = CONFIGURATION_STRATEGIES_FILTER_TYPE_CLASSES[configuration_strategy]
         return type_klass_for_configuration_strategy if type_klass_for_configuration_strategy
