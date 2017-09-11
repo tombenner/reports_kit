@@ -33,17 +33,13 @@ module ReportsKit
       reports_kit_path = Rails.application.routes.url_helpers.reports_kit_path
       path = "#{reports_kit_path}reports_kit/filters/#{filter_key}/autocomplete?"
       path += additional_params.to_query if additional_params.present?
-      scope = options.delete(:scope)
-      params = {}
-      params[:scope] = scope if scope.present?
 
       defaults = {
         class: 'form-control input-sm select2',
         multiple: 'multiple',
         data: {
           placeholder: options[:placeholder],
-          path: path,
-          params: params
+          path: path
         }
       }
       options = defaults.deep_merge(options)

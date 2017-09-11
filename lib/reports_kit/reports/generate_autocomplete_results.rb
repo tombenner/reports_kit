@@ -14,7 +14,6 @@ module ReportsKit
         raise ArgumentError.new("Could not find a model for filter_key: '#{filter_key}'") unless model
         return autocomplete_results_method.call(params: params, context_record: context_record, relation: relation) if autocomplete_results_method
         results = relation
-        results = results.public_send(scope) if scope
         results = results.limit(10_000)
         results = results.map { |result| { id: result.id, text: result.to_s } }
         results = results.sort_by { |result| result[:text].downcase }
@@ -47,18 +46,6 @@ module ReportsKit
       def model
         @model ||= begin
           filter.instance_class
-        end
-      end
-
-      def scope
-        @scope ||= begin
-          scope = params[:scope]
-          return unless scope.present?
-          return unless model.try(:reports_kit_configuration) && model.reports_kit_configuration.autocomplete_scopes.present?
-          unless model.reports_kit_configuration.autocomplete_scopes.include?(scope)
-            raise ArgumentError.new("Unallowed scope '#{scope}' for model #{model.name}")
-          end
-          scope
         end
       end
     end
