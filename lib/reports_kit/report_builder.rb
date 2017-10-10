@@ -40,11 +40,11 @@ module ReportsKit
       end
     end
 
-    def export_csv_button(text='Download CSV', options = {}, &block)
+    def export_csv_button(text = 'Download CSV', options = {}, &block)
       export_button(text, 'csv', options, &block)
     end
 
-    def export_xls_button(text='Download Excel', options = {}, &block)
+    def export_xls_button(text = 'Download Excel', options = {}, &block)
       export_button(text, 'xls', options, &block)
     end
 
