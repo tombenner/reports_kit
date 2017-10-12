@@ -77,7 +77,7 @@ ReportsKit.Table = (function(options) {
         }
       }
       self.table.html(html);
-      self.table.tablesorter();
+      self.table.tablesorter({ sortInitialOrder: 'desc' });
     });
   };
 
