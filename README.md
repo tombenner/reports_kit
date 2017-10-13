@@ -13,9 +13,12 @@ Resources
 
 * [Documentation](https://www.reportskit.co/)
 * [Getting Started](https://www.reportskit.co/categories/getting_started)
-* [Data Examples](https://www.reportskit.co/categories/data)
-* [Visualization Examples](https://www.reportskit.co/categories/visualization)
-* [How It Works](https://www.reportskit.co/categories/getting_started/subcategories/how_it_works)
+* [How It Works](https://www.reportskit.co/subcategories/how_it_works)
+
+Documentation
+-------------
+
+The documentation is hosted at [reportskit.co](https://www.reportskit.co/), and it's generated using [tombenner/reports_kit_docs](https://github.com/tombenner/reports_kit_docs). If you'd like to improve the documentation, feel free to open a PR!
 
 Testing
 -------
