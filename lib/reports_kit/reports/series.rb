@@ -45,7 +45,7 @@ module ReportsKit
       end
 
       def aggregate_function
-        aggregation_expression || :count
+        aggregation_expression || [:count, model_class.primary_key]
       end
 
       def aggregation_expression
