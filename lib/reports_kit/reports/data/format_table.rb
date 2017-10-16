@@ -4,8 +4,6 @@ module ReportsKit
       class FormatTable
         attr_accessor :data, :format, :first_column_label, :report_options
 
-        VALID_AGGREGATION_OPERATORS = [:sum]
-
         def initialize(data, format:, first_column_label:, report_options:)
           self.data = data
           self.format = format
