@@ -6,10 +6,11 @@ module ReportsKit
 
         attr_accessor :properties, :context_record
 
-        def initialize(properties, context_record: nil)
+        def initialize(properties, context_record: nil, context_params: nil)
           self.properties = properties.deep_symbolize_keys
           self.properties = ReportsKit.configuration.default_properties.deep_merge(self.properties) if ReportsKit.configuration.default_properties
-          self.properties = Utils.normalize_properties(self.properties)
+          self.properties[:context_params] = context_params if context_params
+          self.properties = NormalizeProperties.new(self.properties).perform
           self.context_record = context_record
         end
 

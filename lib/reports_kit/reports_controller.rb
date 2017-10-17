@@ -3,6 +3,8 @@ require 'spreadsheet'
 
 module ReportsKit
   class ReportsController < ReportsKit::BaseController
+    before_action :modify_context_params
+
     VALID_PARAMS_PROPERTIES_KEYS = [:ui_filters]
 
     def index
@@ -35,7 +37,7 @@ module ReportsKit
     end
 
     def report_data
-      Reports::Data::Generate.new(properties, context_record: context_record).perform
+      Reports::Data::Generate.new(properties, context_record: context_record, context_params: context_params).perform
     end
 
     def properties

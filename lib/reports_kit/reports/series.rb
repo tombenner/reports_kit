@@ -1,9 +1,9 @@
 module ReportsKit
   module Reports
     class Series < AbstractSeries
-      VALID_KEYS = [:measure, :dimensions, :filters, :limit, :report_options]
+      VALID_KEYS = [:measure, :dimensions, :contextual_filters, :context_params, :filters, :limit, :context_params, :report_options]
 
-      attr_accessor :properties, :dimensions, :filters, :context_record
+      attr_accessor :properties, :dimensions, :contextual_filters, :filters, :context_record
 
       def initialize(properties, context_record: nil)
         properties = { measure: properties } if properties.is_a?(String)
@@ -13,6 +13,7 @@ module ReportsKit
         properties[:measure] = { key: properties[:measure] } if properties[:measure].is_a?(String)
         raise ArgumentError.new("Measure properties must be a String or Hash, not a #{properties.class.name}: #{properties.inspect}") unless properties.is_a?(Hash)
 
+        contextual_filter_keys = properties[:contextual_filters] || []
         dimension_hashes = properties[:dimensions] || []
         dimension_hashes = dimension_hashes.values if dimension_hashes.is_a?(Hash) && dimension_hashes.key?(:'0')
         filter_hashes = properties[:filters] || []
@@ -22,6 +23,7 @@ module ReportsKit
         self.context_record = context_record
         self.dimensions = dimension_hashes.map { |dimension_hash| DimensionWithSeries.new(dimension: Dimension.new(dimension_hash), series: self) }
         self.filters = filter_hashes.map { |filter_hash| FilterWithSeries.new(filter: Filter.new(filter_hash), series: self) }
+        self.contextual_filters = contextual_filter_keys.map { |key| ContextualFilter.new(key, series: self) }
       end
 
       def key
@@ -90,6 +92,9 @@ module ReportsKit
         relation = base_relation
         filters.each do |filter|
           relation = filter.apply(relation)
+        end
+        contextual_filters.each do |filter|
+          relation = filter.apply(relation, properties[:context_params])
         end
         relation
       end
