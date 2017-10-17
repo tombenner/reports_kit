@@ -37,6 +37,12 @@ module ReportsKit
       raise ArgumentError.new("Invalid type for custom_methods configuration: #{custom_methods.class}")
     end
 
+    def context_record_method=(context_record_method)
+      warn "[DEPRECATION] `context_record_method` is deprecated. Please use contextual filters instead: https://www.reportskit.co/subcategories/contextual_filters"
+
+      @context_record_method = context_record_method
+    end
+
     def context_record(context)
       return unless context_record_method
       context.instance_eval(&context_record_method)
