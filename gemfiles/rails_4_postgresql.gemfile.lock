@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    reports_kit (0.4.1)
+    reports_kit (0.5.0)
       rails (>= 3)
       spreadsheet (>= 1.1)
 
