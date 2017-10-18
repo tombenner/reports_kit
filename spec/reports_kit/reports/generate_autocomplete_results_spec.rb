@@ -23,7 +23,7 @@ describe ReportsKit::Reports::GenerateAutocompleteResults do
     end
 
     it 'returns the results' do
-      expect(subject).to eq([
+      expect(subject).to match_array([
         { id: repo.id, text: repo.to_s },
         { id: repo2.id, text: repo2.to_s }
       ])
@@ -42,7 +42,7 @@ describe ReportsKit::Reports::GenerateAutocompleteResults do
       end
 
       it 'returns the results' do
-        expect(subject).to eq([
+        expect(subject).to match_array([
           { id: repo.id, text: repo.to_s }
         ])
       end
@@ -59,7 +59,7 @@ describe ReportsKit::Reports::GenerateAutocompleteResults do
       end
 
       it 'returns the results' do
-        expect(subject).to eq([
+        expect(subject).to match_array([
           { id: repo.id, text: repo.to_s },
           { id: repo2.id, text: repo2.to_s }
         ])
