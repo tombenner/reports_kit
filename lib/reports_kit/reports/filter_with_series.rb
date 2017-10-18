@@ -80,6 +80,15 @@ module ReportsKit
         type_class
       end
 
+      def apply_contextual_filters(relation, context_params)
+        return relation if properties[:contextual_filters].blank? || context_params.blank?
+        contextual_filters = properties[:contextual_filters].map { |key| ContextualFilter.new(key, relation.base_class) }
+        contextual_filters.each do |contextual_filter|
+          relation = contextual_filter.apply(relation, context_params)
+        end
+        relation
+      end
+
       def apply(relation)
         filter_type.apply_filter(relation)
       end

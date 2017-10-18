@@ -5,9 +5,9 @@ module ReportsKit
 
       delegate :settings_from_model, to: :model_settings
 
-      def initialize(key, series:)
+      def initialize(key, model_class)
         self.key = key.to_sym
-        self.model_settings = ModelSettings.new(series, :contextual_filters, self.key)
+        self.model_settings = ModelSettings.new(model_class, :contextual_filters, self.key)
       end
 
       def apply(relation, context_params)

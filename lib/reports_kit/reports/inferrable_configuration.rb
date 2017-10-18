@@ -17,7 +17,7 @@ module ReportsKit
       def initialize(inferrable, inferrable_type)
         self.inferrable = inferrable
         self.inferrable_type = inferrable_type
-        self.model_settings = ModelSettings.new(series, inferrable_type, key)
+        self.model_settings = ModelSettings.new(series.model_class, inferrable_type, key)
       end
 
       def configuration_strategy

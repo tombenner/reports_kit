@@ -1,10 +1,10 @@
 module ReportsKit
   module Reports
     class ModelSettings
-      attr_accessor :series, :model_configuration_type, :key
+      attr_accessor :model_class, :model_configuration_type, :key
 
-      def initialize(series, model_configuration_type, key)
-        self.series = series
+      def initialize(model_class, model_configuration_type, key)
+        self.model_class = model_class
         self.model_configuration_type = model_configuration_type
         self.key = key
       end
@@ -17,11 +17,6 @@ module ReportsKit
           hash[:key] == key
         end
         config_hash || {}
-      end
-
-      def model_class
-        return unless series
-        series.model_class
       end
 
       private

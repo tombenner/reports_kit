@@ -23,7 +23,7 @@ module ReportsKit
         self.context_record = context_record
         self.dimensions = dimension_hashes.map { |dimension_hash| DimensionWithSeries.new(dimension: Dimension.new(dimension_hash), series: self) }
         self.filters = filter_hashes.map { |filter_hash| FilterWithSeries.new(filter: Filter.new(filter_hash), series: self) }
-        self.contextual_filters = contextual_filter_keys.map { |key| ContextualFilter.new(key, series: self) }
+        self.contextual_filters = contextual_filter_keys.map { |key| ContextualFilter.new(key, model_class) }
       end
 
       def key
