@@ -2,7 +2,7 @@ module ReportsKit
   module Reports
     class DimensionWithSeries
       DEFAULT_GRANULARITY = 'week'
-      VALID_GRANULARITIES = %w(day week).freeze
+      VALID_GRANULARITIES = %w(day week month).freeze
       ADAPTER_NAMES_CLASSES = {
         'mysql2' => Adapters::Mysql,
         'postgresql' => Adapters::Postgresql
@@ -52,7 +52,11 @@ module ReportsKit
         elsif configured_by_association?
           inferred_settings_from_association[:column]
         elsif configured_by_column? && configured_by_time?
-          granularity == 'day' ? day_expression : week_expression
+          case granularity
+          when 'day' then day_expression
+          when 'month' then month_expression
+          else week_expression
+          end
         elsif configured_by_column?
           column_expression
         else
@@ -130,6 +134,10 @@ module ReportsKit
 
       def week_expression
         adapter.truncate_to_week(column_expression)
+      end
+
+      def month_expression
+        adapter.truncate_to_month(column_expression)
       end
     end
   end

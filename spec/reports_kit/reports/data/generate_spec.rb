@@ -274,6 +274,36 @@ describe ReportsKit::Reports::Data::Generate do
         })
       end
     end
+
+    context 'with month granularity' do
+      let(:properties) do
+        {
+          measure: 'issue',
+          dimensions: [{ key: 'opened_at', granularity: 'month' }]
+        }
+      end
+      let!(:issues) do
+        [
+          create(:issue, repo: repo, opened_at: now - 2.days),
+          create(:issue, repo: repo, opened_at: now)
+        ]
+      end
+
+      it 'returns the data' do
+        expect(chart_data).to eq({
+          labels: [
+            ReportsKit::Reports::Data::Utils.format_display_time(issues.first.opened_at.beginning_of_month),
+            ReportsKit::Reports::Data::Utils.format_display_time(issues.last.opened_at.beginning_of_month)
+          ],
+          datasets: [
+            {
+              label: 'Issues',
+              data: [1, 1]
+            }
+          ]
+        })
+      end
+    end
   end
 
   context 'with an association dimension' do

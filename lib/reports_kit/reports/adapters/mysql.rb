@@ -16,6 +16,10 @@ module ReportsKit
             raise ArgumentError.new("Unsupported first_day_of_week: #{ReportsKit.configuration.first_day_of_week}")
           end
         end
+
+        def self.truncate_to_month(column)
+          "DATE_SUB(DATE(#{column}), INTERVAL DAY(#{column}) - 1 DAY)"
+        end
       end
     end
   end

@@ -41,6 +41,10 @@ module ReportsKit
             start_at.beginning_of_week(ReportsKit.configuration.first_day_of_week),
             end_at.end_of_week(ReportsKit.configuration.first_day_of_week)
           ] if primary_dimension.granularity == 'week'
+          return [
+            start_at.beginning_of_month,
+            end_at.end_of_month
+          ] if primary_dimension.granularity == 'month'
           [start_at, end_at]
         end
 
