@@ -111,9 +111,10 @@ module ReportsKit
 
         def self.dimension_to_dimension_ids_dimension_instances(dimension, dimension_ids)
           return nil unless dimension.instance_class
-          dimension_instances = dimension.instance_class.where(id: dimension_ids.uniq)
+          primary_key = dimension.instance_class.primary_key
+          dimension_instances = dimension.instance_class.where(primary_key => dimension_ids.uniq)
           dimension_ids_dimension_instances = dimension_instances.map do |dimension_instance|
-            [dimension_instance.id, dimension_instance]
+            [dimension_instance.send(primary_key), dimension_instance]
           end
           Hash[dimension_ids_dimension_instances]
         end
