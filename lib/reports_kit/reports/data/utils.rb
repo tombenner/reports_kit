@@ -36,6 +36,18 @@ module ReportsKit
           RelativeTime.parse(string)
         end
 
+        def self.parse_date_range(string, type: nil)
+          return if string.blank?
+          start_string, end_string = string.split(FilterTypes::Datetime::SEPARATOR)
+          start_at = parse_date_string(start_string)
+          end_at = parse_date_string(end_string)
+          if type == Array
+            [start_at, end_at]
+          else
+            (start_at..end_at)
+          end
+        end
+
         def self.populate_sparse_hash(hash, dimension:)
           keys = hash.keys
           is_nested = dimension.series.has_two_dimensions?

@@ -1,6 +1,7 @@
 require 'reports_kit'
 
 require 'database_cleaner'
+require 'groupdate'
 require 'pry'
 require 'pry-byebug'
 require 'timecop'
@@ -35,6 +36,7 @@ Dir.glob("#{directory}/support/models/**/*.rb") { |file| require file }
 Dir.glob("#{directory}/factories/*.rb") { |file| require file }
 
 require 'support/config'
+require 'support/example_data_methods'
 require 'support/schema'
 
 RSpec.configure do |config|

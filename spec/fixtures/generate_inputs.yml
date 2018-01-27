@@ -242,3 +242,9 @@
     - key: opened_at
     - key: repo
   order: count desc
+- data_method: ExampleDataMethods.issues_by_opened_at
+- data_method: ExampleDataMethods.issues_by_opened_at_and_repo
+- data_method: ExampleDataMethods.issues_by_opened_at_with_filters
+- data_method: ExampleDataMethods.issues_by_opened_at_with_filters
+  ui_filters:
+    state: open

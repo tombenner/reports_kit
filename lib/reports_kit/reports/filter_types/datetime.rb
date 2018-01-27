@@ -17,13 +17,7 @@ module ReportsKit
         end
 
         def start_at_end_at
-          @start_at_end_at ||= begin
-            return unless valid?
-            start_string, end_string = value.split(SEPARATOR)
-            start_at = ReportsKit::Reports::Data::Utils.parse_date_string(start_string)
-            end_at = ReportsKit::Reports::Data::Utils.parse_date_string(end_string)
-            adjust_range_to_dimension(start_at, end_at)
-          end
+          @start_at_end_at ||= valid? ? adjust_range_to_dimension(*Reports::Data::Utils.parse_date_range(value, type: Array)) : nil
         end
 
         def start_at

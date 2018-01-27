@@ -15,6 +15,7 @@ require 'reports_kit/order'
 require 'reports_kit/relative_time'
 require 'reports_kit/report_builder'
 require 'reports_kit/reports_controller'
+require 'reports_kit/utils'
 require 'reports_kit/value'
 require 'reports_kit/version'
 
@@ -25,6 +26,7 @@ require 'reports_kit/reports/data/add_table_aggregations'
 require 'reports_kit/reports/data/aggregate_composite'
 require 'reports_kit/reports/data/aggregate_one_dimension'
 require 'reports_kit/reports/data/aggregate_two_dimensions'
+require 'reports_kit/reports/data/chart_data_for_data_method'
 require 'reports_kit/reports/data/chart_options'
 require 'reports_kit/reports/data/format_one_dimension'
 require 'reports_kit/reports/data/format_table'
@@ -51,6 +53,7 @@ require 'reports_kit/reports/dimension_with_series'
 require 'reports_kit/reports/filter'
 require 'reports_kit/reports/filter_with_series'
 require 'reports_kit/reports/generate_autocomplete_results'
+require 'reports_kit/reports/generate_autocomplete_method_results'
 require 'reports_kit/reports/inferrable_configuration'
 require 'reports_kit/reports/model_settings'
 require 'reports_kit/reports/properties'
@@ -64,5 +67,9 @@ module ReportsKit
 
   def self.configuration
     @configuration ||= Configuration.new
+  end
+
+  def self.parse_date_range(string)
+    ReportsKit::Reports::Data::Utils.parse_date_range(string)
   end
 end
