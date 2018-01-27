@@ -1,10 +1,11 @@
 module ReportsKit
   module Reports
     class GenerateAutocompleteResults
-      attr_accessor :params, :filter_key, :filter, :context_params, :context_record
+      attr_accessor :params, :properties, :filter_key, :filter, :context_params, :context_record
 
       def initialize(params, properties, context_record: nil)
         self.params = params
+        self.properties = properties
         self.context_params = params[:context_params]
         self.filter_key = params[:key]
         self.filter = Reports::PropertiesToFilter.new(properties, context_record: context_record).perform(filter_key)
@@ -12,6 +13,8 @@ module ReportsKit
       end
 
       def perform
+        autocomplete_method_results = Reports::GenerateAutocompleteMethodResults.new(filter_key, properties, params).perform
+        return autocomplete_method_results if autocomplete_method_results
         raise ArgumentError.new("Could not find a model for filter_key: '#{filter_key}'") unless model
         return autocomplete_results_method.call(params: params, context_record: context_record, relation: relation) if autocomplete_results_method
         results = filter.apply_contextual_filters(relation, context_params)

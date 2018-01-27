@@ -63,6 +63,8 @@ GEM
       activesupport (>= 3.0.0)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
+    groupdate (3.2.0)
+      activesupport (>= 3)
     i18n (0.8.6)
     loofah (2.1.1)
       crass (~> 1.0.2)
@@ -148,6 +150,7 @@ DEPENDENCIES
   appraisal
   database_cleaner (~> 1)
   factory_girl (~> 4)
+  groupdate (~> 3)
   pg
   pry (~> 0)
   pry-byebug (~> 1)
@@ -157,4 +160,4 @@ DEPENDENCIES
   timecop (~> 0)
 
 BUNDLED WITH
-   1.15.4
+   1.16.1

@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 3'
   s.add_development_dependency 'database_cleaner', '~> 1'
   s.add_development_dependency 'factory_girl', '~> 4'
+  s.add_development_dependency 'groupdate', '~> 3'
   s.add_development_dependency 'pg', '>= 0.15'
   s.add_development_dependency 'pry', '~> 0'
   s.add_development_dependency 'pry-byebug', '~> 1'

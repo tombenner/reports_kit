@@ -1064,3 +1064,120 @@
         :xPadding: 8
         :yPadding: 7
   :type: bar
+- :chart_data:
+    :labels:
+    - Dec 13, '09
+    - Dec 20, '09
+    - Dec 27, '09
+    :datasets:
+    - :data:
+      - 1
+      - 0
+      - 1
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+        :yAxes:
+        - :ticks:
+            :beginAtZero: true
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :maintainAspectRatio: false
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels:
+    - Dec 13, '09
+    - Dec 20, '09
+    - Dec 27, '09
+    :datasets:
+    - :label: foo/bar1
+      :data:
+      - 1
+      - 0
+      - 1
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+        :yAxes:
+        - :ticks:
+            :beginAtZero: true
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :maintainAspectRatio: false
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels:
+    - Dec 13, '09
+    - Dec 20, '09
+    - Dec 27, '09
+    :datasets:
+    - :data:
+      - 1
+      - 0
+      - 1
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+        :yAxes:
+        - :ticks:
+            :beginAtZero: true
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :maintainAspectRatio: false
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar
+- :chart_data:
+    :labels:
+    - Dec 13, '09
+    :datasets:
+    - :data:
+      - 1
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+        :yAxes:
+        - :ticks:
+            :beginAtZero: true
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :maintainAspectRatio: false
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: bar

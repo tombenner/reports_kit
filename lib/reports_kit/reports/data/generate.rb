@@ -18,17 +18,7 @@ module ReportsKit
           data = ReportsKit::Cache.get(properties, context_record)
           return data.deep_symbolize_keys if data
 
-          if two_dimensions?
-            raw_data = Data::FormatTwoDimensions.new(serieses.first, serieses_results.first.last, order: order, limit: limit).perform
-          else
-            raw_data = Data::FormatOneDimension.new(serieses_results, order: order, limit: limit).perform
-          end
-          raw_data = format_csv_times(raw_data) if format == 'csv'
-          raw_data = Data::AddTableAggregations.new(raw_data, report_options: report_options).perform if table_or_csv?
-          raw_data = data_format_method.call(data: raw_data, properties: properties, context_record: context_record) if data_format_method
-          raw_data = csv_data_format_method.call(data: raw_data, properties: properties, context_record: context_record) if csv_data_format_method && format == 'csv'
-          chart_data = format_chart_data(raw_data)
-
+          chart_data = has_data_method? ? ChartDataForDataMethod.new(properties).perform : properties_to_chart_data
           data = { chart_data: chart_data }
           data = ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
           data[:report_options] = report_options if report_options
@@ -38,6 +28,23 @@ module ReportsKit
         end
 
         private
+
+        def has_data_method?
+          properties[:data_method].present?
+        end
+
+        def properties_to_chart_data
+          if two_dimensions?
+            raw_data = Data::FormatTwoDimensions.new(serieses.first, serieses_results.first.last, order: order, limit: limit).perform
+          else
+            raw_data = Data::FormatOneDimension.new(serieses_results, order: order, limit: limit).perform
+          end
+          raw_data = format_csv_times(raw_data) if format == 'csv'
+          raw_data = Data::AddTableAggregations.new(raw_data, report_options: report_options).perform if table_or_csv?
+          raw_data = data_format_method.call(data: raw_data, properties: properties, context_record: context_record) if data_format_method
+          raw_data = csv_data_format_method.call(data: raw_data, properties: properties, context_record: context_record) if csv_data_format_method && format == 'csv'
+          format_chart_data(raw_data)
+        end
 
         def format_chart_data(raw_data)
           chart_data = {}
@@ -55,7 +62,7 @@ module ReportsKit
           data[:table_data] = Data::FormatTable.new(
             data.delete(:chart_data),
             format: format,
-            first_column_label: primary_dimension.label,
+            first_column_label: primary_dimension.try(:label),
             report_options: report_options
           ).perform
           data[:type] = format
@@ -132,6 +139,7 @@ module ReportsKit
         end
 
         def inferred_options
+          return {} if has_data_method?
           {
             x_axis_label: primary_dimension.label,
             y_axis_label: serieses.length == 1 ? serieses.first.label : nil
