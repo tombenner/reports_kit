@@ -13,7 +13,6 @@ module ReportsKit
       self.autocomplete_results_method = nil
       self.cache_duration = 5.minutes
       self.cache_store = nil
-      self.context_record_method = nil
       self.custom_methods = {}
       self.default_dimension_limit = 30
       self.default_properties = nil
