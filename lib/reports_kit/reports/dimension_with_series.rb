@@ -5,7 +5,8 @@ module ReportsKit
       VALID_GRANULARITIES = %w(day week month).freeze
       ADAPTER_NAMES_CLASSES = {
         'mysql2' => Adapters::Mysql,
-        'postgresql' => Adapters::Postgresql
+        'postgresql' => Adapters::Postgresql,
+        'sqlserver' => Adapters::Mssql
       }.freeze
 
       attr_accessor :dimension, :series, :configuration
