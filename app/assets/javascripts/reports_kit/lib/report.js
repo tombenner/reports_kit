@@ -73,6 +73,8 @@ ReportsKit.Report = (function() {
         format: 'MMM D, YYYY'
       },
       ranges: {
+        'Last 7 Days': [moment().subtract(7, 'days'), moment()],
+        'Last 14 Days': [moment().subtract(14, 'days'), moment()],
         'Last 30 Days': [moment().subtract(30, 'days'), moment()],
         'Last 2 Months': [moment().subtract(2, 'months'), moment()],
         'Last 3 Months': [moment().subtract(3, 'months'), moment()],
