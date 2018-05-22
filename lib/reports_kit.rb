@@ -72,4 +72,8 @@ module ReportsKit
   def self.parse_date_range(string)
     ReportsKit::Reports::Data::Utils.parse_date_range(string)
   end
+
+  def self.format_date_range(string)
+    ReportsKit::Reports::Data::Utils.format_date_range(string)
+  end
 end

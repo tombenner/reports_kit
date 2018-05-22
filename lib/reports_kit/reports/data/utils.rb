@@ -14,6 +14,11 @@ module ReportsKit
           time.strftime('%b %-d, \'%y')
         end
 
+        def self.format_date_range(string)
+          start_at, end_at = parse_date_range(string, type: Array)
+          [format_display_time(start_at), FilterTypes::Datetime::SEPARATOR, format_display_time(end_at)].join(' ')
+        end
+
         def self.format_time_value(value)
           time = RelativeTime.parse(value, prevent_exceptions: true)
           return value unless time
