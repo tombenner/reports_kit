@@ -18,11 +18,12 @@ module ReportsKit
           data = ReportsKit::Cache.get(properties, context_record)
           return data.deep_symbolize_keys if data
 
-          chart_data = has_data_method? ? ChartDataForDataMethod.new(properties).perform : properties_to_chart_data
+          data_method_data = ChartDataForDataMethod.new(properties).perform if has_data_method?
+          chart_data = data_method_data ? data_method_data[:formatted_data] : properties_to_chart_data
           data = { chart_data: chart_data }
           data = ChartOptions.new(data, options: properties[:chart], inferred_options: inferred_options).perform
           data[:report_options] = report_options if report_options
-          data = format_table_data(data) if table_or_csv?
+          data = format_table_data(data, data_method_data) if table_or_csv?
           ReportsKit::Cache.set(properties, context_record, data)
           data
         end
@@ -58,14 +59,18 @@ module ReportsKit
           chart_data
         end
 
-        def format_table_data(data)
+        def format_table_data(data, data_method_data)
+          data[:type] = format
+          if has_data_method?
+            data[:table_data] = data_method_data[:raw_data]
+            return data
+          end
           data[:table_data] = Data::FormatTable.new(
             data.delete(:chart_data),
             format: format,
             first_column_label: primary_dimension.try(:label),
             report_options: report_options
           ).perform
-          data[:type] = format
           data
         end
 

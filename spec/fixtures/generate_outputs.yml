@@ -1181,3 +1181,36 @@
         :xPadding: 8
         :yPadding: 7
   :type: bar
+- :chart_data:
+    :labels:
+    - Date
+    - Dec 13, '09
+    :datasets:
+    - :data:
+      - Issue count
+      - 1
+      :backgroundColor: "#1f77b4"
+      :borderColor: "#1f77b4"
+    :options:
+      :scales:
+        :xAxes:
+        - :gridLines:
+            :display: false
+          :barPercentage: 0.9
+          :categoryPercentage: 0.9
+        :yAxes:
+        - :ticks:
+            :beginAtZero: true
+      :legend:
+        :labels:
+          :usePointStyle: true
+      :maintainAspectRatio: false
+      :tooltips:
+        :xPadding: 8
+        :yPadding: 7
+  :type: table
+  :table_data:
+  - - Date
+    - Issue count
+  - - Dec 13, '09
+    - 1

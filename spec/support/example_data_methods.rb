@@ -10,10 +10,13 @@ class ExampleDataMethods
   end
 
   def self.issues_by_opened_at_with_filters(properties)
+    format = properties[:format]
     ui_filters = properties[:ui_filters]
     issues = Issue.group_by_week(:opened_at)
     issues = issues.where(state: ui_filters[:state]) if ui_filters.try(:[], :state).present?
-    issues.count.map { |date, count| [format_date(date), count] }
+    dates_issue_counts = issues.count.map { |date, count| [format_date(date), count] }
+    return dates_issue_counts unless format == 'table'
+    [['Date', 'Issue count']] + dates_issue_counts
   end
 
   def self.format_date(date)

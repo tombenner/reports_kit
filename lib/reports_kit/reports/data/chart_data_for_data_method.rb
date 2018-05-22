@@ -8,8 +8,11 @@ module ReportsKit
 
     def perform
       klass, method_name = ReportsKit::Utils.string_to_class_method(properties[:data_method], 'data_method')
-      returned_data = klass.public_send(method_name, properties)
-      format_returned_data(returned_data)
+      raw_data = klass.public_send(method_name, properties)
+      {
+        raw_data: raw_data,
+        formatted_data: format_returned_data(raw_data)
+      }
     end
 
     private
