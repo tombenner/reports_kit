@@ -4,6 +4,7 @@ module ReportsKit
       SUPPORTED_COLUMN_TYPES = [
         :boolean,
         :datetime,
+        :date,
         :integer,
         :string,
         :text
@@ -46,7 +47,7 @@ module ReportsKit
       end
 
       def configured_by_time?
-        column_type == :datetime
+        column_type == :datetime || column_type == :date
       end
 
       def reflection

@@ -5,12 +5,14 @@ module ReportsKit
         association: FilterTypes::Records,
         boolean: FilterTypes::Boolean,
         datetime: FilterTypes::Datetime,
+        date: FilterTypes::Datetime,
         integer: FilterTypes::Number,
         string: FilterTypes::String
       }
       COLUMN_TYPES_FILTER_TYPE_CLASSES = {
         boolean: FilterTypes::Boolean,
         datetime: FilterTypes::Datetime,
+        date: FilterTypes::Datetime,
         integer: FilterTypes::Number,
         string: FilterTypes::String
       }
