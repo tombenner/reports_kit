@@ -21,6 +21,7 @@ require 'reports_kit/version'
 
 require 'reports_kit/reports/adapters/mysql'
 require 'reports_kit/reports/adapters/postgresql'
+require 'reports_kit/reports/adapters/mssql'
 
 require 'reports_kit/reports/data/add_table_aggregations'
 require 'reports_kit/reports/data/aggregate_composite'
