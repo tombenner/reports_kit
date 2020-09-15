@@ -15,7 +15,7 @@ module ReportsKit
 
     def check_box(filter_key, options = {})
       filter = properties_to_filter.perform(filter_key)
-      checked = filter.normalized_properties[:criteria].try(:[], :value) == 'true'
+      checked = options.key?(:value) ? options[:value] : filter.normalized_properties[:criteria].try(:[], :value) == 'true'
       check_box_tag(filter_key, '1', checked, options)
     end
 
@@ -23,7 +23,7 @@ module ReportsKit
       filter = properties_to_filter.perform(filter_key)
       defaults = { class: 'form-control input-sm date_range_picker' }
       options = defaults.deep_merge(options)
-      value = filter.normalized_properties[:criteria].try(:[], :value).presence
+      value = options[:value].presence || filter.normalized_properties[:criteria].try(:[], :value).presence
       value ||= default_date_range_value
       text_field_tag(filter_key, value, options)
     end

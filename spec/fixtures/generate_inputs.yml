@@ -248,3 +248,7 @@
 - data_method: ExampleDataMethods.issues_by_opened_at_with_filters
   ui_filters:
     state: open
+- data_method: ExampleDataMethods.issues_by_opened_at_with_filters
+  ui_filters:
+    state: open
+  format: table
